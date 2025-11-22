@@ -1,0 +1,31 @@
+Archivos del Sistema Operativo
+
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+Logs y bases de datos locales
+
+*.log
+*.sqlite
+
+Dependencias (para el futuro cuando uses Node.js)
+
+node_modules/
+dist/
+build/
+
+Claves de entorno (¡MUY IMPORTANTE PARA SEGURIDAD!)
+
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+Editor
+
+.vscode/
+.idea/
+*.swp
