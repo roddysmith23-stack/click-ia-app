@@ -38,17 +38,6 @@ Abre el archivo index.html en tu navegador favorito (Chrome/Edge/Safari).
 
 ¡Listo! No requiere instalación de dependencias npm por el momento.
 
-🗺️ Hoja de Ruta (Roadmap)
-
-[x] Prototipo Funcional (Frontend)
-
-[x] Internacionalización (i18n)
-
-[ ] Conexión con Firebase (Base de Datos)
-
-[ ] Integración API Gemini Pro & Replicate (Generación Real)
-
-[ ] Pasarela de Pagos (Stripe)
 
 👨‍💻 Creador
 
