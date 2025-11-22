@@ -25,6 +25,10 @@
             background: rgba(10, 12, 18, 0.9); backdrop-filter: blur(20px); 
             border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.9); 
         }
+        .glass-panel {
+            background: rgba(20, 20, 25, 0.95); backdrop-filter: blur(30px);
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
         .glass-card { 
             background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); 
             transition: all 0.3s ease; cursor: pointer; overflow: hidden; position: relative; border-radius: 16px;
@@ -72,6 +76,13 @@
             box-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
         .tech-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(255, 255, 255, 0.5); }
+        
+        .editor-btn {
+            background: #1a1a1a; color: white; font-weight: 600; font-family: 'Chakra Petch';
+            border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;
+            transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .editor-btn:hover { border-color: #06b6d4; background: rgba(6, 182, 212, 0.1); }
 
         /* Inputs */
         .quiz-input {
@@ -99,15 +110,6 @@
         .aspect-story { aspect-ratio: 9/16; max-width: 300px; }
         .aspect-video { aspect-ratio: 16/9; max-width: 100%; }
 
-        /* Texto Editable */
-        .editable-text {
-            position: absolute; cursor: text; text-align: center; width: 90%; left: 5%;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.9); transition: all 0.2s;
-            border: 1px solid transparent; background: transparent; font-family: 'Chakra Petch';
-        }
-        .editable-text:hover { border-color: rgba(255,255,255,0.3); background: rgba(0,0,0,0.2); }
-        .editable-text:focus { outline: none; border-color: #06b6d4; background: rgba(0,0,0,0.5); }
-
         /* Checkbox Colores */
         .color-check { width: 40px; height: 40px; border-radius: 10px; cursor: pointer; border: 2px solid rgba(255,255,255,0.1); transition: transform 0.2s; position: relative;}
         .color-check.selected { border-color: white; transform: scale(1.15); box-shadow: 0 0 15px rgba(255,255,255,0.3); }
@@ -122,7 +124,7 @@
         .social-btn:hover { background: rgba(255,255,255,0.1); color: white; }
         .social-btn.connected { background: rgba(6, 182, 212, 0.2); border-color: #06b6d4; color: #06b6d4; }
 
-        /* CRÉDITO INCRUSTADO (Estilo para dentro de cajas) */
+        /* CRÉDITO INCRUSTADO */
         .embedded-credit { 
             text-align: center; 
             font-size: 9px; 
@@ -136,7 +138,7 @@
             width: 100%;
         }
         
-        /* CRÉDITO FLOTANTE (Pie de página fijo y seguro) */
+        /* CRÉDITO FLOTANTE */
         .floating-credit {
             position: fixed;
             bottom: 30px;
@@ -156,16 +158,59 @@
 
         .mute-btn { position: fixed; bottom: 20px; right: 20px; z-index: 60; background: rgba(0,0,0,0.8); border: 1px solid #06b6d4; color: #06b6d4; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         
-        /* Clip Path para botones estilo tech */
+        /* Clip Path para botones */
         .clip-path-slanted {
             clip-path: polygon(10% 0, 100% 0, 100% 80%, 90% 100%, 0 100%, 0 20%);
         }
         
-        /* Ocultar scrollbar pero permitir scroll */
+        /* Sliders */
+        input[type=range] {
+            -webkit-appearance: none; width: 100%; background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #06b6d4; cursor: pointer; margin-top: -6px;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 4px; cursor: pointer; background: rgba(255,255,255,0.2); border-radius: 2px;
+        }
+        
+        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        /* Copy Area */
+        .copy-area {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 15px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: #e5e7eb;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .copy-area:focus { outline: none; border-color: #06b6d4; }
+
+        /* YouTube */
+        .yt-embed-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .yt-embed-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 <body>
@@ -185,14 +230,9 @@
         const { useState, useEffect, useRef } = React;
 
         // --- CONSTANTES Y DATOS ---
-        // Estas son imágenes de ejemplo. REEMPLAZA los links de abajo con los de tu GitHub si quieres cambiarlas.
         const MAGIC_RESULT_IMAGE_DEFAULT = "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2865"; 
         const UGLY_BURGER_IMAGE = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=2799"; 
-        
-        // *** AQUÍ VA TU FOTO DE CREADOR ***
-        // Pega el enlace raw de GitHub de tu foto "CREDENCIALES CLICK DIGITAL.jpg" aquí dentro de las comillas:
         const CREATOR_IMAGE = "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop"; 
-        
         const INITIAL_CREDITS = 3;
 
         // --- ICONOS SVG ---
@@ -219,8 +259,20 @@
             ChevronDown: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>,
             Video: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>,
             Sliders: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>,
-            Credit: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.15-1.46-3.27-3.4h1.96c.1 1.05 1.18 1.91 2.53 1.91 1.38 0 2.36-.83 2.36-1.9 0-1.07-.69-1.58-2.61-2.17-2.24-.68-3.37-1.62-3.37-3.43 0-1.73 1.37-3.1 3.07-3.44V3.98h2.67v1.96c1.56.35 2.76 1.54 2.91 3.14h-1.98c-.13-1.01-1.02-1.68-2.18-1.68-1.24 0-2.15.79-2.15 1.8 0 .95.63 1.46 2.36 2.01 2.43.77 3.62 1.74 3.62 3.62 0 1.9-1.42 3.09-3.23 3.26z"/></svg>
+            Credit: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.15-1.46-3.27-3.4h1.96c.1 1.05 1.18 1.91 2.53 1.91 1.38 0 2.36-.83 2.36-1.9 0-1.07-.69-1.58-2.61-2.17-2.24-.68-3.37-1.62-3.37-3.43 0-1.73 1.37-3.1 3.07-3.44V3.98h2.67v1.96c1.56.35 2.76 1.54 2.91 3.14h-1.98c-.13-1.01-1.02-1.68-2.18-1.68-1.24 0-2.15.79-2.15 1.8 0 .95.63 1.46 2.36 2.01 2.43.77 3.62 1.74 3.62 3.62 0 1.9-1.42 3.09-3.23 3.26z"/></svg>,
+            Copy: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>,
+            Logout: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>,
+            Cloud: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>,
+            Edit: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
+            Save: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
         };
+
+        // --- DATOS Y CONFIGURACIÓN ---
+        const REAL_MUSIC_IDS = [
+            { title: "Epic Cinematic", id: "p7Z9y8eZtMc" }, 
+            { title: "Corporate Upbeat", id: "3y3r2p7kC_k" },
+            { title: "Fashion House", id: "n61ULEU7CO0" } 
+        ];
 
         const STYLES_DATA = [
             { id: 'realistic', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400' },
@@ -247,16 +299,16 @@
             "CUATERNARIOS": ["#800000", "#808000", "#008080", "#000080"]
         };
 
-        const TRENDING_MUSIC = [
-            { id: 1, title: "Flowers - Remix", desc: "Viral TikTok", duration: "15s" },
-            { id: 2, title: "Cyberpunk City", desc: "Tech Audio", duration: "30s" },
-            { id: 3, title: "Lofi Chill", desc: "Relax Vibes", duration: "1m" }
-        ];
-
         const BEST_TIMES = [
             { icon: <Icons.Instagram />, platform: "Instagram", time: "18:30", day: "Hoy" },
             { icon: <Icons.Tiktok />, platform: "TikTok", time: "20:00", day: "Hoy" },
             { icon: <Icons.Facebook />, platform: "Facebook", time: "09:00", day: "Mañana" }
+        ];
+
+        const TRENDING_MUSIC = [
+            { id: 1, title: "Flowers - Remix", desc: "Viral TikTok", duration: "15s" },
+            { id: 2, title: "Cyberpunk City", desc: "Tech Audio", duration: "30s" },
+            { id: 3, title: "Lofi Chill", desc: "Relax Vibes", duration: "1m" }
         ];
 
         const TRANSLATIONS = {
@@ -292,11 +344,8 @@
                 schedule: "Cronograma IA", copy_viral: "Copy Viral", star_text: "TEXTO ESTRELLA ★",
                 trends: "Tendencias Detectadas", publish: "PUBLICAR AHORA", new_btn: "NUEVO", ready: "LISTO",
                 credits: "CRÉDITOS", color_n: "NEUTROS", color_nu: "NUDE", color_p: "PRIMARIOS", color_s: "SECUNDARIOS", color_t: "TERCIARIOS", color_q: "CUATERNARIOS",
-                loading_steps: ["CONECTANDO API...", "ANALIZANDO MERCADO...", "RENDERIZANDO 8K...", "GENERANDO COPY VIRAL...", "FINALIZANDO..."],
+                loading_steps: ["BUSCANDO EN LA WEB...", "ANALIZANDO TENDENCIAS...", "ESTRUCTURANDO ESTRATEGIA...", "GENERANDO IMAGEN 8K...", "REDACTANDO COPY VIRAL..."],
                 txt_top: "TU MARCA", txt_bot: "OFERTA LIMITADA",
-                copy_headline: "¿Listo para el siguiente nivel?", copy_body_1: "No es solo", copy_body_2: "Es una experiencia.",
-                copy_offer: "Oferta exclusiva:", copy_cta: "📲 Haz tu pedido aquí:",
-                default_promo: "Por tiempo limitado",
                 credit_text: '"La creatividad es la inteligencia divirtiéndose." - Albert Einstein',
                 creator_title: "NUESTRO CREADOR",
                 creator_role: "CO-FOUNDER & CSIO",
@@ -306,7 +355,11 @@
                 l_studio: 'Luz de Estudio', l_studio_desc: 'Frontal Suave',
                 l_neon: 'Neón', l_neon_desc: 'Lateral Color',
                 l_golden: 'Hora Dorada', l_golden_desc: 'Trasera Solar',
-                l_dramatic: 'Cinemático', l_dramatic_desc: 'Contraste Alto'
+                l_dramatic: 'Cinemático', l_dramatic_desc: 'Contraste Alto',
+                download: "DESCARGAR IMAGEN", copy_clipboard: "COPIAR TEXTO",
+                cloud_welcome: "BIENVENIDO A TU NUBE", cloud_desc: "Aquí guardamos todas tus campañas.",
+                edit_design: "🛠️ ABRIR ESTUDIO DE DISEÑO", editor_title: "NANO-STUDIO", save_design: "GUARDAR DISEÑO", close_editor: "CERRAR",
+                edit_text_1: "Texto Principal", edit_text_2: "Subtítulo", edit_size: "Tamaño Logo"
             },
             EN: {
                 enter: "LOGIN", prices: "PRICING", faq: "FAQ",
@@ -342,9 +395,6 @@
                 credits: "CREDITS", color_n: "NEUTRALS", color_nu: "NUDE", color_p: "PRIMARY", color_s: "SECONDARY", color_t: "TERTIARY", color_q: "QUATERNARY",
                 loading_steps: ["CONNECTING API...", "ANALYZING MARKET...", "RENDERING 8K...", "GENERATING VIRAL COPY...", "FINALIZING..."],
                 txt_top: "YOUR BRAND", txt_bot: "LIMITED OFFER",
-                copy_headline: "Ready for the next level?", copy_body_1: "It's not just", copy_body_2: "It's an experience.",
-                copy_offer: "Exclusive offer:", copy_cta: "📲 Order here:",
-                default_promo: "Limited time only",
                 credit_text: '"Creativity is intelligence having fun." - Albert Einstein',
                 creator_title: "MEET THE CREATOR",
                 creator_role: "CO-FOUNDER & CSIO",
@@ -354,7 +404,11 @@
                 l_studio: 'Studio Light', l_studio_desc: 'Soft Frontal',
                 l_neon: 'Neon', l_neon_desc: 'Side Color',
                 l_golden: 'Golden Hour', l_golden_desc: 'Back Sun',
-                l_dramatic: 'Cinematic', l_dramatic_desc: 'High Contrast'
+                l_dramatic: 'Cinematic', l_dramatic_desc: 'High Contrast',
+                download: "DOWNLOAD IMAGE", copy_clipboard: "COPY TEXT",
+                cloud_welcome: "WELCOME TO YOUR CLOUD", cloud_desc: "All your campaigns are safe here.",
+                edit_design: "🛠️ OPEN DESIGN STUDIO", editor_title: "NANO-STUDIO", save_design: "SAVE DESIGN", close_editor: "CLOSE",
+                edit_text_1: "Main Text", edit_text_2: "Subtitle", edit_size: "Logo Size"
             },
             ZH: {
                 enter: "登录", prices: "价格", faq: "常问问题",
@@ -390,9 +444,6 @@
                 credits: "学分", color_n: "中性色", color_nu: "裸色", color_p: "原色", color_s: "二次色", color_t: "三次色", color_q: "四次色",
                 loading_steps: ["连接 API...", "分析市场...", "渲染 8K...", "生成病毒文案...", "完成..."],
                 txt_top: "你的品牌", txt_bot: "限时优惠",
-                copy_headline: "准备好进入下一个层级了吗？", copy_body_1: "这不仅仅是", copy_body_2: "这是一种体验。",
-                copy_offer: "独家优惠：", copy_cta: "📲 在此下单：",
-                default_promo: "限时优惠",
                 credit_text: '"创意是智慧在玩耍。" - Albert Einstein',
                 creator_title: "遇见创作者",
                 creator_role: "联合创始人 & 首席战略官",
@@ -402,7 +453,11 @@
                 l_studio: '摄影棚光', l_studio_desc: '柔和正面',
                 l_neon: '霓虹', l_neon_desc: '侧面色彩',
                 l_golden: '黄金时刻', l_golden_desc: '逆光',
-                l_dramatic: '电影感', l_dramatic_desc: '高对比度'
+                l_dramatic: '电影感', l_dramatic_desc: '高对比度',
+                download: "下载图片", copy_clipboard: "复制文本",
+                cloud_welcome: "欢迎来到您的云", cloud_desc: "您的所有活动都在这里安全。",
+                edit_design: "🛠️ 打开设计工作室", editor_title: "纳米工作室", save_design: "保存设计", close_editor: "关闭",
+                edit_text_1: "主要文本", edit_text_2: "副标题", edit_size: "标志尺寸"
             },
             FR: {
                 enter: "S'IDENTIFIER", prices: "TARIFS", faq: "FAQ",
@@ -438,9 +493,6 @@
                 credits: "CRÉDITS", color_n: "NEUTRES", color_nu: "NUDE", color_p: "PRIMAIRES", color_s: "SECONDAIRES", color_t: "TERTIAIRES", color_q: "QUATERNAIRES",
                 loading_steps: ["CONNEXION API...", "ANALYSE DU MARCHÉ...", "RENDU 8K...", "GÉNÉRATION COPY VIRAL...", "FINALISATION..."],
                 txt_top: "VOTRE MARQUE", txt_bot: "OFFRE LIMITÉE",
-                copy_headline: "Prêt pour le niveau supérieur ?", copy_body_1: "Ce n'est pas juste", copy_body_2: "C'est une expérience.",
-                copy_offer: "Offre exclusive :", copy_cta: "📲 Commandez ici :",
-                default_promo: "Durée limitée",
                 credit_text: '"La créativité, c\'est l\'intelligence qui s\'amuse." - Albert Einstein',
                 creator_title: "RENCONTREZ LE CRÉATEUR",
                 creator_role: "CO-FONDATEUR & CSIO",
@@ -450,11 +502,16 @@
                 l_studio: 'Lumière Studio', l_studio_desc: 'Frontale Douce',
                 l_neon: 'Néon', l_neon_desc: 'Couleur Latérale',
                 l_golden: 'Heure Dorée', l_golden_desc: 'Soleil Arrière',
-                l_dramatic: 'Cinématique', l_dramatic_desc: 'Contraste Élevé'
+                l_dramatic: 'Cinématique', l_dramatic_desc: 'Contraste Élevé',
+                download: "TÉLÉCHARGER IMAGE", copy_clipboard: "COPIER TEXTE",
+                cloud_welcome: "BIENVENUE SUR VOTRE CLOUD", cloud_desc: "Toutes vos campagnes sont ici.",
+                edit_design: "🛠️ OUVRIR STUDIO DE DESIGN", editor_title: "NANO-STUDIO", save_design: "SAUVEGARDER", close_editor: "FERMER",
+                edit_text_1: "Texte Principal", edit_text_2: "Sous-titre", edit_size: "Taille Logo"
             }
         };
 
-        // --- COMPONENTES AUXILIARES ---
+        // --- COMPONENTES PRINCIPALES (Definidos antes de App) ---
+
         const NeuralBrain = () => {
             const canvasRef = useRef(null);
             useEffect(() => {
@@ -485,7 +542,6 @@
         const ComparisonSlider = ({ beforeImage, afterImage, tLang }) => {
             const [sliderPos, setSliderPos] = useState(50);
             const containerRef = useRef(null);
-
             const handleMove = (e) => {
                 if (!containerRef.current) return;
                 const rect = containerRef.current.getBoundingClientRect();
@@ -494,27 +550,11 @@
                 const x = (clientX - rect.left) / rect.width * 100;
                 setSliderPos(Math.min(100, Math.max(0, x)));
             };
-
             return (
-                <div 
-                    className="relative w-full h-full overflow-hidden cursor-ew-resize select-none rounded-xl border border-white/20 shadow-2xl"
-                    ref={containerRef}
-                    onMouseMove={handleMove}
-                    onTouchMove={handleMove}
-                >
+                <div className="relative w-full h-full overflow-hidden cursor-ew-resize select-none rounded-xl border border-white/20 shadow-2xl" ref={containerRef} onMouseMove={handleMove} onTouchMove={handleMove}>
                     <img src={afterImage} alt="After" className="absolute top-0 left-0 w-full h-full object-cover" />
-                    <div 
-                        className="absolute top-0 left-0 h-full overflow-hidden border-r-2 border-white"
-                        style={{ width: `${sliderPos}%` }}
-                    >
-                        <img src={beforeImage} alt="Before" className="absolute top-0 left-0 h-full max-w-none object-cover" style={{ width: containerRef.current ? containerRef.current.offsetWidth : '100%' }} />
-                    </div>
-                    <div 
-                        className="absolute top-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center text-black shadow-lg transform -translate-y-1/2 -translate-x-1/2 pointer-events-none"
-                        style={{ left: `${sliderPos}%` }}
-                    >
-                        <Icons.Sliders />
-                    </div>
+                    <div className="absolute top-0 left-0 h-full overflow-hidden border-r-2 border-white" style={{ width: `${sliderPos}%` }}><img src={beforeImage} alt="Before" className="absolute top-0 left-0 h-full max-w-none object-cover" style={{ width: containerRef.current ? containerRef.current.offsetWidth : '100%' }} /></div>
+                    <div className="absolute top-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center text-black shadow-lg transform -translate-y-1/2 -translate-x-1/2 pointer-events-none" style={{ left: `${sliderPos}%` }}><Icons.Sliders /></div>
                     <div className="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded uppercase">{tLang.before}</div>
                     <div className="absolute bottom-4 right-4 bg-green-500 text-black text-xs font-bold px-2 py-1 rounded uppercase">{tLang.after}</div>
                 </div>
@@ -523,58 +563,57 @@
 
         const PricingCard = ({ title, price, features, recommended, onSelect, strike, sub, tLang }) => (
             <div className={`relative p-6 md:p-8 rounded-xl flex flex-col gap-6 transition-transform duration-300 hover:scale-105 ${recommended ? 'glass border-cyan-500 shadow-[0_0_40px_rgba(6,182,212,0.3)] transform scale-110 z-10' : 'glass opacity-80 hover:opacity-100'}`}>
-                {recommended && (
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-cyan-500 text-black font-black text-[10px] uppercase tracking-widest py-1 px-4 clip-path-slanted animate-pulse">
-                        {tLang.rec}
-                    </div>
-                )}
-                <div>
-                    <h3 className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-2 font-tech">{title}</h3>
-                    <div className="flex items-baseline gap-1 justify-center md:justify-start">
-                        <span className="text-5xl font-black text-white font-tech">${price}</span>
-                        {strike && <span className="text-sm text-red-500 line-through font-bold">${strike}</span>}
-                    </div>
-                    <p className="text-xs text-gray-500 mt-2 font-mono uppercase">{sub}</p>
-                </div>
-                <ul className="space-y-3 flex-1">
-                    {features.map((f, i) => (
-                        <li key={i} className="flex items-start gap-3 text-xs text-gray-300 font-tech">
-                            <div className={`mt-0.5 ${recommended ? 'text-cyan-400' : 'text-gray-600'}`}><Icons.Check /></div>
-                            {f}
-                        </li>
-                    ))}
-                </ul>
-                <button onClick={onSelect} className={`w-full py-4 font-black uppercase tracking-widest text-xs transition-all clip-path-slanted ${recommended ? 'tech-btn' : 'border border-white/20 hover:bg-white/10'}`}>
-                    {recommended ? tLang.buy : tLang.sel}
-                </button>
+                {recommended && <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-cyan-500 text-black font-black text-[10px] uppercase tracking-widest py-1 px-4 clip-path-slanted animate-pulse">{tLang.rec}</div>}
+                <div><h3 className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-2 font-tech">{title}</h3><div className="flex items-baseline gap-1 justify-center md:justify-start"><span className="text-5xl font-black text-white font-tech">${price}</span>{strike && <span className="text-sm text-red-500 line-through font-bold">${strike}</span>}</div><p className="text-xs text-gray-500 mt-2 font-mono uppercase">{sub}</p></div>
+                <ul className="space-y-3 flex-1">{features.map((f, i) => (<li key={i} className="flex items-start gap-3 text-xs text-gray-300 font-tech"><div className={`mt-0.5 ${recommended ? 'text-cyan-400' : 'text-gray-600'}`}><Icons.Check /></div>{f}</li>))}</ul>
+                <button onClick={onSelect} className={`w-full py-4 font-black uppercase tracking-widest text-xs transition-all clip-path-slanted ${recommended ? 'tech-btn' : 'border border-white/20 hover:bg-white/10'}`}>{recommended ? tLang.buy : tLang.sel}</button>
             </div>
         );
 
-        const QuestionScreen = ({ title, color, children, onNext, onPrev, credits, setView, tLang }) => (
-            <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative">
-                {/* Header Interno Persistente - CENTRADO */}
-                <div className="absolute top-0 left-0 w-full p-6 flex justify-center items-center gap-6 z-50 pointer-events-none">
-                     {/* Créditos */}
-                     <div className="pointer-events-auto">
-                         <button onClick={() => setView('pricing')} className="flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-md rounded-full border border-yellow-500/30 hover:border-yellow-400 hover:scale-105 transition-all shadow-lg group">
-                            <span className="text-yellow-400 group-hover:rotate-12 transition-transform"><Icons.Credit /></span>
-                            <span className="text-xs font-bold font-tech text-white">{credits} {tLang.credits}</span>
-                            <span className="w-4 h-4 bg-yellow-500 text-black rounded-full flex items-center justify-center text-[10px] font-bold">+</span>
-                         </button>
-                    </div>
+        const DesignEditor = ({ image, logo, initialText, onSave, onClose, tLang }) => {
+            const [txtTop, setTxtTop] = useState(initialText.top);
+            const [txtBot, setTxtBot] = useState(initialText.bottom);
+            const [logoSize, setLogoSize] = useState(initialText.logoSize);
+            const [txtColorTop, setTxtColorTop] = useState(initialText.colorTop);
+            const [txtColorBot, setTxtColorBot] = useState(initialText.colorBot);
+            const [posYTop, setPosYTop] = useState(initialText.posTop);
+            const [posYBot, setPosYBot] = useState(initialText.posBot);
 
-                    {/* Logo (Clickable) */}
-                    <div className="pointer-events-auto flex items-center gap-2 cursor-pointer group" onClick={() => setView('landing')}>
-                        <Icons.Logo />
-                        <span className="text-xl font-black font-tech tracking-tighter group-hover:text-cyan-400 transition-colors">CLICK.IA</span>
-                    </div>
+            const handleSave = () => { onSave({ top: txtTop, bottom: txtBot, logoSize, colorTop: txtColorTop, colorBot: txtColorBot, posTop: posYTop, posBot: posYBot }); };
 
-                    {/* Powered By Gemini */}
-                    <div className="pointer-events-auto flex items-center gap-1 text-[8px] text-cyan-400 font-bold uppercase tracking-[0.2em] bg-cyan-900/20 px-3 py-2 rounded-full border border-cyan-500/20">
-                        <Icons.Google /> {tLang.powered}
+            return (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm fade-enter p-4">
+                    <div className="w-full max-w-6xl h-[90vh] glass-panel rounded-2xl flex overflow-hidden border border-white/10">
+                        <div className="flex-1 relative bg-black/50 flex items-center justify-center p-8">
+                             <div className="relative group rounded-lg overflow-hidden shadow-2xl max-h-full aspect-square">
+                                <img src={image} className="w-full h-full object-contain" />
+                                {logo && <div className="absolute top-6 left-6 object-contain drop-shadow-2xl filter brightness-125 mix-blend-multiply transition-all" style={{ width: `${logoSize * 4}px` }}><img src={logo} className="w-full" /></div>}
+                                <div className="absolute left-0 w-full text-center transition-all" style={{ top: `${posYTop}%` }}><h2 className="text-5xl font-black font-tech drop-shadow-lg uppercase" style={{ color: txtColorTop }}>{txtTop}</h2></div>
+                                <div className="absolute left-0 w-full text-center transition-all" style={{ top: `${posYBot}%` }}><h3 className="text-2xl font-bold font-tech drop-shadow-lg uppercase" style={{ color: txtColorBot }}>{txtBot}</h3></div>
+                                <div className="absolute bottom-6 left-6 px-4 py-2 bg-white text-black font-black text-xs uppercase rounded tracking-widest flex items-center gap-2"><Icons.Logo /> CLICK.IA <Icons.Star /></div>
+                            </div>
+                        </div>
+                        <div className="w-80 bg-black/60 border-l border-white/10 p-6 flex flex-col gap-6 overflow-y-auto">
+                            <div className="flex justify-between items-center mb-2"><h3 className="font-tech font-bold text-xl text-white">{tLang.editor_title}</h3><button onClick={onClose} className="text-gray-400 hover:text-white"><Icons.X /></button></div>
+                            <div className="space-y-4">
+                                <div><label className="text-xs font-bold text-gray-400 uppercase mb-2 block">{tLang.edit_text_1}</label><input className="glass-input w-full p-2 rounded text-sm mb-2" value={txtTop} onChange={e => setTxtTop(e.target.value)} /><div className="flex gap-2 items-center"><input type="color" value={txtColorTop} onChange={e => setTxtColorTop(e.target.value)} className="h-8 w-8 rounded cursor-pointer bg-transparent border-none" /><input type="range" min="0" max="90" value={posYTop} onChange={e => setPosYTop(e.target.value)} /></div></div>
+                                <div><label className="text-xs font-bold text-gray-400 uppercase mb-2 block">{tLang.edit_text_2}</label><input className="glass-input w-full p-2 rounded text-sm mb-2" value={txtBot} onChange={e => setTxtBot(e.target.value)} /><div className="flex gap-2 items-center"><input type="color" value={txtColorBot} onChange={e => setTxtColorBot(e.target.value)} className="h-8 w-8 rounded cursor-pointer bg-transparent border-none" /><input type="range" min="0" max="90" value={posYBot} onChange={e => setPosYBot(e.target.value)} /></div></div>
+                                <div><label className="text-xs font-bold text-gray-400 uppercase mb-2 block">{tLang.edit_size}</label><input type="range" min="10" max="60" value={logoSize} onChange={e => setLogoSize(e.target.value)} /></div>
+                            </div>
+                            <div className="mt-auto space-y-2"><button onClick={handleSave} className="w-full py-3 bg-cyan-500 text-black font-bold uppercase rounded hover:bg-cyan-400 transition-colors shadow-[0_0_20px_rgba(6,182,212,0.3)]">{tLang.save_design}</button><div className="text-[9px] text-center text-gray-500 mt-4 font-mono">POWERED BY NANO BANANA & GEMINI</div></div>
+                        </div>
                     </div>
                 </div>
+            );
+        };
 
+        const QuestionScreen = ({ title, color, children, onNext, onPrev, credits, setView, tLang }) => (
+            <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative">
+                <div className="absolute top-0 left-0 w-full p-6 flex justify-center items-center gap-6 z-50 pointer-events-none">
+                     <div className="pointer-events-auto"><button onClick={() => setView('pricing')} className="flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-md rounded-full border border-yellow-500/30 hover:border-yellow-400 hover:scale-105 transition-all shadow-lg group"><span className="text-yellow-400 group-hover:rotate-12 transition-transform"><Icons.Credit /></span><span className="text-xs font-bold font-tech text-white">{credits} {tLang.credits}</span><span className="w-4 h-4 bg-yellow-500 text-black rounded-full flex items-center justify-center text-[10px] font-bold">+</span></button></div>
+                    <div className="pointer-events-auto flex items-center gap-2 cursor-pointer group" onClick={() => setView('landing')}><Icons.Logo /><span className="text-xl font-black font-tech tracking-tighter group-hover:text-cyan-400 transition-colors">CLICK.IA</span></div>
+                    <div className="pointer-events-auto flex items-center gap-1 text-[8px] text-cyan-400 font-bold uppercase tracking-[0.2em] bg-cyan-900/20 px-3 py-2 rounded-full border border-cyan-500/20"><Icons.Google /> {tLang.powered}</div>
+                </div>
                 <div className="w-full max-w-2xl glass p-12 rounded-3xl text-center relative mt-20">
                     <div className="absolute top-8 left-8 cursor-pointer text-gray-500 hover:text-white" onClick={onPrev}><Icons.ChevronLeft /></div>
                     <h2 className={`text-2xl font-bold font-tech mb-8 ${color}`}>{title}</h2>
@@ -590,444 +629,119 @@
             const [view, setView] = useState('landing');
             const [lang, setLang] = useState('ES'); 
             const [credits, setCredits] = useState(INITIAL_CREDITS);
-            const [formData, setFormData] = useState({ 
-                image: null, logo: null, inspirationImg: null, target: '', company: '', whatsapp: '', 
-                product: { name: '', price: '', promo: '' }, textOnImage: '',
-                style: '', light: '', colors: [], googleData: false, inspiration: '',
-                connected: { fb: false, ig: false, tk: false },
-                format: 'post'
-            });
+            const [user, setUser] = useState(null); 
+            const [userCloud, setUserCloud] = useState([]);
+            const [isEditing, setIsEditing] = useState(false);
+
+            const [formData, setFormData] = useState({ image: null, logo: null, inspirationImg: null, target: '', company: '', whatsapp: '', product: { name: '', price: '', promo: '' }, textOnImage: '', style: '', light: '', colors: [], googleData: false, inspiration: '', connected: { fb: false, ig: false, tk: false }, format: 'post' });
             const [loadingText, setLoadingText] = useState('');
             const [progress, setProgress] = useState(0);
             const [isMuted, setIsMuted] = useState(false);
             const [textOverlay, setTextOverlay] = useState({ top: "TU MARCA", bottom: "OFERTA LIMITADA" });
+            const [designState, setDesignState] = useState({ top: "TU MARCA", bottom: "OFERTA LIMITADA", logoSize: 24, colorTop: "#FFFFFF", colorBot: "#06b6d4", posTop: 33, posBot: 66 });
             const [resultImage, setResultImage] = useState(MAGIC_RESULT_IMAGE_DEFAULT);
+            const [generatedCopy, setGeneratedCopy] = useState("");
+            const [suggestedMusic, setSuggestedMusic] = useState([]);
             const [apiKey, setApiKey] = useState('');
             const [playingMusic, setPlayingMusic] = useState(null);
-
             const fileInputProduct = useRef(null);
             const fileInputLogo = useRef(null);
             const fileInputInspiration = useRef(null);
-
             const t = TRANSLATIONS[lang];
 
-            // Helper para construir la URL de Pollinations con parámetros
-            const generateImageURL = (prompt) => {
-                // Codificar el prompt para que sea seguro en la URL
-                const encodedPrompt = encodeURIComponent(prompt);
-                // Añadir parámetros de calidad y evitar logos
-                return `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1080&height=1080&nologo=true&seed=${Math.floor(Math.random() * 1000)}`;
-            };
+            useEffect(() => { setTextOverlay({ top: t.txt_top, bottom: t.txt_bot }); setDesignState(prev => ({ ...prev, top: t.txt_top, bottom: t.txt_bot })); }, [lang]);
+            useEffect(() => { const storedUser = localStorage.getItem('clickia_user'); const storedCloud = JSON.parse(localStorage.getItem('clickia_cloud') || '[]'); if (storedUser) { setUser(JSON.parse(storedUser)); setUserCloud(storedCloud); } }, []);
 
-            useEffect(() => {
-                setTextOverlay({
-                    top: t.txt_top,
-                    bottom: t.txt_bot
-                });
-            }, [lang]);
-
-            const playSound = (type) => {
-                if (isMuted) return;
-                const audio = document.getElementById(`sfx-${type}`);
-                if(audio) { audio.currentTime = 0; audio.play().catch(()=>{}); }
-                if(type === 'click') { 
-                    const bg = document.getElementById('bg-music'); 
-                    if(bg && bg.paused) { bg.volume = 0.2; bg.play().catch(()=>{}); } 
-                }
-            };
-
+            const playSound = (type) => { if (isMuted) return; const audio = document.getElementById(`sfx-${type}`); if(audio) { audio.currentTime = 0; audio.play().catch(()=>{}); } if(type === 'click') { const bg = document.getElementById('bg-music'); if(bg && bg.paused) { bg.volume = 0.2; bg.play().catch(()=>{}); } } };
             const changeView = (v) => { playSound('click'); setView(v); };
-
-            const handleUpload = (e, field) => {
-                const file = e.target.files[0];
-                if(file) {
-                    playSound('click');
-                    setFormData(prev => ({...prev, [field]: URL.createObjectURL(file)}));
-                }
-            };
-
-            const updateProduct = (field, value) => {
-                setFormData(prev => ({ ...prev, product: { ...prev.product, [field]: value } }));
-            };
-
-            const toggleColor = (color) => {
-                playSound('click');
-                setFormData(prev => {
-                    const newColors = prev.colors.includes(color) 
-                        ? prev.colors.filter(c => c !== color) 
-                        : [...prev.colors, color].slice(0, 4); 
-                    return { ...prev, colors: newColors };
-                });
-            };
-
-            const connectSocial = (network) => {
-                playSound('click');
-                let url = '';
-                // URLs de documentación oficial de OAuth para simular la redirección
-                switch(network) {
-                    case 'fb': url = 'https://www.facebook.com/v18.0/dialog/oauth?client_id=YOUR_APP_ID&redirect_uri=YOUR_URL'; break;
-                    case 'ig': url = 'https://api.instagram.com/oauth/authorize'; break;
-                    case 'tk': url = 'https://www.tiktok.com/auth/authorize/'; break;
-                }
-                // Abrir pestaña real
-                if (url) window.open(url, '_blank');
-                
-                setFormData(prev => ({...prev, connected: {...prev.connected, [network]: !prev.connected[network]} }));
-            };
+            const handleUpload = (e, field) => { const file = e.target.files[0]; if(file) { playSound('click'); setFormData(prev => ({...prev, [field]: URL.createObjectURL(file)})); } };
+            const updateProduct = (field, value) => { setFormData(prev => ({ ...prev, product: { ...prev.product, [field]: value } })); };
+            const toggleColor = (color) => { playSound('click'); setFormData(prev => { const newColors = prev.colors.includes(color) ? prev.colors.filter(c => c !== color) : [...prev.colors, color].slice(0, 4); return { ...prev, colors: newColors }; }); };
+            const connectSocial = (network) => { playSound('click'); let url = ''; switch(network) { case 'fb': url = 'https://www.facebook.com/v18.0/dialog/oauth?client_id=YOUR_APP_ID&redirect_uri=YOUR_URL'; break; case 'ig': url = 'https://api.instagram.com/oauth/authorize'; break; case 'tk': url = 'https://www.tiktok.com/auth/authorize/'; break; } if (url) window.open(url, '_blank'); setFormData(prev => ({...prev, connected: {...prev.connected, [network]: !prev.connected[network]} })); };
+            const toggleMusic = (id) => { playSound('click'); setPlayingMusic(playingMusic === id ? null : id); };
+            const handleNewGeneration = () => { playSound('click'); setFormData({ image: null, logo: null, inspirationImg: null, target: '', company: '', whatsapp: '', product: { name: '', price: '', promo: '' }, textOnImage: '', style: '', light: '', colors: [], googleData: false, inspiration: '', connected: { fb: false, ig: false, tk: false }, format: 'post' }); setResultImage(MAGIC_RESULT_IMAGE_DEFAULT); setView('upload'); };
+            const handleLogin = () => { const fakeUser = { name: "Emprendedor", email: "user@clickia.com" }; setUser(fakeUser); localStorage.setItem('clickia_user', JSON.stringify(fakeUser)); changeView('upload'); };
+            const handleCopyText = () => { navigator.clipboard.writeText(generatedCopy); alert("Copy copiado!"); };
+            const handleDownloadImage = () => { const link = document.createElement('a'); link.href = resultImage; link.download = `CLICK_IA_${Date.now()}.jpg`; document.body.appendChild(link); link.click(); document.body.removeChild(link); };
+            const saveDesign = (newState) => { setDesignState(newState); setIsEditing(false); playSound('success'); };
+            const generateImageURL = (prompt) => { const encodedPrompt = encodeURIComponent(prompt); return `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1080&height=1080&nologo=true&seed=${Math.floor(Math.random() * 10000)}`; };
             
-            const toggleMusic = (id) => {
-                playSound('click');
-                setPlayingMusic(playingMusic === id ? null : id);
-            };
-            
-            const handleNewGeneration = () => {
-                playSound('click');
-                setFormData({ 
-                    image: null, logo: null, inspirationImg: null, target: '', company: '', whatsapp: '', 
-                    product: { name: '', price: '', promo: '' }, textOnImage: '',
-                    style: '', light: '', colors: [], googleData: false, inspiration: '',
-                    connected: { fb: false, ig: false, tk: false },
-                    format: 'post'
-                });
-                setResultImage(MAGIC_RESULT_IMAGE_DEFAULT);
-                setView('upload');
+            const generateDynamicCopy = () => {
+                const product = formData.product.name || "Producto Increíble";
+                const promo = formData.product.promo || t.default_promo;
+                const contact = formData.whatsapp || "5939999999";
+                const company = formData.company || "Tu Empresa";
+                let copy = "";
+                if (lang === 'ES') { copy = `🚀 **¡${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${promo}\n📍 Disponible en: ${company}\n\n👇 **¡No esperes más!** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; } 
+                else if (lang === 'EN') { copy = `🚀 **${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${promo}\n📍 Available at: ${company}\n\n👇 **Don't wait!** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; } 
+                else if (lang === 'ZH') { copy = `🚀 **${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${promo}\n📍 位于: ${company}\n\n👇 **不要等待!** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; } 
+                else { copy = `🚀 **${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${promo}\n📍 Disponible chez : ${company}\n\n👇 **N'attendez plus !** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; }
+                return copy;
             };
 
             const runEngine = async () => {
                 if(!formData.style) return alert("Elige un estilo");
                 if(credits <= 0) return alert("¡Te has quedado sin créditos! Por favor recarga para continuar.");
-                
-                playSound('process');
-                setView('processing');
-                
-                // 1. Construir un prompt enriquecido para la generación de imágenes
-                // Si el usuario no puso info, usamos valores por defecto para que siempre salga algo lindo
-                const promptBase = formData.product.name || "futuristic product";
+                playSound('process'); setView('processing');
+                const promptBase = formData.product.name || "luxury product";
                 const style = formData.style || "cinematic";
-                const lighting = formData.light || "neon";
+                const lighting = formData.light || "studio lighting";
                 const colors = formData.colors.length > 0 ? formData.colors.join(", ") : "vibrant colors";
-                
-                // Prompt "Mágico" que combina todo
-                const magicPrompt = `highly detailed 8k masterpiece of ${promptBase}, style ${style}, lighting ${lighting}, colors ${colors}, professional product photography, commercial advertisement, sharp focus, trending on artstation`;
-
-                // 2. Generar URL de Pollinations
+                const magicPrompt = `Hyper-ultra-realistic 8k commercial masterpiece of ${promptBase}, ${style} style, ${lighting}, ${colors} color palette, modern minimalist setting, professional photography, sharp focus, high detail, trending on artstation, best quality, vivid`;
                 const newImageURL = generateImageURL(magicPrompt);
-                console.log("Generando imagen con:", magicPrompt);
-                console.log("URL generada:", newImageURL);
-
-                // 3. Simular proceso con Gemini si hay Key (opcional para este paso de imagen)
-                if (apiKey) {
-                     // Aquí iría la llamada real a Gemini para texto, pero para la imagen ya tenemos Pollinations
-                     console.log("Usando API Key para optimización de texto...");
-                }
-
-                // Usar los pasos traducidos
+                const copy = generateDynamicCopy();
+                setGeneratedCopy(copy);
+                setSuggestedMusic(REAL_MUSIC_IDS);
                 const steps = t.loading_steps;
-                for(let i=0; i<steps.length; i++) {
-                    setLoadingText(steps[i]);
-                    setProgress(((i+1)/steps.length)*100);
-                    await new Promise(r => setTimeout(r, 1500));
-                }
-                
-                // Actualizar la imagen de resultado y créditos
+                for(let i=0; i<steps.length; i++) { setLoadingText(steps[i]); setProgress(((i+1)/steps.length)*100); await new Promise(r => setTimeout(r, 1500)); }
                 setResultImage(newImageURL);
                 setCredits(prev => prev - 1);
-                playSound('success');
-                setView('result');
+                const newItem = { id: Date.now(), image: newImageURL, copy: copy, date: new Date().toLocaleDateString() };
+                const updatedCloud = [newItem, ...userCloud];
+                setUserCloud(updatedCloud);
+                localStorage.setItem('clickia_cloud', JSON.stringify(updatedCloud));
+                playSound('success'); setView('result');
             };
 
-            // HEADER COMPONENT FOR INTERNAL PAGES
             const HeaderInternal = () => (
                 <div className="absolute top-0 left-0 w-full p-6 flex justify-center items-center gap-6 z-50 pointer-events-none">
-                     {/* Créditos */}
-                     <div className="pointer-events-auto">
-                         <button onClick={() => setView('pricing')} className="flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-md rounded-full border border-yellow-500/30 hover:border-yellow-400 hover:scale-105 transition-all shadow-lg group">
-                            <span className="text-yellow-400 group-hover:rotate-12 transition-transform"><Icons.Credit /></span>
-                            <span className="text-xs font-bold font-tech text-white">{credits} {t.credits}</span>
-                            <span className="w-4 h-4 bg-yellow-500 text-black rounded-full flex items-center justify-center text-[10px] font-bold">+</span>
-                         </button>
-                    </div>
-
-                    {/* Logo (Clickable) */}
-                    <div className="pointer-events-auto flex items-center gap-2 cursor-pointer group" onClick={() => setView('landing')}>
-                        <Icons.Logo />
-                        <span className="text-xl font-black font-tech tracking-tighter group-hover:text-cyan-400 transition-colors">CLICK.IA</span>
-                    </div>
-
-                    {/* Powered By Gemini */}
-                    <div className="pointer-events-auto flex items-center gap-1 text-[8px] text-cyan-400 font-bold uppercase tracking-[0.2em] bg-cyan-900/20 px-3 py-2 rounded-full border border-cyan-500/20">
-                        <Icons.Google /> {t.powered}
-                    </div>
+                     <div className="pointer-events-auto"><button onClick={() => setView('pricing')} className="flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-md rounded-full border border-yellow-500/30 hover:border-yellow-400 hover:scale-105 transition-all shadow-lg group"><span className="text-yellow-400 group-hover:rotate-12 transition-transform"><Icons.Credit /></span><span className="text-xs font-bold font-tech text-white">{credits} {t.credits}</span><span className="w-4 h-4 bg-yellow-500 text-black rounded-full flex items-center justify-center text-[10px] font-bold">+</span></button></div>
+                    <div className="pointer-events-auto flex items-center gap-2 cursor-pointer group" onClick={() => setView('landing')}><Icons.Logo /><span className="text-xl font-black font-tech tracking-tighter group-hover:text-cyan-400 transition-colors">CLICK.IA</span></div>
+                    <div className="pointer-events-auto flex items-center gap-1 text-[8px] text-cyan-400 font-bold uppercase tracking-[0.2em] bg-cyan-900/20 px-3 py-2 rounded-full border border-cyan-500/20"><Icons.Google /> {t.powered}</div>
                 </div>
             );
-
+            
             // --- VISTAS ---
             if (view === 'landing') return (
                 <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center relative fade-enter">
                     <nav className="absolute top-0 w-full p-6 flex justify-center items-center z-50">
                         <div className="flex flex-wrap justify-center gap-4 items-center bg-black/40 backdrop-blur-xl p-3 rounded-full border border-white/10 shadow-2xl hover:border-white/20 transition-all duration-500">
-                            <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500/10 to-transparent rounded-full border border-yellow-500/30">
-                                <span className="text-yellow-400 animate-pulse"><Icons.Credit /></span>
-                                <span className="text-xs font-black font-tech text-yellow-100 tracking-widest">{credits} {t.credits}</span>
-                            </div>
-                            <div className="flex items-center gap-3 px-4 border-r border-white/10">
-                                {['ES', 'EN', 'ZH', 'FR'].map(l => (
-                                    <button key={l} onClick={() => { playSound('click'); setLang(l); }} className={`text-[10px] font-bold font-tech transition-all duration-300 hover:scale-110 ${lang === l ? 'text-cyan-400 scale-110' : 'text-gray-500 hover:text-white'}`}>{l}</button>
-                                ))}
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <button onClick={() => {playSound('click'); setView('setup')}} className="text-xs font-bold text-white hover:text-cyan-400 font-tech uppercase tracking-widest px-4 py-2 hover:bg-white/5 rounded-full transition-all">{t.enter}</button>
-                                <button onClick={() => {playSound('click'); setView('pricing')}} className="text-xs font-bold text-gray-300 hover:text-white font-tech uppercase tracking-widest bg-white/5 border border-white/10 px-5 py-2 rounded-full hover:bg-white/20 transition-all shadow-lg">{t.prices}</button>
-                                <button onClick={() => {playSound('click'); setView('faq')}} className="text-xs font-bold text-gray-300 hover:text-white font-tech uppercase tracking-widest bg-white/5 border border-white/10 px-5 py-2 rounded-full hover:bg-white/20 transition-all shadow-lg">{t.faq}</button>
-                            </div>
+                            <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500/10 to-transparent rounded-full border border-yellow-500/30"><span className="text-yellow-400 animate-pulse"><Icons.Credit /></span><span className="text-xs font-black font-tech text-yellow-100 tracking-widest">{credits} {t.credits}</span></div>
+                            <div className="flex items-center gap-3 px-4 border-r border-white/10">{['ES', 'EN', 'ZH', 'FR'].map(l => (<button key={l} onClick={() => { playSound('click'); setLang(l); }} className={`text-[10px] font-bold font-tech transition-all duration-300 hover:scale-110 ${lang === l ? 'text-cyan-400 scale-110' : 'text-gray-500 hover:text-white'}`}>{l}</button>))}</div>
+                            <div className="flex items-center gap-2"><button onClick={() => {playSound('click'); setView('setup')}} className="text-xs font-bold text-white hover:text-cyan-400 font-tech uppercase tracking-widest px-4 py-2 hover:bg-white/5 rounded-full transition-all">{t.enter}</button><button onClick={() => {playSound('click'); setView('pricing')}} className="text-xs font-bold text-gray-300 hover:text-white font-tech uppercase tracking-widest bg-white/5 border border-white/10 px-5 py-2 rounded-full hover:bg-white/20 transition-all shadow-lg">{t.prices}</button><button onClick={() => {playSound('click'); setView('faq')}} className="text-xs font-bold text-gray-300 hover:text-white font-tech uppercase tracking-widest bg-white/5 border border-white/10 px-5 py-2 rounded-full hover:bg-white/20 transition-all shadow-lg">{t.faq}</button></div>
                         </div>
                     </nav>
                     <div className="z-10 max-w-6xl w-full flex flex-col items-center mt-40">
-                         <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12 animate-pulse-fast">
-                            <div className="flex items-center gap-3 select-none">
-                                <div className="transform scale-150"><Icons.Logo /></div>
-                                <span className="text-5xl font-black font-tech tracking-tighter">CLICK<span className="text-cyan-400">.IA</span></span>
-                            </div>
-                            <div className="hidden md:block w-px h-12 bg-gradient-to-b from-transparent via-white/30 to-transparent"></div>
-                            <div className="inline-flex items-center gap-3 px-5 py-2 glass rounded-full border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(6,182,212,0.15)]">
-                                <Icons.Google /> {t.powered}
-                            </div>
-                         </div>
-                        <h1 className="text-4xl md:text-7xl font-black font-tech mb-8 leading-none tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">
-                            {t.hero_mk} <br/><span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-700">{t.hero_auto}</span>
-                        </h1>
-                        <div className="flex flex-wrap justify-center gap-4 mb-12 text-xs font-bold uppercase tracking-widest text-gray-300">
-                            {t.bullets.map(b => (<div key={b} className="flex items-center gap-2 bg-white/5 px-3 py-1 rounded border border-white/10"><Icons.Check /> {b}</div>))}
-                        </div>
-                        <div className="w-full max-w-4xl h-96 mb-12 shadow-[0_0_50px_rgba(6,182,212,0.2)] rounded-2xl overflow-hidden border border-white/20">
-                             <ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} />
-                        </div>
-                        <div className="flex flex-col items-center gap-3 mb-12">
-                            <button onClick={() => {playSound('click'); setView('setup')}} className="tech-btn px-16 py-6 text-xl rounded-full flex items-center gap-4 mx-auto shadow-[0_0_50px_rgba(6,182,212,0.4)]">
-                                {t.cta_trial}
-                            </button>
-                            <div className="flex items-center gap-2 text-cyan-400 font-bold text-sm uppercase tracking-widest animate-pulse">
-                                <Icons.Zap /> {t.cta_posts}
-                            </div>
-                        </div>
-
-                        {/* SECCIÓN DEL CREADOR */}
-                        <div className="w-full max-w-4xl glass p-8 rounded-3xl border border-white/10 mb-20 flex flex-col md:flex-row items-center gap-8 text-left relative overflow-hidden">
-                            <div className="absolute -top-20 -right-20 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl"></div>
-                            <div className="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-white/10 shadow-2xl flex-shrink-0 overflow-hidden relative z-10">
-                                <img src={CREATOR_IMAGE} className="w-full h-full object-cover" />
-                            </div>
-                            <div className="flex-1 relative z-10">
-                                <div className="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2">{t.creator_title}</div>
-                                <h3 className="text-3xl font-black font-tech mb-1">RODDY SMITH</h3>
-                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{t.creator_role}</p>
-                                <p className="text-sm text-gray-300 leading-relaxed mb-4 italic border-l-2 border-cyan-500 pl-4">"{t.creator_bio}"</p>
-                                <p className="text-xs text-gray-400 leading-relaxed">{t.creator_mission}</p>
-                            </div>
-                        </div>
-
+                         <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12 animate-pulse-fast"><div className="flex items-center gap-3 select-none"><div className="transform scale-150"><Icons.Logo /></div><span className="text-5xl font-black font-tech tracking-tighter">CLICK<span className="text-cyan-400">.IA</span></span></div><div className="hidden md:block w-px h-12 bg-gradient-to-b from-transparent via-white/30 to-transparent"></div><div className="inline-flex items-center gap-3 px-5 py-2 glass rounded-full border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(6,182,212,0.15)]"><Icons.Google /> {t.powered}</div></div>
+                        <h1 className="text-4xl md:text-7xl font-black font-tech mb-8 leading-none tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">{t.hero_mk} <br/><span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-700">{t.hero_auto}</span></h1>
+                        <div className="flex flex-wrap justify-center gap-4 mb-12 text-xs font-bold uppercase tracking-widest text-gray-300">{t.bullets.map(b => (<div key={b} className="flex items-center gap-2 bg-white/5 px-3 py-1 rounded border border-white/10"><Icons.Check /> {b}</div>))}</div>
+                        <div className="w-full max-w-4xl h-96 mb-12 shadow-[0_0_50px_rgba(6,182,212,0.2)] rounded-2xl overflow-hidden border border-white/20"><ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} /></div>
+                        <div className="flex flex-col items-center gap-3 mb-12"><button onClick={() => {playSound('click'); setView('setup')}} className="tech-btn px-16 py-6 text-xl rounded-full flex items-center gap-4 mx-auto shadow-[0_0_50px_rgba(6,182,212,0.4)]">{t.cta_trial}</button><div className="flex items-center gap-2 text-cyan-400 font-bold text-sm uppercase tracking-widest animate-pulse"><Icons.Zap /> {t.cta_posts}</div></div>
+                        <div className="w-full max-w-4xl glass p-8 rounded-3xl border border-white/10 mb-20 flex flex-col md:flex-row items-center gap-8 text-left relative overflow-hidden"><div className="absolute -top-20 -right-20 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl"></div><div className="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-white/10 shadow-2xl flex-shrink-0 overflow-hidden relative z-10"><img src={CREATOR_IMAGE} className="w-full h-full object-cover" /></div><div className="flex-1 relative z-10"><div className="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2">{t.creator_title}</div><h3 className="text-3xl font-black font-tech mb-1">RODDY SMITH</h3><p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{t.creator_role}</p><p className="text-sm text-gray-300 leading-relaxed mb-4 italic border-l-2 border-cyan-500 pl-4">"{t.creator_bio}"</p><p className="text-xs text-gray-400 leading-relaxed">{t.creator_mission}</p></div></div>
                         <div className="floating-credit">{t.credit_text}</div>
                     </div>
                 </div>
             );
-
-            if (view === 'setup') return (
-                <div className="min-h-screen flex items-center justify-center p-6">
-                    <div className="w-full max-w-md glass p-10 rounded-2xl text-center relative overflow-hidden">
-                        <button onClick={() => changeView('landing')} className="absolute top-4 right-4 text-gray-500 hover:text-white"><Icons.X /></button>
-                        <h2 className="text-3xl font-bold font-tech mb-2">{t.setup_title}</h2>
-                        <p className="text-gray-400 text-sm mb-8">{t.setup_desc}</p>
-                        <div className="relative mb-6">
-                            <input type="password" placeholder="Google API Key (Opcional)" value={apiKey} onChange={e => setApiKey(e.target.value)} className="glass-input w-full p-4 rounded-lg pl-10"/>
-                            <div className="absolute left-3 top-4 text-gray-500"><Icons.Lock /></div>
-                        </div>
-                        <button onClick={() => changeView('upload')} className="w-full py-4 bg-white text-black font-black uppercase tracking-widest hover:bg-cyan-400 transition-colors rounded-lg">{t.setup_btn}</button>
-                        <div className="embedded-credit">{t.credit_text}</div>
-                    </div>
-                </div>
-            );
-
-            if (view === 'upload') return (
-                <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative">
-                    <HeaderInternal />
-                    <div className="w-full max-w-4xl glass p-12 rounded-3xl text-center border border-white/10 mt-20">
-                        <div className="absolute top-8 left-8 cursor-pointer text-gray-500 hover:text-white" onClick={() => setView('landing')}><Icons.ChevronLeft /></div>
-                        <h2 className="text-3xl font-bold font-tech mb-8 uppercase">{t.upload_title}</h2>
-                        <div className="grid md:grid-cols-2 gap-8 mb-10">
-                             <div onClick={() => fileInputProduct.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.image ? 'border-cyan-500 bg-cyan-900/10' : 'border-white/20 hover:border-cyan-500'}`}>
-                                {formData.image ? (
-                                    <>
-                                        <img src={formData.image} className="w-full h-full object-contain p-4" />
-                                        <div className="scan-line"></div>
-                                    </>
-                                ) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Upload /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_prod}</span></>}
-                                <input type="file" ref={fileInputProduct} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'image')} />
-                            </div>
-                            
-                            <div onClick={() => fileInputLogo.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.logo ? 'border-purple-500 bg-purple-900/10' : 'border-white/20 hover:border-purple-500'}`}>
-                                {formData.logo ? (
-                                    <>
-                                        <img src={formData.logo} className="w-full h-full object-contain p-8" />
-                                        <div className="scan-line"></div>
-                                        <div className="absolute top-0 left-0 w-full h-full pointer-events-none mix-blend-multiply bg-white/0"></div> {/* Ayuda visual para logos con fondo blanco */}
-                                    </>
-                                ) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Zap /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_logo}</span></>}
-                                <input type="file" ref={fileInputLogo} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'logo')} />
-                            </div>
-                        </div>
-                        <button onClick={() => { if(!formData.image) return alert("Sube producto"); playSound('click'); changeView('q1'); }} className={`tech-btn w-full py-5 text-xl uppercase tracking-widest ${!formData.image && 'opacity-50 cursor-not-allowed'}`}>{t.next}</button>
-                        <div className="embedded-credit">{t.credit_text}</div>
-                    </div>
-                </div>
-            );
-
-            if (view === 'q1') return <QuestionScreen title={t.q1_title} color="text-cyan-400" nextView="q2" prevView="upload" onNext={() => changeView('q2')} onPrev={() => changeView('upload')} credits={credits} setView={setView} tLang={t}>
-                <input className="quiz-input" placeholder={t.q1_ph} autoFocus value={formData.target} onChange={e => setFormData({...formData, target: e.target.value})} />
-            </QuestionScreen>;
-
-            if (view === 'q2') return <QuestionScreen title={t.q2_title} color="text-purple-400" nextView="q3" prevView="q1" onNext={() => changeView('q3')} onPrev={() => changeView('q1')} credits={credits} setView={setView} tLang={t}>
-                <div className="space-y-4">
-                    <input className="quiz-input" placeholder={t.q2_p1} value={formData.product.name} onChange={e => updateProduct('name', e.target.value)} />
-                    <div className="grid grid-cols-2 gap-4">
-                        <input className="quiz-input" placeholder={t.q2_p2} value={formData.product.price} onChange={e => updateProduct('price', e.target.value)} />
-                        <input className="quiz-input" placeholder={t.q2_p3} value={formData.product.promo} onChange={e => updateProduct('promo', e.target.value)} />
-                    </div>
-                </div>
-            </QuestionScreen>;
-
-            if (view === 'q3') return <QuestionScreen title={t.q3_title} color="text-green-400" nextView="q4" prevView="q2" onNext={() => changeView('q4')} onPrev={() => changeView('q2')} credits={credits} setView={setView} tLang={t}>
-                <div className="space-y-4">
-                    <input className="quiz-input" placeholder={t.q3_p1} value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} />
-                    <div className="relative">
-                        <input className="quiz-input pl-10" placeholder={t.q3_p2} value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} />
-                        <div className="absolute left-2 top-4 text-green-500 font-bold">WA</div>
-                    </div>
-                </div>
-            </QuestionScreen>;
-
-            if (view === 'q4') return <QuestionScreen title={t.q4_title} color="text-yellow-400" nextView="q5" prevView="q3" onNext={() => changeView('q5')} onPrev={() => changeView('q3')} credits={credits} setView={setView} tLang={t}>
-                <div className="space-y-6">
-                    <input className="quiz-input" placeholder={t.q4_ph1} value={formData.inspiration} onChange={e => setFormData({...formData, inspiration: e.target.value})} />
-                    <div onClick={() => fileInputInspiration.current.click()} className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all text-center relative h-48 flex items-center justify-center overflow-hidden ${formData.inspirationImg ? 'border-yellow-400' : 'border-white/20 hover:border-yellow-400'}`}>
-                        {formData.inspirationImg ? (
-                            <>
-                                <img src={formData.inspirationImg} className="w-full h-full object-cover absolute top-0 left-0 opacity-60" />
-                                <div className={`scan-line opacity-100`}></div>
-                                <div className="relative z-10 bg-black/50 px-4 py-2 rounded-full text-xs font-bold text-yellow-400 border border-yellow-400 uppercase">{t.q4_change}</div>
-                            </>
-                        ) : (
-                            <div className="text-gray-500 text-xs uppercase">{t.q4_upload}</div>
-                        )}
-                        <input type="file" ref={fileInputInspiration} className="hidden" onChange={(e) => handleUpload(e, 'inspirationImg')} />
-                    </div>
-                </div>
-            </QuestionScreen>;
-
-            if (view === 'q5') return <QuestionScreen title={t.q5_title} color="text-red-400" nextView="style" prevView="q4" onNext={() => changeView('style')} onPrev={() => changeView('q4')} credits={credits} setView={setView} tLang={t}>
-                 <div className="h-64 overflow-y-auto pr-2 custom-scroll">
-                     {Object.entries(COLOR_GROUPS).map(([group, colors]) => (
-                        <div key={group} className="mb-6">
-                            <p className="text-[10px] font-bold text-gray-500 uppercase mb-3 tracking-widest text-left">
-                                {group === "NEUTROS" ? t.color_n : 
-                                 group === "NUDE" ? t.color_nu :
-                                 group === "PRIMARIOS" ? t.color_p :
-                                 group === "SECUNDARIOS" ? t.color_s :
-                                 group === "TERCIARIOS" ? t.color_t : t.color_q}
-                            </p>
-                            <div className="flex flex-wrap gap-3">
-                                {colors.map(c => (
-                                    <div key={c} onClick={() => toggleColor(c)} className={`color-check ${formData.colors.includes(c) ? 'selected' : ''}`} style={{backgroundColor: c}}></div>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </QuestionScreen>;
-
-            if (view === 'style') return (
-                <div className="min-h-screen p-6 fade-enter flex flex-col relative">
-                    <HeaderInternal />
-                    <div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20">
-                         <button onClick={() => setView('q5')} className="p-2 rounded-full bg-white/10 hover:bg-white/20"><Icons.ChevronLeft /></button>
-                         <h2 className="text-3xl font-bold font-tech">{t.style_title}</h2>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto w-full">
-                        {STYLES_DATA.map(s => (
-                            <div key={s.id} onClick={() => {playSound('click'); setFormData({...formData, style: t[`s_${s.id}`]}); changeView('light')}} className="glass-card rounded-xl h-64 group">
-                                <img src={s.img} className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
-                                <div className="card-label">{t[`s_${s.id}`]}</div>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="mt-8 w-full max-w-7xl mx-auto">
-                        <div className="floating-credit">{t.credit_text}</div>
-                    </div>
-                </div>
-            );
-
-            if (view === 'light') return (
-                <div className="min-h-screen p-6 fade-enter flex flex-col relative">
-                    <HeaderInternal />
-                    <div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20">
-                         <button onClick={() => changeView('style')} className="p-2 rounded-full bg-white/10 hover:bg-white/20"><Icons.ChevronLeft /></button>
-                         <h2 className="text-3xl font-bold font-tech">{t.light_title}</h2>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-7xl mx-auto w-full mb-12">
-                        {LIGHTING_DATA.map(l => (
-                            <div key={l.id} onClick={() => {playSound('click'); setFormData({...formData, light: t[`l_${l.id}`]}); }} className={`glass-card rounded-xl h-64 group ${formData.light === t[`l_${l.id}`] ? 'selected' : ''}`}>
-                                <img src={l.img} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all" />
-                                <div className="card-label">{t[`l_${l.id}`]} <br/><span className="text-[9px] text-gray-400 font-normal">{t[`l_${l.id}_desc`]}</span></div>
-                            </div>
-                        ))}
-                    </div>
-                    <div onClick={() => {playSound('click'); setFormData(prev => ({...prev, googleData: !prev.googleData}));}} className={`glass p-6 rounded-2xl flex justify-between items-center border transition-all cursor-pointer mb-8 max-w-2xl mx-auto w-full ${formData.googleData ? 'border-blue-500 bg-blue-900/20' : 'border-white/10 hover:border-blue-500/50'}`}>
-                         <div className="flex items-center gap-4">
-                             <div className="bg-blue-500/20 p-3 rounded-full text-blue-400"><Icons.Google /></div>
-                             <div><h3 className="font-bold">{t.google_data}</h3><p className="text-xs text-gray-400">{t.google_desc}</p></div>
-                         </div>
-                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${formData.googleData ? 'bg-blue-500 border-blue-500' : 'border-gray-500'}`}>{formData.googleData && <Icons.Check />}</div>
-                    </div>
-                    <div className="max-w-7xl mx-auto w-full text-center">
-                        <button onClick={runEngine} className="tech-btn px-20 py-6 text-2xl rounded-full shadow-[0_0_50px_rgba(6,182,212,0.5)]">{t.gen_btn}</button>
-                    </div>
-                    <div className="mt-8 w-full max-w-7xl mx-auto">
-                        <div className="floating-credit">{t.credit_text}</div>
-                    </div>
-                </div>
-            );
-
-            if (view === 'processing') return (
-                <div className="min-h-screen flex flex-col items-center justify-center p-8 fade-enter relative overflow-hidden">
-                    <HeaderInternal />
-                    
-                    <div className="flex flex-col items-center justify-center gap-6 w-full max-w-2xl z-10 mt-32">
-                        <NeuralBrain />
-                        
-                        <div className="flex flex-col items-center gap-4 w-full">
-                            <h2 className="text-3xl md:text-4xl font-black font-tech text-white tracking-[0.2em] text-center animate-pulse uppercase drop-shadow-[0_0_25px_rgba(6,182,212,0.5)]">
-                                {loadingText}
-                            </h2>
-                            
-                            <div className="flex flex-col items-center gap-2">
-                                <p className="text-cyan-400 font-mono text-xs tracking-[0.3em] font-bold">
-                                    {t.processing}
-                                </p>
-                                <p className="text-white font-black font-mono text-xl">
-                                    {Math.round(progress)}%
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="w-full max-w-md h-1 bg-gray-900 rounded-full overflow-hidden border border-white/10 shadow-lg">
-                            <div 
-                                className="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 transition-all duration-200 ease-out shadow-[0_0_30px_#06b6d4]" 
-                                style={{ width: `${progress}%` }}
-                            ></div>
-                        </div>
-                    </div>
-                    <div className="floating-credit">{t.credit_text}</div>
-                </div>
-            );
+            if (view === 'setup') return <QuestionScreen title={t.setup_title} color="text-white" nextView="upload" onNext={() => changeView('upload')} onPrev={() => changeView('landing')} credits={credits} setView={setView} tLang={t}><div className="space-y-4"><button onClick={handleLogin} className="w-full py-4 bg-white text-black font-black uppercase tracking-widest hover:bg-cyan-400 transition-colors rounded-lg flex items-center justify-center gap-2"><Icons.Google /> {t.setup_btn}</button><p className="text-xs text-gray-500">{t.setup_email}</p></div></QuestionScreen>;
+            if (view === 'upload') return <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative"><HeaderInternal /><div className="w-full max-w-4xl glass p-12 rounded-3xl text-center border border-white/10 mt-20"><div className="absolute top-8 left-8 cursor-pointer text-gray-500 hover:text-white" onClick={() => setView('landing')}><Icons.ChevronLeft /></div><h2 className="text-3xl font-bold font-tech mb-8 uppercase">{t.upload_title}</h2><div className="grid md:grid-cols-2 gap-8 mb-10"><div onClick={() => fileInputProduct.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.image ? 'border-cyan-500 bg-cyan-900/10' : 'border-white/20 hover:border-cyan-500'}`}>{formData.image ? (<><img src={formData.image} className="w-full h-full object-contain p-4" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Upload /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_prod}</span></>}<input type="file" ref={fileInputProduct} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'image')} /></div><div onClick={() => fileInputLogo.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.logo ? 'border-purple-500 bg-purple-900/10' : 'border-white/20 hover:border-purple-500'}`}>{formData.logo ? (<><img src={formData.logo} className="w-full h-full object-contain p-8" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Zap /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_logo}</span></>}<input type="file" ref={fileInputLogo} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'logo')} /></div></div><button onClick={() => { if(!formData.image) return alert("Sube producto"); playSound('click'); changeView('q1'); }} className={`tech-btn w-full py-5 text-xl uppercase tracking-widest ${!formData.image && 'opacity-50 cursor-not-allowed'}`}>{t.next}</button><div className="embedded-credit">{t.credit_text}</div></div></div>;
+            if (view === 'q1') return <QuestionScreen title={t.q1_title} color="text-cyan-400" nextView="q2" prevView="upload" onNext={() => changeView('q2')} onPrev={() => changeView('upload')} credits={credits} setView={setView} tLang={t}><input className="quiz-input" placeholder={t.q1_ph} autoFocus value={formData.target} onChange={e => setFormData({...formData, target: e.target.value})} /></QuestionScreen>;
+            if (view === 'q2') return <QuestionScreen title={t.q2_title} color="text-purple-400" nextView="q3" prevView="q1" onNext={() => changeView('q3')} onPrev={() => changeView('q1')} credits={credits} setView={setView} tLang={t}><div className="space-y-4"><input className="quiz-input" placeholder={t.q2_p1} value={formData.product.name} onChange={e => updateProduct('name', e.target.value)} /><div className="grid grid-cols-2 gap-4"><input className="quiz-input" placeholder={t.q2_p2} value={formData.product.price} onChange={e => updateProduct('price', e.target.value)} /><input className="quiz-input" placeholder={t.q2_p3} value={formData.product.promo} onChange={e => updateProduct('promo', e.target.value)} /></div></div></QuestionScreen>;
+            if (view === 'q3') return <QuestionScreen title={t.q3_title} color="text-green-400" nextView="q4" prevView="q2" onNext={() => changeView('q4')} onPrev={() => changeView('q2')} credits={credits} setView={setView} tLang={t}><div className="space-y-4"><input className="quiz-input" placeholder={t.q3_p1} value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} /><div className="relative"><input className="quiz-input pl-10" placeholder={t.q3_p2} value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} /><div className="absolute left-2 top-4 text-green-500 font-bold">WA</div></div></div></QuestionScreen>;
+            if (view === 'q4') return <QuestionScreen title={t.q4_title} color="text-yellow-400" nextView="q5" prevView="q3" onNext={() => changeView('q5')} onPrev={() => changeView('q3')} credits={credits} setView={setView} tLang={t}><div className="space-y-6"><input className="quiz-input" placeholder={t.q4_ph1} value={formData.inspiration} onChange={e => setFormData({...formData, inspiration: e.target.value})} /><div onClick={() => fileInputInspiration.current.click()} className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all text-center relative h-48 flex items-center justify-center overflow-hidden ${formData.inspirationImg ? 'border-yellow-400' : 'border-white/20 hover:border-yellow-400'}`}>{formData.inspirationImg ? (<><img src={formData.inspirationImg} className="w-full h-full object-cover absolute top-0 left-0 opacity-60" /><div className={`scan-line opacity-100`}></div><div className="relative z-10 bg-black/50 px-4 py-2 rounded-full text-xs font-bold text-yellow-400 border border-yellow-400 uppercase">{t.q4_change}</div></>) : (<div className="text-gray-500 text-xs uppercase">{t.q4_upload}</div>)}<input type="file" ref={fileInputInspiration} className="hidden" onChange={(e) => handleUpload(e, 'inspirationImg')} /></div></div></QuestionScreen>;
+            if (view === 'q5') return <QuestionScreen title={t.q5_title} color="text-red-400" nextView="style" prevView="q4" onNext={() => changeView('style')} onPrev={() => changeView('q4')} credits={credits} setView={setView} tLang={t}><div className="h-64 overflow-y-auto pr-2 custom-scroll">{Object.entries(COLOR_GROUPS).map(([group, colors]) => (<div key={group} className="mb-6"><p className="text-[10px] font-bold text-gray-500 uppercase mb-3 tracking-widest text-left">{group === "NEUTROS" ? t.color_n : group === "NUDE" ? t.color_nu : group === "PRIMARIOS" ? t.color_p : group === "SECUNDARIOS" ? t.color_s : group === "TERCIARIOS" ? t.color_t : t.color_q}</p><div className="flex flex-wrap gap-3">{colors.map(c => (<div key={c} onClick={() => toggleColor(c)} className={`color-check ${formData.colors.includes(c) ? 'selected' : ''}`} style={{backgroundColor: c}}></div>))}</div></div>))}</div></QuestionScreen>;
+            if (view === 'style') return <div className="min-h-screen p-6 fade-enter flex flex-col relative"><HeaderInternal /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => setView('q5')} className="p-2 rounded-full bg-white/10 hover:bg-white/20"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech">{t.style_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto w-full">{STYLES_DATA.map(s => (<div key={s.id} onClick={() => {playSound('click'); setFormData({...formData, style: t[`s_${s.id}`]}); changeView('light')}} className="glass-card rounded-xl h-64 group"><img src={s.img} className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" /><div className="card-label">{t[`s_${s.id}`]}</div></div>))}</div><div className="mt-8 w-full max-w-7xl mx-auto"><div className="floating-credit">{t.credit_text}</div></div></div>;
+            if (view === 'light') return <div className="min-h-screen p-6 fade-enter flex flex-col relative"><HeaderInternal /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => changeView('style')} className="p-2 rounded-full bg-white/10 hover:bg-white/20"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech">{t.light_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-7xl mx-auto w-full mb-12">{LIGHTING_DATA.map(l => (<div key={l.id} onClick={() => {playSound('click'); setFormData({...formData, light: t[`l_${l.id}`]}); }} className={`glass-card rounded-xl h-64 group ${formData.light === t[`l_${l.id}`] ? 'selected' : ''}`}><img src={l.img} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all" /><div className="card-label">{t[`l_${l.id}`]} <br/><span className="text-[9px] text-gray-400 font-normal">{t[`l_${l.id}_desc`]}</span></div></div>))}</div><div onClick={() => {playSound('click'); setFormData(prev => ({...prev, googleData: !prev.googleData}));}} className={`glass p-6 rounded-2xl flex justify-between items-center border transition-all cursor-pointer mb-8 max-w-2xl mx-auto w-full ${formData.googleData ? 'border-blue-500 bg-blue-900/20' : 'border-white/10 hover:border-blue-500/50'}`}><div className="flex items-center gap-4"><div className="bg-blue-500/20 p-3 rounded-full text-blue-400"><Icons.Google /></div><div><h3 className="font-bold">{t.google_data}</h3><p className="text-xs text-gray-400">{t.google_desc}</p></div></div><div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${formData.googleData ? 'bg-blue-500 border-blue-500' : 'border-gray-500'}`}>{formData.googleData && <Icons.Check />}</div></div><div className="max-w-7xl mx-auto w-full text-center"><button onClick={runEngine} className="tech-btn px-20 py-6 text-2xl rounded-full shadow-[0_0_50px_rgba(6,182,212,0.5)]">{t.gen_btn}</button></div><div className="mt-8 w-full max-w-7xl mx-auto"><div className="floating-credit">{t.credit_text}</div></div></div>;
+            if (view === 'processing') return <div className="min-h-screen flex flex-col items-center justify-center p-8 fade-enter relative overflow-hidden"><HeaderInternal /><div className="flex flex-col items-center justify-center gap-6 w-full max-w-2xl z-10 mt-32"><NeuralBrain /><div className="flex flex-col items-center gap-4 w-full"><h2 className="text-3xl md:text-4xl font-black font-tech text-white tracking-[0.2em] text-center animate-pulse uppercase drop-shadow-[0_0_25px_rgba(6,182,212,0.5)]">{loadingText}</h2><div className="flex flex-col items-center gap-2"><p className="text-cyan-400 font-mono text-xs tracking-[0.3em] font-bold">{t.processing}</p><p className="text-white font-black font-mono text-xl">{Math.round(progress)}%</p></div></div><div className="w-full max-w-md h-1 bg-gray-900 rounded-full overflow-hidden border border-white/10 shadow-lg"><div className="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 transition-all duration-200 ease-out shadow-[0_0_30px_#06b6d4]" style={{ width: `${progress}%` }}></div></div></div><div className="floating-credit">{t.credit_text}</div></div>;
 
             if (view === 'result') return (
                 <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative">
@@ -1035,7 +749,6 @@
                     <h2 className="text-5xl font-black font-tech text-white mt-24 mb-8 tracking-widest">{t.result_title}</h2>
                     
                     <div className="w-full max-w-7xl grid md:grid-cols-2 gap-10 glass p-8 rounded-3xl border border-white/20">
-                        
                         <div className="space-y-4 relative">
                             <div className="flex justify-center gap-4 mb-4">
                                 {['post', 'story', 'video'].map(f => (
@@ -1045,23 +758,52 @@
                             
                             <div className={`relative group rounded-2xl overflow-hidden border border-white/20 shadow-2xl mx-auto transition-all duration-500 ${formData.format === 'story' ? 'aspect-story max-w-xs' : formData.format === 'video' ? 'aspect-video' : 'aspect-square'}`}>
                                 <img src={resultImage} className="w-full h-full object-cover" />
-                                {formData.logo && <div className="absolute top-6 left-6 w-24 h-24 object-contain drop-shadow-2xl filter brightness-125 mix-blend-multiply"><img src={formData.logo} /></div>}
+                                {formData.logo && (
+                                    <div className="absolute object-contain drop-shadow-2xl filter brightness-125 mix-blend-multiply" 
+                                         style={{ 
+                                             width: `${designState.logoSize * 4}px`, 
+                                             top: '6%', left: '6%' // Posición base
+                                         }}>
+                                        <img src={formData.logo} className="w-full" />
+                                    </div>
+                                )}
                                 
-                                <input className="editable-text absolute top-1/3 left-10 right-10 text-5xl font-black font-tech text-white bg-transparent border-none outline-none text-center drop-shadow-lg uppercase" 
-                                    value={textOverlay.top} onChange={e => setTextOverlay({...textOverlay, top: e.target.value})} />
-                                <input className="editable-text absolute bottom-1/3 left-10 right-10 text-2xl font-bold font-tech text-cyan-400 bg-transparent border-none outline-none text-center drop-shadow-lg uppercase" 
-                                    value={textOverlay.bottom} onChange={e => setTextOverlay({...textOverlay, bottom: e.target.value})} />
+                                <div className="absolute left-0 w-full text-center" style={{ top: `${designState.posTop}%` }}>
+                                    <h2 className="text-5xl font-black font-tech drop-shadow-lg uppercase" style={{ color: designState.colorTop }}>{designState.top}</h2>
+                                </div>
+                                <div className="absolute left-0 w-full text-center" style={{ top: `${designState.posBot}%` }}>
+                                    <h3 className="text-2xl font-bold font-tech drop-shadow-lg uppercase" style={{ color: designState.colorBot }}>{designState.bottom}</h3>
+                                </div>
 
                                 <div className="absolute bottom-6 left-6 px-4 py-2 bg-white text-black font-black text-xs uppercase rounded tracking-widest flex items-center gap-2">
                                     <Icons.Logo /> CLICK.IA <Icons.Star />
                                 </div>
                             </div>
                             
-                            <button onClick={() => { playSound('click'); runEngine(); }} className="w-full py-3 border border-cyan-500 text-cyan-400 text-sm font-bold uppercase rounded-xl hover:bg-cyan-500/10 transition-colors flex items-center justify-center gap-2">
+                            <div className="flex gap-2">
+                                <button onClick={handleDownloadImage} className="flex-1 py-3 bg-cyan-500 text-black text-xs font-bold uppercase rounded-xl hover:bg-cyan-400 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20">
+                                    <Icons.Download /> {t.download}
+                                </button>
+                                <button onClick={() => setIsEditing(true)} className="flex-1 py-3 border border-white/20 text-white text-xs font-bold uppercase rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
+                                    {t.edit_design}
+                                </button>
+                            </div>
+                            
+                            <div className="glass p-4 rounded-xl mt-4">
+                                <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{t.link_acc}</h4>
+                                <div className="flex flex-col gap-2">
+                                    <button onClick={() => connectSocial('fb')} className={`social-btn ${formData.connected.fb ? 'connected' : ''}`}><Icons.Facebook /> {formData.connected.fb ? t.ready : 'FACEBOOK'}</button>
+                                    <button onClick={() => connectSocial('ig')} className={`social-btn ${formData.connected.ig ? 'connected' : ''}`}><Icons.Instagram /> {formData.connected.ig ? t.ready : 'INSTAGRAM'}</button>
+                                    <button onClick={() => connectSocial('tk')} className={`social-btn ${formData.connected.tk ? 'connected' : ''}`}><Icons.Tiktok /> {formData.connected.tk ? t.ready : 'TIKTOK'}</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="flex flex-col space-y-6">
+                            <button onClick={() => { playSound('click'); runEngine(); }} className="w-full py-4 border border-cyan-500 text-cyan-400 text-sm font-bold uppercase rounded-xl hover:bg-cyan-500/10 transition-colors flex items-center justify-center gap-2">
                                 <Icons.Zap /> {t.regenerate}
                             </button>
 
-                            {/* VIRAL SCORE REUBICADO AQUI */}
                             <div className="bg-black/40 backdrop-blur-md p-4 rounded-xl border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.1)] w-full animate-pulse-fast flex flex-col justify-center">
                                 <div className="flex items-center justify-between mb-2 px-2">
                                     <div className="flex items-center gap-2">
@@ -1076,18 +818,6 @@
                                 <p className="text-[10px] text-gray-400 text-center">{t.viral_desc}</p>
                             </div>
 
-                            <div className="glass p-4 rounded-xl mt-4">
-                                <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{t.link_acc}</h4>
-                                <div className="flex flex-col gap-2">
-                                    <button onClick={() => connectSocial('fb')} className={`social-btn ${formData.connected.fb ? 'connected' : ''}`}><Icons.Facebook /> {formData.connected.fb ? t.ready : 'FACEBOOK'}</button>
-                                    <button onClick={() => connectSocial('ig')} className={`social-btn ${formData.connected.ig ? 'connected' : ''}`}><Icons.Instagram /> {formData.connected.ig ? t.ready : 'INSTAGRAM'}</button>
-                                    <button onClick={() => connectSocial('tk')} className={`social-btn ${formData.connected.tk ? 'connected' : ''}`}><Icons.Tiktok /> {formData.connected.tk ? t.ready : 'TIKTOK'}</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div className="flex flex-col space-y-6">
-                            {/* BEST TIME MODULE */}
                             <div className="glass p-6 rounded-2xl border-l-4 border-blue-500">
                                 <h3 className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                                     <Icons.Clock /> {t.schedule}
@@ -1106,18 +836,12 @@
                             <div className="glass p-6 rounded-2xl border-l-4 border-purple-500 relative">
                                 <div className="flex justify-between items-center mb-4">
                                     <h3 className="text-xs font-bold text-purple-400 uppercase tracking-widest flex items-center gap-2"><Icons.Zap /> {t.copy_viral}</h3>
-                                    <span className="bg-yellow-500 text-black text-[10px] font-bold px-2 py-1 rounded">{t.star_text}</span>
+                                    <button onClick={handleCopyText} className="text-[10px] font-bold text-gray-400 hover:text-white flex items-center gap-1 uppercase border border-white/20 px-2 py-1 rounded transition-colors">
+                                        <Icons.Copy /> {t.copy_clipboard}
+                                    </button>
                                 </div>
-                                <p className="text-white text-xl font-bold mb-2 italic">"{t.copy_headline}" 🚀</p>
-                                <p className="text-gray-300 text-sm leading-relaxed mb-4">
-                                    {t.copy_body_1} {formData.product.name || 'PRODUCTO'}. {t.copy_body_2} <br/>
-                                    {t.copy_offer} {formData.product.promo || t.default_promo}.<br/><br/>
-                                    {t.copy_cta} <span className="text-green-400 underline">wa.me/{formData.whatsapp || '593999999999'}</span>
-                                </p>
-                                <div className="mt-4 flex flex-wrap gap-2">
-                                    <span className="text-cyan-400 text-xs bg-cyan-900/30 px-2 py-1 rounded">#{formData.product.name.replace(/\s/g,'')}</span>
-                                    <span className="text-cyan-400 text-xs bg-cyan-900/30 px-2 py-1 rounded">#Viral</span>
-                                    <span className="text-cyan-400 text-xs bg-cyan-900/30 px-2 py-1 rounded">#Trending2025</span>
+                                <div className="copy-area custom-scroll">
+                                    {generatedCopy}
                                 </div>
                             </div>
 
@@ -1126,14 +850,17 @@
                                     <Icons.Music /> {t.trends}
                                 </h3>
                                 <div className="space-y-3">
-                                    {TRENDING_MUSIC.map(track => (
-                                        <div key={track.id} onClick={() => toggleMusic(track.id)} className={`glass p-3 rounded-xl cursor-pointer border border-transparent hover:border-green-500/50 flex items-center gap-3 ${playingMusic === track.id ? 'border-green-500 bg-green-900/20' : ''}`}>
-                                            <div className="bg-black p-2 rounded-full text-white">
-                                                {playingMusic === track.id ? <Icons.Pause /> : <Icons.Play />}
-                                            </div>
-                                            <div>
-                                                <p className="text-xs font-bold">{track.title}</p>
-                                                <p className="text-[10px] text-gray-500">{track.desc}</p>
+                                    {suggestedMusic.map((track, i) => (
+                                        <div key={i} className="bg-white/5 p-3 rounded-lg border border-white/10">
+                                            <p className="text-xs font-bold text-white mb-2">{track.title}</p>
+                                            <div className="yt-embed-container">
+                                                <iframe 
+                                                    src={`https://www.youtube.com/embed/${track.id}`} 
+                                                    title={track.title} 
+                                                    frameBorder="0" 
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                    allowFullScreen
+                                                ></iframe>
                                             </div>
                                         </div>
                                     ))}
@@ -1141,40 +868,28 @@
                             </div>
 
                             <div className="flex gap-4 mt-auto">
-                                <button className="flex-1 py-4 bg-white text-black font-bold rounded-xl uppercase text-xs tracking-widest hover:bg-cyan-400 transition-colors shadow-lg">{t.publish}</button>
-                                <button onClick={handleNewGeneration} className="px-6 py-4 border border-white/20 rounded-xl text-xs font-bold uppercase hover:bg-white hover:text-black transition-colors">{t.new_btn}</button>
+                                <button onClick={handleNewGeneration} className="w-full py-4 border border-white/20 rounded-xl text-xs font-bold uppercase hover:bg-white hover:text-black transition-colors">{t.new_btn}</button>
                             </div>
                         </div>
                     </div>
                     <div className="floating-credit">{t.credit_text}</div>
+
+                    {/* MODAL DEL EDITOR */}
+                    {isEditing && (
+                        <DesignEditor 
+                            image={resultImage} 
+                            logo={formData.logo} 
+                            initialText={designState} 
+                            onSave={saveDesign} 
+                            onClose={() => setIsEditing(false)} 
+                            tLang={t}
+                        />
+                    )}
                 </div>
             );
 
-            if (view === 'pricing') return (
-                <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter">
-                    <button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all text-xl font-bold"><Icons.X /></button>
-                    <h2 className="text-5xl font-black font-tech text-center mb-10">{t.plans}</h2>
-                    <div className="grid md:grid-cols-3 gap-8 w-full max-w-6xl pb-10 items-center">
-                        <PricingCard title={t.p_names[0]} price="99" features={t.f_1} onSelect={() => {}} sub={t.p_subs[0]} tLang={t} />
-                        <PricingCard title={t.p_names[1]} price="297" strike="1200" recommended={true} features={t.f_2} onSelect={() => {}} sub={t.p_subs[1]} tLang={t} />
-                        <PricingCard title={t.p_names[2]} price="997" features={t.f_3} onSelect={() => {}} sub={t.p_subs[2]} tLang={t} />
-                    </div>
-                    <div className="floating-credit">{t.credit_text}</div>
-                </div>
-            );
-
-            if (view === 'faq') return (
-                <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter">
-                    <button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all text-xl font-bold"><Icons.X /></button>
-                    <h2 className="text-5xl font-black font-tech text-center mb-16">{t.faq_title}</h2>
-                    <div className="max-w-3xl w-full space-y-6">
-                        {[{q: t.q1, a: t.a1}, {q: t.q2, a: t.a2}, {q: t.q3, a: t.a3}].map((item, i) => (
-                            <details key={i} className="glass p-6 rounded-xl border border-white/10 group cursor-pointer open:bg-white/5"><summary className="font-bold text-lg flex justify-between items-center outline-none list-none uppercase font-tech">{item.q} <span className="text-cyan-500 transition-transform group-open:rotate-180"><Icons.ChevronDown /></span></summary><p className="text-gray-400 text-sm mt-4 leading-relaxed pl-4 border-l-2 border-cyan-500/50">{item.a}</p></details>
-                        ))}
-                    </div>
-                    <div className="floating-credit">{t.credit_text}</div>
-                </div>
-            );
+            if (view === 'pricing') return <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter"><button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all text-xl font-bold"><Icons.X /></button><h2 className="text-5xl font-black font-tech text-center mb-10">{t.plans}</h2><div className="grid md:grid-cols-3 gap-8 w-full max-w-6xl pb-10 items-center"><PricingCard title={t.p_names[0]} price="99" features={t.f_1} onSelect={() => {}} sub={t.p_subs[0]} tLang={t} /><PricingCard title={t.p_names[1]} price="297" strike="1200" recommended={true} features={t.f_2} onSelect={() => {}} sub={t.p_subs[1]} tLang={t} /><PricingCard title={t.p_names[2]} price="997" features={t.f_3} onSelect={() => {}} sub={t.p_subs[2]} tLang={t} /></div><div className="floating-credit">{t.credit_text}</div></div>;
+            if (view === 'faq') return <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter"><button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all text-xl font-bold"><Icons.X /></button><h2 className="text-5xl font-black font-tech text-center mb-16">{t.faq_title}</h2><div className="max-w-3xl w-full space-y-6"> {[{q: t.q1, a: t.a1}, {q: t.q2, a: t.a2}, {q: t.q3, a: t.a3}].map((item, i) => (<details key={i} className="glass p-6 rounded-xl border border-white/10 group cursor-pointer open:bg-white/5"><summary className="font-bold text-lg flex justify-between items-center outline-none list-none uppercase font-tech">{item.q} <span className="text-cyan-500 transition-transform group-open:rotate-180"><Icons.ChevronDown /></span></summary><p className="text-gray-400 text-sm mt-4 leading-relaxed pl-4 border-l-2 border-cyan-500/50">{item.a}</p></details>))} </div><div className="floating-credit">{t.credit_text}</div></div>;
 
             return (
                 <>
