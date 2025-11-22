@@ -185,9 +185,9 @@
         const { useState, useEffect, useRef } = React;
 
         // --- CONSTANTES Y DATOS ---
-        const MAGIC_RESULT_IMAGE = "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2865"; 
         const UGLY_BURGER_IMAGE = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=2799"; 
-        // IMPORTANTE: Reemplaza esto con la URL de tu foto "CREDENCIALES CLICK DIGITAL.jpg" cuando subas la web.
+        const MAGIC_RESULT_IMAGE_DEFAULT = "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2865";
+        // IMPORTANTE: Reemplaza esto con la URL de tu foto "CREDENCIALES CLICK DIGITAL.jpg"
         const CREATOR_IMAGE = "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop"; 
         const INITIAL_CREDITS = 3;
 
@@ -450,6 +450,7 @@
             }
         };
 
+        // --- COMPONENTES AUXILIARES ---
         const NeuralBrain = () => {
             const canvasRef = useRef(null);
             useEffect(() => {
@@ -547,7 +548,9 @@
 
         const QuestionScreen = ({ title, color, children, onNext, onPrev, credits, setView, tLang }) => (
             <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative">
+                {/* Header Interno Persistente - CENTRADO */}
                 <div className="absolute top-0 left-0 w-full p-6 flex justify-center items-center gap-6 z-50 pointer-events-none">
+                     {/* Créditos */}
                      <div className="pointer-events-auto">
                          <button onClick={() => setView('pricing')} className="flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-md rounded-full border border-yellow-500/30 hover:border-yellow-400 hover:scale-105 transition-all shadow-lg group">
                             <span className="text-yellow-400 group-hover:rotate-12 transition-transform"><Icons.Credit /></span>
@@ -555,10 +558,14 @@
                             <span className="w-4 h-4 bg-yellow-500 text-black rounded-full flex items-center justify-center text-[10px] font-bold">+</span>
                          </button>
                     </div>
+
+                    {/* Logo (Clickable) */}
                     <div className="pointer-events-auto flex items-center gap-2 cursor-pointer group" onClick={() => setView('landing')}>
                         <Icons.Logo />
                         <span className="text-xl font-black font-tech tracking-tighter group-hover:text-cyan-400 transition-colors">CLICK.IA</span>
                     </div>
+
+                    {/* Powered By Gemini */}
                     <div className="pointer-events-auto flex items-center gap-1 text-[8px] text-cyan-400 font-bold uppercase tracking-[0.2em] bg-cyan-900/20 px-3 py-2 rounded-full border border-cyan-500/20">
                         <Icons.Google /> {tLang.powered}
                     </div>
@@ -589,6 +596,7 @@
             const [progress, setProgress] = useState(0);
             const [isMuted, setIsMuted] = useState(false);
             const [textOverlay, setTextOverlay] = useState({ top: "TU MARCA", bottom: "OFERTA LIMITADA" });
+            const [resultImage, setResultImage] = useState(MAGIC_RESULT_IMAGE_DEFAULT);
             const [apiKey, setApiKey] = useState('');
             const [playingMusic, setPlayingMusic] = useState(null);
 
@@ -597,6 +605,14 @@
             const fileInputInspiration = useRef(null);
 
             const t = TRANSLATIONS[lang];
+
+            // Helper para construir la URL de Pollinations con parámetros
+            const generateImageURL = (prompt) => {
+                // Codificar el prompt para que sea seguro en la URL
+                const encodedPrompt = encodeURIComponent(prompt);
+                // Añadir parámetros de calidad y evitar logos
+                return `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1080&height=1080&nologo=true&seed=${Math.floor(Math.random() * 1000)}`;
+            };
 
             useEffect(() => {
                 setTextOverlay({
@@ -668,6 +684,7 @@
                     connected: { fb: false, ig: false, tk: false },
                     format: 'post'
                 });
+                setResultImage(MAGIC_RESULT_IMAGE_DEFAULT);
                 setView('upload');
             };
 
@@ -678,29 +695,28 @@
                 playSound('process');
                 setView('processing');
                 
-                const masterPrompt = {
-                    role: "Director Creativo Global de Google & Nano Banana",
-                    task: "Generar Campaña de Marketing Viral 360",
-                    inputs: {
-                        cliente: formData.target,
-                        producto: formData.product,
-                        empresa: formData.company,
-                        contacto: formData.whatsapp,
-                        estilo_visual: formData.style,
-                        iluminacion: formData.light,
-                        paleta_colores: formData.colors,
-                        inspiracion_ref: formData.inspiration,
-                        data_source: formData.googleData ? "Google Trends Live API" : "Local Datasets"
-                    },
-                    output_requirements: {
-                        imagen: "Generación de imagen 8K hiperrealista basada en preferencias",
-                        copy: "Textos persuasivos optimizados para conversión",
-                        viralidad: "Análisis predictivo de alcance"
-                    }
-                };
-                console.log(">>> CONECTANDO CON GEMINI MUNDIAL & NANO BANANA...", masterPrompt);
-                console.log(">>> DATOS ENVIADOS AL MODELO DE APRENDIZAJE AUTOMÁTICO PARA MEJORA CONTINUA.");
+                // 1. Construir un prompt enriquecido para la generación de imágenes
+                // Si el usuario no puso info, usamos valores por defecto para que siempre salga algo lindo
+                const promptBase = formData.product.name || "futuristic product";
+                const style = formData.style || "cinematic";
+                const lighting = formData.light || "neon";
+                const colors = formData.colors.length > 0 ? formData.colors.join(", ") : "vibrant colors";
+                
+                // Prompt "Mágico" que combina todo
+                const magicPrompt = `highly detailed 8k masterpiece of ${promptBase}, style ${style}, lighting ${lighting}, colors ${colors}, professional product photography, commercial advertisement, sharp focus, trending on artstation`;
 
+                // 2. Generar URL de Pollinations
+                const newImageURL = generateImageURL(magicPrompt);
+                console.log("Generando imagen con:", magicPrompt);
+                console.log("URL generada:", newImageURL);
+
+                // 3. Simular proceso con Gemini si hay Key (opcional para este paso de imagen)
+                if (apiKey) {
+                     // Aquí iría la llamada real a Gemini para texto, pero para la imagen ya tenemos Pollinations
+                     console.log("Usando API Key para optimización de texto...");
+                }
+
+                // Usar los pasos traducidos
                 const steps = t.loading_steps;
                 for(let i=0; i<steps.length; i++) {
                     setLoadingText(steps[i]);
@@ -708,13 +724,17 @@
                     await new Promise(r => setTimeout(r, 1500));
                 }
                 
+                // Actualizar la imagen de resultado y créditos
+                setResultImage(newImageURL);
                 setCredits(prev => prev - 1);
                 playSound('success');
                 setView('result');
             };
 
+            // HEADER COMPONENT FOR INTERNAL PAGES
             const HeaderInternal = () => (
                 <div className="absolute top-0 left-0 w-full p-6 flex justify-center items-center gap-6 z-50 pointer-events-none">
+                     {/* Créditos */}
                      <div className="pointer-events-auto">
                          <button onClick={() => setView('pricing')} className="flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-md rounded-full border border-yellow-500/30 hover:border-yellow-400 hover:scale-105 transition-all shadow-lg group">
                             <span className="text-yellow-400 group-hover:rotate-12 transition-transform"><Icons.Credit /></span>
@@ -722,16 +742,21 @@
                             <span className="w-4 h-4 bg-yellow-500 text-black rounded-full flex items-center justify-center text-[10px] font-bold">+</span>
                          </button>
                     </div>
+
+                    {/* Logo (Clickable) */}
                     <div className="pointer-events-auto flex items-center gap-2 cursor-pointer group" onClick={() => setView('landing')}>
                         <Icons.Logo />
                         <span className="text-xl font-black font-tech tracking-tighter group-hover:text-cyan-400 transition-colors">CLICK.IA</span>
                     </div>
+
+                    {/* Powered By Gemini */}
                     <div className="pointer-events-auto flex items-center gap-1 text-[8px] text-cyan-400 font-bold uppercase tracking-[0.2em] bg-cyan-900/20 px-3 py-2 rounded-full border border-cyan-500/20">
                         <Icons.Google /> {t.powered}
                     </div>
                 </div>
             );
 
+            // --- VISTAS ---
             if (view === 'landing') return (
                 <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center relative fade-enter">
                     <nav className="absolute top-0 w-full p-6 flex justify-center items-center z-50">
@@ -770,7 +795,7 @@
                             {t.bullets.map(b => (<div key={b} className="flex items-center gap-2 bg-white/5 px-3 py-1 rounded border border-white/10"><Icons.Check /> {b}</div>))}
                         </div>
                         <div className="w-full max-w-4xl h-96 mb-12 shadow-[0_0_50px_rgba(6,182,212,0.2)] rounded-2xl overflow-hidden border border-white/20">
-                             <ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE} tLang={t} />
+                             <ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} />
                         </div>
                         <div className="flex flex-col items-center gap-3 mb-12">
                             <button onClick={() => {playSound('click'); setView('setup')}} className="tech-btn px-16 py-6 text-xl rounded-full flex items-center gap-4 mx-auto shadow-[0_0_50px_rgba(6,182,212,0.4)]">
@@ -781,6 +806,7 @@
                             </div>
                         </div>
 
+                        {/* SECCIÓN DEL CREADOR */}
                         <div className="w-full max-w-4xl glass p-8 rounded-3xl border border-white/10 mb-20 flex flex-col md:flex-row items-center gap-8 text-left relative overflow-hidden">
                             <div className="absolute -top-20 -right-20 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl"></div>
                             <div className="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-white/10 shadow-2xl flex-shrink-0 overflow-hidden relative z-10">
@@ -794,7 +820,7 @@
                                 <p className="text-xs text-gray-400 leading-relaxed">{t.creator_mission}</p>
                             </div>
                         </div>
-                        
+
                         <div className="floating-credit">{t.credit_text}</div>
                     </div>
                 </div>
@@ -1012,7 +1038,7 @@
                             </div>
                             
                             <div className={`relative group rounded-2xl overflow-hidden border border-white/20 shadow-2xl mx-auto transition-all duration-500 ${formData.format === 'story' ? 'aspect-story max-w-xs' : formData.format === 'video' ? 'aspect-video' : 'aspect-square'}`}>
-                                <img src={MAGIC_RESULT_IMAGE} className="w-full h-full object-cover" />
+                                <img src={resultImage} className="w-full h-full object-cover" />
                                 {formData.logo && <div className="absolute top-6 left-6 w-24 h-24 object-contain drop-shadow-2xl filter brightness-125"><img src={formData.logo} /></div>}
                                 
                                 <input className="editable-text absolute top-1/3 left-10 right-10 text-5xl font-black font-tech text-white bg-transparent border-none outline-none text-center drop-shadow-lg uppercase" 
