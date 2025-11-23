@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAG.IA - The Liquid Future</title>
+    <title>MAG.IA - The Future of Marketing</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=Chakra+Petch:wght@400;600;700&family=Dancing+Script:wght@700&family=Oswald:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=Chakra+Petch:wght@400;600;700&family=Oswald:wght@500&family=Playfair+Display:wght@600&family=Montserrat:wght@700&family=Roboto+Mono:wght@400;500&family=Bebas+Neue&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
     
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -14,196 +14,102 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     
     <style>
-        /* --- MAG.IA LIQUID CORE --- */
-        body { 
-            margin: 0; 
-            overflow-x: hidden; 
-            font-family: 'Inter', sans-serif; 
-            background: #f0f9ff; /* Base clara */
-            color: #1e293b; /* Texto oscuro por defecto para legibilidad */
-            transition: all 1s ease; 
-        }
-        
-        /* Tipografías */
-        .font-tech { font-family: 'Chakra Petch', sans-serif; }
-        .font-logo { font-family: 'Dancing Script', cursive; }
+        /* --- MAG.IA CORE STYLES --- */
+        body { margin: 0; overflow-x: hidden; font-family: 'Inter', sans-serif; background: #000; color: white; transition: background 1s ease; }
+        h1, h2, h3, .font-tech { font-family: 'Chakra Petch', sans-serif; }
 
-        /* FONDO LÍQUIDO V2 (SIN ARTEFACTOS) */
+        /* FONDO LÍQUIDO DINÁMICO */
         .liquid-bg {
-            position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; z-index: -2;
-            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0) 100%);
-            filter: blur(100px); /* El secreto para eliminar bloques */
-            animation: fluidMove 20s ease-in-out infinite alternate;
-            opacity: 0.8;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            transition: background-image 2s ease-in-out;
         }
 
-        /* Capas de color flotantes */
-        .orb {
-            position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1;
-            animation: floatOrb 15s infinite ease-in-out;
-        }
-        .orb-1 { top: 0; left: 0; width: 60vw; height: 60vw; background: rgba(14, 165, 233, 0.3); animation-delay: 0s; }
-        .orb-2 { bottom: 0; right: 0; width: 50vw; height: 50vw; background: rgba(99, 102, 241, 0.3); animation-delay: -5s; }
-        .orb-3 { top: 30%; left: 30%; width: 40vw; height: 40vw; background: rgba(236, 72, 153, 0.2); animation-delay: -10s; }
+        /* Temas de Tiempo */
+        .theme-morning { background-image: linear-gradient(-45deg, #0ea5e9, #22d3ee, #e0f2fe, #0284c7); }
+        .theme-sunset { background-image: linear-gradient(-45deg, #f59e0b, #db2777, #7c3aed, #ea580c); }
+        .theme-night { background-image: linear-gradient(-45deg, #020617, #1e1b4b, #312e81, #000000); }
 
-        /* Temas de Tiempo (Afectan a los Orbs) */
-        .theme-morning .orb-1 { background: rgba(56, 189, 248, 0.4); } 
-        .theme-morning .orb-2 { background: rgba(255, 251, 235, 0.6); }
-        .theme-morning .orb-3 { background: rgba(167, 243, 208, 0.3); }
-
-        .theme-sunset .orb-1 { background: rgba(251, 146, 60, 0.4); }
-        .theme-sunset .orb-2 { background: rgba(244, 63, 94, 0.4); }
-        .theme-sunset .orb-3 { background: rgba(124, 58, 237, 0.3); }
-
-        .theme-night { background: #0f172a; color: white; }
-        .theme-night .orb-1 { background: rgba(30, 58, 138, 0.6); }
-        .theme-night .orb-2 { background: rgba(88, 28, 135, 0.5); }
-        .theme-night .orb-3 { background: rgba(15, 23, 42, 0.8); }
-
-        @keyframes floatOrb {
-            0% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, 50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0, 0) scale(1); }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        /* GLASSMORPHISM OPTICO (LIGHT) */
+        /* GLASSMORPHISM AVANZADO */
         .glass {
-            background: rgba(255, 255, 255, 0.25); /* Más claro y luminoso */
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05); /* Sombra suave */
-            border-radius: 32px;
-        }
-        .theme-night .glass {
-            background: rgba(15, 23, 42, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
-        }
-
-        /* LOGO SUN ANIMATION */
-        .sun-logo-container {
-            filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.6));
-            animation: sunPulse 4s infinite ease-in-out;
-        }
-        @keyframes sunPulse {
-            0% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.6)); }
-            50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(251, 191, 36, 0.9)); }
-            100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.6)); }
-        }
-
-        /* UI Elements - Botones Liquid */
-        .tech-btn { 
-            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.6) 100%);
-            color: #0f172a; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            letter-spacing: 0.05em; 
-            border-radius: 20px; 
-            padding: 18px 40px; 
-            transition: all 0.3s; 
-            cursor: pointer; 
-            border: 1px solid rgba(255,255,255,0.8); 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            backdrop-filter: blur(4px);
-        }
-        .tech-btn:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.2); 
-            background: white;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border-radius: 24px;
         }
         
-        .glass-card { 
-            background: rgba(255, 255, 255, 0.4); 
-            border: 1px solid rgba(255, 255, 255, 0.5); 
-            transition: all 0.4s ease; 
-            cursor: pointer; 
-            overflow: hidden; 
-            position: relative; 
-            border-radius: 24px; 
-        }
-        .glass-card:hover { 
-            transform: translateY(-8px); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
-            background: rgba(255,255,255,0.7);
-        }
-        .glass-card.selected { 
-            border-color: #0ea5e9; 
-            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.2); 
-        }
-        
-        /* Inputs Liquid */
-        .quiz-input { 
-            background: transparent; 
-            border: none; 
-            border-bottom: 2px solid rgba(0,0,0,0.1); 
-            width: 100%; 
-            padding: 20px; 
-            font-size: 1.8rem; 
-            color: inherit; 
-            text-align: center; 
-            font-family: 'Chakra Petch'; 
-            transition: all 0.3s; 
-        }
-        .theme-night .quiz-input { border-bottom: 2px solid rgba(255,255,255,0.2); }
-        .quiz-input:focus { outline: none; border-color: #0ea5e9; transform: scale(1.02); }
+        /* Sol Dinámico */
+        .sun-icon { transition: all 1s ease; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
+        .sun-morning { color: #fcd34d; filter: drop-shadow(0 0 20px #fcd34d); }
+        .sun-sunset { color: #fb923c; filter: drop-shadow(0 0 20px #ea580c); }
+        .sun-night { color: #60a5fa; filter: drop-shadow(0 0 15px #2563eb); }
 
-        .glass-input { 
-            background: rgba(255, 255, 255, 0.5); 
-            border: 1px solid rgba(255, 255, 255, 0.3); 
-            color: #0f172a; 
-            font-family: 'Inter'; 
-            padding: 16px; 
-            width: 100%; 
-            border-radius: 16px; 
-            backdrop-filter: blur(10px); 
-        }
-        .theme-night .glass-input { background: rgba(255, 255, 255, 0.1); color: white; }
-        .glass-input:focus { outline: none; border-color: #0ea5e9; background: white; }
+        /* Avatar Adaptativo */
+        .avatar-wrapper { position: relative; overflow: hidden; border-radius: 999px; transition: all 0.5s ease; }
+        .avatar-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; mix-blend-mode: overlay; opacity: 0.4; transition: background 2s ease; pointer-events: none; }
+        .overlay-morning { background: linear-gradient(to bottom, transparent, #38bdf8); }
+        .overlay-sunset { background: linear-gradient(to bottom, transparent, #f97316); opacity: 0.6; }
+        .overlay-night { background: linear-gradient(to bottom, #1e3a8a, #4c1d95); opacity: 0.7; }
+
+        /* UI Elements */
+        .tech-btn { background: rgba(255,255,255,0.9); color: black; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 12px; padding: 16px 32px; transition: all 0.3s; cursor: pointer; border: 1px solid white; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        .tech-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 0 40px rgba(255, 255, 255, 0.5); }
+        
+        .glass-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; cursor: pointer; overflow: hidden; position: relative; border-radius: 20px; }
+        .glass-card:hover { border-color: rgba(255,255,255,0.4); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .glass-card.selected { border-color: #fff; background: rgba(255,255,255,0.15); box-shadow: 0 0 0 1px #fff; transform: scale(1.02); }
+        
+        .card-label { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 20px 10px 15px 10px; text-align: center; font-family: 'Chakra Petch'; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; }
+
+        /* Scanline sutil para toque tech */
+        .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent); background-size: 100% 30%; animation: scan 3s linear infinite; pointer-events: none; z-index: 20; opacity: 0.3; }
+        @keyframes scan { 0% { background-position: 0% -30%; } 100% { background-position: 0% 130%; } }
+
+        /* Inputs */
+        .quiz-input { background: transparent; border: none; border-bottom: 2px solid rgba(255,255,255,0.3); width: 100%; padding: 20px; font-size: 1.5rem; color: white; text-align: center; font-family: 'Chakra Petch'; transition: all 0.3s; }
+        .quiz-input:focus { outline: none; border-color: #fff; background: rgba(255,255,255,0.05); }
+        .glass-input { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-family: 'Chakra Petch'; padding: 14px; width: 100%; border-radius: 12px; backdrop-filter: blur(5px); }
+        .glass-input:focus { outline: none; border-color: #fff; background: rgba(255, 255, 255, 0.2); }
 
         /* Frase CEO */
         .floating-credit { 
-            position: relative; margin-top: 60px; padding-bottom: 30px; width: 100%; 
-            text-align: center; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; 
-            color: rgba(0,0,0,0.4); font-family: 'Inter'; pointer-events: none;
-            max-width: 700px; margin-left: auto; margin-right: auto; font-weight: 600;
-        }
-        .theme-night .floating-credit { color: rgba(255,255,255,0.4); }
-
-        /* Logo Curvo Estilizado */
-        .brand-title {
-            background: linear-gradient(90deg, #0ea5e9, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 10px rgba(14, 165, 233, 0.1);
-        }
-        .theme-night .brand-title {
-            background: linear-gradient(90deg, #fff, #e0f2fe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+            position: relative; margin-top: 50px; padding-bottom: 30px; width: 100%; 
+            text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; 
+            color: rgba(255,255,255,0.6); font-family: 'Chakra Petch'; pointer-events: none;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5); 
+            max-width: 800px; margin-left: auto; margin-right: auto;
+            line-height: 1.6;
         }
 
         /* Utilidades */
-        .fade-enter { animation: fadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        
+        .fade-enter { animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .custom-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 4px; }
-        .theme-night .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 4px; }
+        
+        .gold-btn {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            color: black; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em;
+            border-radius: 12px; padding: 14px 20px; transition: all 0.2s; cursor: pointer;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.3); border: 1px solid #fcd34d; position: relative; overflow: hidden;
+        }
+        .gold-btn:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(251, 191, 36, 0.6); }
 
         /* Nano Studio Fixes */
-        .editor-btn { background: rgba(255,255,255,0.1); color: inherit; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s; }
-        .editor-btn:hover { background: rgba(255,255,255,0.3); }
+        .editor-btn { background: rgba(0,0,0,0.6); color: white; border: 1px solid rgba(255,255,255,0.2); }
+        .editor-btn:hover { background: rgba(255,255,255,0.1); border-color: white; }
     </style>
 </head>
 <body>
-    <div class="liquid-bg"></div>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-
     <audio id="sfx-click" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a7346b.mp3"></audio>
     <audio id="sfx-process" src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_c2b3b469b7.mp3"></audio>
     <audio id="sfx-success" src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_1728e273c4.mp3"></audio>
@@ -215,17 +121,17 @@
 
         // --- HOOK DEL TIEMPO (CEREBRO DINÁMICO) ---
         const useTimeTheme = () => {
-            const [timeState, setTimeState] = useState('morning'); 
+            const [timeState, setTimeState] = useState('morning'); // morning, sunset, night
             
             useEffect(() => {
                 const checkTime = () => {
                     const hour = new Date().getHours();
-                    if (hour >= 6 && hour < 18) setTimeState('morning');
-                    else if (hour >= 18 && hour < 20) setTimeState('sunset');
+                    if (hour >= 6 && hour < 17) setTimeState('morning');
+                    else if (hour >= 17 && hour < 20) setTimeState('sunset');
                     else setTimeState('night');
                 };
                 checkTime();
-                const interval = setInterval(checkTime, 60000);
+                const interval = setInterval(checkTime, 60000); // Check every minute
                 return () => clearInterval(interval);
             }, []);
             return timeState;
@@ -239,32 +145,21 @@
 
         // --- ICONOS ---
         const Icons = {
+            // NUEVO SOL MAG.IA
             SunLogo: ({ theme }) => (
-                <div className="sun-logo-container mb-2">
-                    <svg className={`w-24 h-24`} viewBox="0 0 24 24" fill="none" stroke="none">
-                        <circle cx="12" cy="12" r="5" fill="url(#sunGradient)" />
-                        <g stroke="url(#rayGradient)" strokeWidth="2" strokeLinecap="round">
-                            <line x1="12" y1="1" x2="12" y2="3" />
-                            <line x1="12" y1="21" x2="12" y2="23" />
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                            <line x1="1" y1="12" x2="3" y2="12" />
-                            <line x1="21" y1="12" x2="23" y2="12" />
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                        </g>
-                        <defs>
-                            <linearGradient id="sunGradient" x1="0" y1="0" x2="1" y2="1">
-                                <stop offset="0%" stopColor="#FCD34D" />
-                                <stop offset="100%" stopColor="#F59E0B" />
-                            </linearGradient>
-                            <linearGradient id="rayGradient" x1="0" y1="0" x2="1" y2="1">
-                                <stop offset="0%" stopColor="#FBBF24" />
-                                <stop offset="100%" stopColor="#D97706" />
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                </div>
+                <svg className={`sun-icon sun-${theme} w-16 h-16 md:w-20 md:h-20 mb-2`} viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <circle cx="12" cy="12" r="6" />
+                    <g stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                        <line x1="12" y1="1" x2="12" y2="4" />
+                        <line x1="12" y1="20" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="6.34" y2="6.34" />
+                        <line x1="17.66" y1="17.66" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="4" y2="12" />
+                        <line x1="20" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="6.34" y2="17.66" />
+                        <line x1="17.66" y1="6.34" x2="19.78" y2="4.22" />
+                    </g>
+                </svg>
             ),
             Google: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"/></svg>,
             Upload: () => <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>,
@@ -281,12 +176,42 @@
             Image: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>,
             Trash: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
             Download: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
+            Clock: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+            Music: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>,
             X: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
             ChevronDown: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>,
             Sliders: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>,
+            Instagram: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>,
+            Tiktok: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>,
+            Facebook: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>,
             Undo: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>,
             Redo: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/></svg>,
             Star: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        };
+
+        const STYLES_DATA = [
+            { id: 'realistic', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400' },
+            { id: 'cinematic', img: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=400' }, 
+            { id: 'luxury', img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400' },
+            { id: 'neon', img: 'https://images.unsplash.com/photo-1555212697-194d092e3b8f?q=80&w=400' },
+            { id: '3d', img: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=400' },
+            { id: 'cyber', img: 'https://images.unsplash.com/photo-1515630278258-407f66498911?q=80&w=400' }
+        ];
+
+        const LIGHTING_DATA = [
+            { id: 'studio', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400' },
+            { id: 'neon', img: 'https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=400' },
+            { id: 'golden', img: 'https://images.unsplash.com/photo-1477346611705-65d1883cee1e?q=80&w=400' },
+            { id: 'dramatic', img: 'https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?q=80&w=400' }
+        ];
+
+        const COLOR_GROUPS = {
+            "NEUTROS": ["#FFFFFF", "#000000", "#F5F5F5", "#D3D3D3", "#808080", "#333333"],
+            "NUDE": ["#E3D1C4", "#D7B8A3", "#C7A188", "#B88E76", "#A87F63", "#8D6E55", "#6F4F1D", "#5D4037", "#3E2723"],
+            "PRIMARIOS": ["#FF0000", "#0000FF", "#FFFF00"],
+            "SECUNDARIOS": ["#00FF00", "#FFA500", "#800080"],
+            "TERCIARIOS": ["#FF4500", "#FFD700", "#ADFF2F", "#00CED1", "#8A2BE2", "#C71585"],
+            "CUATERNARIOS": ["#800000", "#808000", "#008080", "#000080"]
         };
 
         const TRANSLATIONS = {
@@ -347,7 +272,7 @@
                 trends: "Detected Trends", publish: "PUBLISH NOW", new_btn: "NEW", ready: "READY",
                 credits: "CREDITS", color_n: "NEUTRALS", color_nu: "NUDE", color_p: "PRIMARY", color_s: "SECONDARY", color_t: "TERTIARY", color_q: "QUATERNARY",
                 loading_steps: ["SEARCHING WEB...", "ANALIZING TRENDS...", "STRUCTURING STRATEGY...", "GENERATING 8K IMAGE...", "WRITING VIRAL COPY..."],
-                credit_text: '"Si para el universo no existen límites, no debería haber límites para la mente humana” — Roddy Smith',
+                credit_text: '"If limits do not exist for the universe, they should not exist for the human mind” — Roddy Smith',
                 creator_title: "OUR CREATOR", creator_role: "CEO & FOUNDER", creator_bio: "Roddy Smith, strategic visionary. Total mastery of AI to change global marketing.",
                 creator_mission: "Our mission is to break entry barriers. MAG.IA was born to change the world.",
                 download: "DOWNLOAD IMAGE", premium_download: "DOWNLOAD 8K ULTRA (Billboard) - $0.99",
@@ -364,46 +289,94 @@
             }
         };
 
-        const STYLES_DATA = [
-            { id: 'realistic', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400' },
-            { id: 'cinematic', img: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=400' }, 
-            { id: 'luxury', img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400' },
-            { id: 'neon', img: 'https://images.unsplash.com/photo-1555212697-194d092e3b8f?q=80&w=400' },
-            { id: '3d', img: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=400' },
-            { id: 'cyber', img: 'https://images.unsplash.com/photo-1515630278258-407f66498911?q=80&w=400' }
-        ];
+        // --- COMPONENTES AUXILIARES ---
+        const AdBanner = () => {
+            const [adIndex, setAdIndex] = useState(0);
+            const ads = [
+                { bg: 'bg-gradient-to-r from-blue-900/50 to-black', text: 'ANÚNCIATE AQUÍ - GOOGLE ADS' },
+                { bg: 'bg-gradient-to-r from-purple-900/50 to-black', text: 'TU MARCA ANTE MILLONES' },
+                { bg: 'bg-gradient-to-r from-green-900/50 to-black', text: 'OPTIMIZA TUS VENTAS HOY' }
+            ];
 
-        const LIGHTING_DATA = [
-            { id: 'studio', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400' },
-            { id: 'neon', img: 'https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=400' },
-            { id: 'golden', img: 'https://images.unsplash.com/photo-1477346611705-65d1883cee1e?q=80&w=400' },
-            { id: 'dramatic', img: 'https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?q=80&w=400' }
-        ];
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    setAdIndex(prev => (prev + 1) % ads.length);
+                }, 5000);
+                return () => clearInterval(interval);
+            }, []);
 
-        const COLOR_GROUPS = {
-            "NEUTROS": ["#FFFFFF", "#000000", "#F5F5F5", "#D3D3D3", "#808080", "#333333"],
-            "NUDE": ["#E3D1C4", "#D7B8A3", "#C7A188", "#B88E76", "#A87F63", "#8D6E55", "#6F4F1D", "#5D4037", "#3E2723"],
-            "PRIMARIOS": ["#FF0000", "#0000FF", "#FFFF00"],
-            "SECUNDARIOS": ["#00FF00", "#FFA500", "#800080"],
-            "TERCIARIOS": ["#FF4500", "#FFD700", "#ADFF2F", "#00CED1", "#8A2BE2", "#C71585"],
-            "CUATERNARIOS": ["#800000", "#808000", "#008080", "#000080"]
+            return (
+                <div className={`w-full max-w-lg h-24 rounded-xl border border-white/10 flex items-center justify-center mb-8 relative overflow-hidden transition-all duration-1000 ${ads[adIndex].bg} backdrop-blur-sm`}>
+                    <div className="absolute top-2 right-2 text-[8px] bg-white/20 text-white px-1 rounded">PUBLICIDAD</div>
+                    <p className="font-tech text-white/50 text-xl tracking-widest animate-pulse">{ads[adIndex].text}</p>
+                    <div className="scan-line opacity-30"></div>
+                </div>
+            );
+        };
+
+        const NeuralBrain = () => {
+            const canvasRef = useRef(null);
+            useEffect(() => {
+                const canvas = canvasRef.current;
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                let width = canvas.width = 300; let height = canvas.height = 300;
+                let particles = [];
+                for(let i=0; i<60; i++) particles.push({x: Math.random()*width, y: Math.random()*height, vx: (Math.random()-0.5), vy: (Math.random()-0.5)});
+                const animate = () => {
+                    ctx.clearRect(0,0,width,height);
+                    particles.forEach((p, i) => {
+                        p.x += p.vx; p.y += p.vy;
+                        if(p.x < 0 || p.x > width) p.vx *= -1; if(p.y < 0 || p.y > height) p.vy *= -1;
+                        ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
+                        particles.slice(i+1).forEach(p2 => {
+                            let d = Math.hypot(p.x-p2.x, p.y-p2.y);
+                            if(d < 70) { ctx.beginPath(); ctx.strokeStyle = `rgba(255, 255, 255, ${0.2 * (1 - d/70)})`; ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); }
+                        });
+                    });
+                    requestAnimationFrame(animate);
+                };
+                animate();
+            }, []);
+            return <canvas ref={canvasRef} className="w-40 h-40 mx-auto mb-6 rounded-full bg-white/5 border border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.1)] backdrop-blur-md" />;
+        };
+
+        const ComparisonSlider = ({ beforeImage, afterImage, tLang }) => {
+            const [sliderPos, setSliderPos] = useState(50);
+            const containerRef = useRef(null);
+            const handleMove = (e) => {
+                if (!containerRef.current) return;
+                const rect = containerRef.current.getBoundingClientRect();
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                if (clientX === undefined) return;
+                const x = (clientX - rect.left) / rect.width * 100;
+                setSliderPos(Math.min(100, Math.max(0, x)));
+            };
+            return (
+                <div className="relative w-full h-full overflow-hidden cursor-ew-resize select-none rounded-xl border border-white/20 shadow-2xl bg-black" ref={containerRef} onMouseMove={handleMove} onTouchMove={handleMove}>
+                    <img src={afterImage} alt="After" className="absolute top-0 left-0 w-full h-full object-cover" />
+                    <div className="absolute top-0 left-0 h-full overflow-hidden border-r-2 border-white" style={{ width: `${sliderPos}%` }}><img src={beforeImage} alt="Before" className="absolute top-0 left-0 h-full max-w-none object-cover" style={{ width: containerRef.current ? containerRef.current.offsetWidth : '100%' }} /></div>
+                    <div className="absolute top-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center text-black shadow-lg transform -translate-y-1/2 -translate-x-1/2 pointer-events-none" style={{ left: `${sliderPos}%` }}><Icons.Sliders /></div>
+                    <div className="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded uppercase shadow-md">{tLang.before}</div>
+                    <div className="absolute bottom-4 right-4 bg-green-500 text-black text-xs font-bold px-2 py-1 rounded uppercase shadow-md">{tLang.after}</div>
+                </div>
+            );
         };
 
         const PricingCard = ({ title, price, features, recommended, onSelect, strike, sub, tLang }) => (
-            <div className={`relative p-6 md:p-8 rounded-3xl flex flex-col gap-6 transition-transform duration-300 hover:scale-105 ${recommended ? 'glass border-blue-300 shadow-lg transform scale-105 z-10' : 'glass opacity-90 hover:opacity-100'}`}>
-                {recommended && <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#0ea5e9] text-white font-black text-[10px] uppercase tracking-widest py-1 px-4 rounded-full animate-pulse">{tLang.rec}</div>}
-                <div><h3 className="text-gray-500 font-bold uppercase tracking-widest text-xs mb-2 font-tech">{title}</h3><div className="flex items-baseline gap-1 justify-center md:justify-start"><span className="text-5xl font-black text-[#0f172a] font-tech">${price}</span>{strike && <span className="text-sm text-red-400 line-through font-bold">${strike}</span>}</div><p className="text-xs text-gray-400 mt-2 font-mono uppercase">{sub}</p></div>
-                <ul className="space-y-3 flex-1 my-6">{features.map((f, i) => (<li key={i} className="flex items-start gap-3 text-xs text-gray-600 font-tech"><div className={`mt-0.5 ${recommended ? 'text-blue-500' : 'text-gray-400'}`}><Icons.Check /></div><span>{f}</span></li>))}</ul>
-                <button onClick={onSelect} className={`w-full py-4 font-black uppercase tracking-widest text-xs transition-all rounded-xl ${recommended ? 'bg-[#0ea5e9] text-white shadow-lg hover:shadow-xl' : 'border border-gray-300 hover:bg-white text-gray-600'}`}>{recommended ? tLang.buy : tLang.sel}</button>
+            <div className={`relative p-6 md:p-8 rounded-2xl flex flex-col gap-6 transition-transform duration-300 hover:scale-105 ${recommended ? 'glass border-white shadow-[0_0_40px_rgba(255,255,255,0.2)] transform scale-105 z-10' : 'glass opacity-90 hover:opacity-100'}`}>
+                {recommended && <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-white text-black font-black text-[10px] uppercase tracking-widest py-1 px-4 clip-path-slanted animate-pulse">{tLang.rec}</div>}
+                <div><h3 className="text-gray-300 font-bold uppercase tracking-widest text-xs mb-2 font-tech">{title}</h3><div className="flex items-baseline gap-1 justify-center md:justify-start"><span className="text-5xl font-black text-white font-tech">${price}</span>{strike && <span className="text-sm text-red-400 line-through font-bold">${strike}</span>}</div><p className="text-xs text-gray-400 mt-2 font-mono uppercase">{sub}</p></div>
+                <ul className="space-y-3 flex-1 my-6">{features.map((f, i) => (<li key={i} className="flex items-start gap-3 text-xs text-gray-200 font-tech"><div className={`mt-0.5 ${recommended ? 'text-white' : 'text-gray-500'}`}><Icons.Check /></div><span>{f}</span></li>))}</ul>
+                <button onClick={onSelect} className={`w-full py-4 font-black uppercase tracking-widest text-xs transition-all ${recommended ? 'tech-btn' : 'border border-white/20 hover:bg-white/10 rounded-xl'}`}>{recommended ? tLang.buy : tLang.sel}</button>
             </div>
         );
 
+        // --- NANO STUDIO 2.0 (MODIFIED FOR NEW UI) ---
         const DesignEditor = ({ image, logo, initialText, onSave, onClose, tLang }) => {
             const canvasRef = useRef(null);
             const fabricCanvasRef = useRef(null);
             const [selectedObj, setSelectedObj] = useState(null);
-            
-            // ... (Manteniendo toda la lógica original de Fabric.js intacta)
             const historyRef = useRef([]);
             const historyStepRef = useRef(-1);
             const isTrackingRef = useRef(true);
@@ -413,7 +386,9 @@
                 const initCanvas = () => {
                     const canvasElement = canvasRef.current;
                     if (!canvasElement) return;
+
                     if (fabricCanvasRef.current) { try { fabricCanvasRef.current.dispose(); } catch(e) {} fabricCanvasRef.current = null; }
+
                     try {
                         const canvas = new fabric.Canvas(canvasElement, { width: 800, height: 800, backgroundColor: '#000000' });
                         fabricCanvasRef.current = canvas;
@@ -471,29 +446,30 @@
             const download = () => { if(fabricCanvasRef.current) { const dataURL = fabricCanvasRef.current.toDataURL({ format: 'jpeg', quality: 0.9, multiplier: 2 }); const link = document.createElement('a'); link.download = `MAGIA_DESIGN_${Date.now()}.jpg`; link.href = dataURL; link.click(); } };
 
             return (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 fade-enter backdrop-blur-sm">
-                    <div className="w-[95%] h-[90%] flex border border-white/20 rounded-2xl overflow-hidden bg-[#1e1e1e] shadow-2xl">
-                        <div className="w-80 bg-[#2d2d2d] border-r border-white/10 p-6 flex flex-col gap-6 overflow-y-auto">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 fade-enter backdrop-blur-md">
+                    <div className="w-[95%] h-[90%] flex border border-white/10 rounded-2xl overflow-hidden bg-black/80 shadow-2xl">
+                        <div className="w-80 bg-white/5 border-r border-white/10 p-6 flex flex-col gap-6 overflow-y-auto backdrop-blur-sm">
                              <h3 className="font-tech text-white text-2xl mb-2">{tLang.editor_title}</h3>
-                             <div className="flex gap-2 mb-2"><button onClick={undo} className="editor-btn flex-1 py-2 text-xs rounded-lg text-gray-300" title="Deshacer"><Icons.Undo /> UNDO</button><button onClick={redo} className="editor-btn flex-1 py-2 text-xs rounded-lg text-gray-300" title="Rehacer"><Icons.Redo /> REDO</button></div>
-                             <button onClick={duplicate} className="editor-btn w-full py-3 text-xs flex gap-2 justify-center mb-2 rounded-lg text-gray-300" title="Duplicar"><Icons.Copy /> DUPLICAR</button>
-                             <div className="grid grid-cols-2 gap-2"><button onClick={addNewText} className="editor-btn text-xs flex-col py-3 rounded-lg text-gray-300"><Icons.Text /> TEXTO</button><label className="editor-btn text-xs flex-col py-3 cursor-pointer rounded-lg text-gray-300"><Icons.Image /> IMAGEN <input type="file" hidden onChange={handleImageUpload} /></label></div>
+                             <div className="flex gap-2 mb-2"><button onClick={undo} className="editor-btn flex-1 py-2 text-xs rounded-lg" title="Deshacer"><Icons.Undo /> UNDO</button><button onClick={redo} className="editor-btn flex-1 py-2 text-xs rounded-lg" title="Rehacer"><Icons.Redo /> REDO</button></div>
+                             <button onClick={duplicate} className="editor-btn w-full py-3 text-xs flex gap-2 justify-center mb-2 rounded-lg" title="Duplicar"><Icons.Copy /> DUPLICAR</button>
+                             <div className="grid grid-cols-2 gap-2"><button onClick={addNewText} className="editor-btn text-xs flex-col py-3 rounded-lg"><Icons.Text /> TEXTO</button><label className="editor-btn text-xs flex-col py-3 cursor-pointer rounded-lg"><Icons.Image /> IMAGEN <input type="file" hidden onChange={handleImageUpload} /></label></div>
                              {selectedObj ? (
-                                 <div className="space-y-4 bg-[#3d3d3d] p-4 rounded-xl border border-white/10">
+                                 <div className="space-y-4 animate-pulse-fast bg-white/5 p-4 rounded-xl border border-white/10">
                                      <p className="text-[10px] font-bold text-gray-400 uppercase">EDITANDO: {selectedObj.type}</p>
                                      {selectedObj.type === 'i-text' && (
                                          <>
-                                            <div className="flex gap-2"><input type="color" className="h-8 w-8 bg-transparent cursor-pointer rounded" onChange={e => updateSelected('fill', e.target.value)} /><input type="range" className="flex-1 accent-blue-500" min="10" max="200" value={selectedObj.fontSize} onChange={e => updateSelected('fontSize', parseInt(e.target.value))} /></div>
-                                            <select className="glass-input text-xs bg-[#2d2d2d] text-white border-gray-600" onChange={e => updateSelected('fontFamily', e.target.value)} value={selectedObj.fontFamily}>
+                                            <div className="flex gap-2"><input type="color" className="h-8 w-8 bg-transparent cursor-pointer rounded" onChange={e => updateSelected('fill', e.target.value)} /><input type="range" className="flex-1 accent-white" min="10" max="200" value={selectedObj.fontSize} onChange={e => updateSelected('fontSize', parseInt(e.target.value))} /></div>
+                                            <select className="glass-input text-xs" onChange={e => updateSelected('fontFamily', e.target.value)} value={selectedObj.fontFamily}>
                                                 <option value="Chakra Petch">Tech (Chakra)</option><option value="Inter">Modern (Inter)</option><option value="Oswald">Impact (Oswald)</option><option value="Playfair Display">Luxury (Serif)</option><option value="Montserrat">Clean (Montserrat)</option><option value="Roboto Mono">Code (Mono)</option><option value="Bebas Neue">Bebas (Condensed)</option><option value="Roboto Slab">Slab (Geometric)</option>
                                             </select>
                                          </>
                                      )}
-                                     <div className="flex gap-2 items-center"><span className="text-xs text-gray-400">Opacidad</span><input type="range" className="accent-blue-500" min="0" max="1" step="0.1" value={selectedObj.opacity} onChange={e => updateSelected('opacity', parseFloat(e.target.value))} /></div>
+                                     <div className="flex gap-2 items-center"><span className="text-xs text-gray-500">Opacidad</span><input type="range" className="accent-white" min="0" max="1" step="0.1" value={selectedObj.opacity} onChange={e => updateSelected('opacity', parseFloat(e.target.value))} /></div>
+                                     {selectedObj.type === 'image' && (<button onClick={() => updateSelected('globalCompositeOperation', selectedObj.globalCompositeOperation === 'multiply' ? 'source-over' : 'multiply')} className={`w-full py-2 border rounded text-xs ${selectedObj.globalCompositeOperation === 'multiply' ? 'bg-white/20 border-white text-white' : 'border-gray-600 text-gray-400'}`}>{selectedObj.globalCompositeOperation === 'multiply' ? 'MODO: MULTIPLY (ON)' : 'MODO: NORMAL'}</button>)}
                                      <button onClick={deleteSelected} className="w-full py-2 bg-red-900/50 text-red-200 rounded text-xs flex items-center justify-center gap-2 hover:bg-red-900/70"><Icons.Trash /> ELIMINAR</button>
                                  </div>
                              ) : <div className="text-center py-10 text-gray-500 text-xs">Selecciona un elemento.</div>}
-                             <div className="mt-auto flex flex-col gap-2"><button onClick={download} className="tech-btn w-full flex justify-center gap-2 text-xs"><Icons.Download /> EXPORTAR HD</button><button onClick={onClose} className="w-full py-3 border border-gray-600 text-gray-300 rounded-lg text-xs hover:bg-white/5">{tLang.close_editor}</button></div>
+                             <div className="mt-auto flex flex-col gap-2"><button onClick={download} className="tech-btn w-full flex justify-center gap-2 text-xs"><Icons.Download /> EXPORTAR HD</button><button onClick={onClose} className="w-full py-3 border border-gray-700 rounded-lg text-xs hover:bg-white/5">{tLang.close_editor}</button></div>
                         </div>
                         <div className="flex-1 bg-black canvas-container flex items-center justify-center relative overflow-hidden p-10"><canvas ref={canvasRef} /></div>
                     </div>
@@ -501,57 +477,44 @@
             );
         };
 
-        const ComparisonSlider = ({ beforeImage, afterImage, tLang }) => {
-            const [sliderPos, setSliderPos] = useState(50);
-            const containerRef = useRef(null);
-            const handleMove = (e) => {
-                if (!containerRef.current) return;
-                const rect = containerRef.current.getBoundingClientRect();
-                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-                if (clientX === undefined) return;
-                const x = (clientX - rect.left) / rect.width * 100;
-                setSliderPos(Math.min(100, Math.max(0, x)));
-            };
-            return (
-                <div className="relative w-full h-full overflow-hidden cursor-ew-resize select-none rounded-xl border border-white/50 shadow-2xl bg-black" ref={containerRef} onMouseMove={handleMove} onTouchMove={handleMove}>
-                    <img src={afterImage} alt="After" className="absolute top-0 left-0 w-full h-full object-cover" />
-                    <div className="absolute top-0 left-0 h-full overflow-hidden border-r-2 border-white" style={{ width: `${sliderPos}%` }}><img src={beforeImage} alt="Before" className="absolute top-0 left-0 h-full max-w-none object-cover" style={{ width: containerRef.current ? containerRef.current.offsetWidth : '100%' }} /></div>
-                    <div className="absolute top-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center text-black shadow-lg transform -translate-y-1/2 -translate-x-1/2 pointer-events-none" style={{ left: `${sliderPos}%` }}><Icons.Sliders /></div>
-                </div>
-            );
-        };
-
-        const HeaderInternal = ({ credits, setView, t, theme }) => (
-            <div className="absolute top-0 left-0 w-full p-4 md:p-6 flex justify-center items-start gap-6 z-50 pointer-events-none">
-                <div className="pointer-events-auto absolute left-4 md:left-8 top-6">
-                    <button onClick={() => setView('pricing')} className="flex items-center gap-2 px-4 py-2 bg-white/40 backdrop-blur-md rounded-full border border-white/60 hover:border-white hover:scale-105 transition-all shadow-lg group">
-                        <span className="text-yellow-600 group-hover:rotate-12 transition-transform"><Icons.Credit /></span>
-                        <span className="text-xs font-bold font-tech text-gray-800">{credits} {t.credits}</span>
-                        <span className="w-4 h-4 bg-white text-black rounded-full flex items-center justify-center text-[10px] font-bold">+</span>
-                    </button>
-                </div>
-
-                {/* NUEVO BRANDING CENTRAL MAG.IA */}
-                <div className="pointer-events-auto flex flex-col items-center cursor-pointer group mt-4" onClick={() => setView('landing')}>
-                    <Icons.SunLogo theme={theme} />
-                    <span className="brand-title text-5xl font-logo tracking-tighter drop-shadow-lg transform -rotate-2 group-hover:rotate-0 transition-transform duration-500">MAG.IA</span>
-                    <div className="flex items-center gap-1 text-[9px] text-gray-500 font-bold uppercase tracking-[0.1em] mt-2 bg-white/30 px-3 py-1 rounded-full backdrop-blur-sm">
-                        <Icons.Google /> {t.powered}
-                    </div>
-                </div>
-            </div>
-        );
-
         const QuestionScreen = ({ title, color, children, onNext, onPrev, credits, setView, tLang, theme }) => (
             <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative z-10">
                 <HeaderInternal credits={credits} setView={setView} t={tLang} theme={theme} />
-                <div className="w-full max-w-2xl glass p-12 rounded-3xl text-center relative mt-32">
-                    <div className="absolute top-8 left-8 cursor-pointer text-gray-400 hover:text-[#0ea5e9] transition-colors" onClick={onPrev}><Icons.ChevronLeft /></div>
-                    <h2 className={`text-3xl font-bold font-tech mb-8 text-[#0f172a] drop-shadow-sm`}>{title}</h2>
+                <div className="w-full max-w-2xl glass p-12 rounded-3xl text-center relative mt-20">
+                    <div className="absolute top-8 left-8 cursor-pointer text-gray-400 hover:text-white transition-colors" onClick={onPrev}><Icons.ChevronLeft /></div>
+                    <h2 className={`text-2xl font-bold font-tech mb-8 text-white drop-shadow-md`}>{title}</h2>
                     {children}
                     <button onClick={onNext} className="tech-btn w-full mt-10 py-4 rounded-xl">{tLang.next}</button>
                 </div>
                 <div className="floating-credit">{tLang.credit_text}</div>
+            </div>
+        );
+
+        // --- NEW MAG.IA HEADER ---
+        const HeaderInternal = ({ credits, setView, t, theme }) => (
+            <div className="absolute top-0 left-0 w-full p-4 md:p-6 flex justify-center items-start gap-6 z-50 pointer-events-none">
+                {/* Créditos Flotantes */}
+                <div className="pointer-events-auto absolute left-4 md:left-8 top-6">
+                    <button onClick={() => setView('pricing')} className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 hover:border-white/50 hover:scale-105 transition-all shadow-lg group">
+                        <span className="text-yellow-400 group-hover:rotate-12 transition-transform"><Icons.Credit /></span>
+                        <span className="text-xs font-bold font-tech text-white">{credits} {t.credits}</span>
+                        <span className="w-4 h-4 bg-white text-black rounded-full flex items-center justify-center text-[10px] font-bold">+</span>
+                    </button>
+                </div>
+
+                {/* LOGO CENTRAL MAG.IA */}
+                <div className="pointer-events-auto flex flex-col items-center cursor-pointer group mt-2" onClick={() => setView('landing')}>
+                    <Icons.SunLogo theme={theme} />
+                    <span className="text-3xl font-black font-tech tracking-tighter text-white drop-shadow-[0_2px_10px_rgba(255,255,255,0.3)]">MAG.IA</span>
+                    <div className="flex items-center gap-1 text-[8px] text-white/70 font-bold uppercase tracking-[0.1em] mt-1">
+                        <Icons.Google /> {t.powered}
+                    </div>
+                </div>
+
+                {/* Settings / Lang placeholder right */}
+                <div className="absolute right-4 md:right-8 top-6 pointer-events-auto">
+                    {/* Placeholder for future menu or user icon */}
+                </div>
             </div>
         );
 
@@ -563,7 +526,7 @@
             const [user, setUser] = useState(null); 
             const [userCloud, setUserCloud] = useState([]);
             const [isEditing, setIsEditing] = useState(false);
-            const timeTheme = useTimeTheme(); 
+            const timeTheme = useTimeTheme(); // MAG.IA Time Engine
 
             const initialForm = { image: null, logo: null, inspirationImg: null, target: '', company: '', whatsapp: '', product: { name: '', price: '', promo: '' }, textOnImage: '', style: '', light: '', colors: [], googleData: false, inspiration: '', connected: { fb: false, ig: false, tk: false }, format: 'post' };
             const [formData, setFormData] = useState(initialForm);
@@ -601,7 +564,12 @@
             const handleLogin = () => { if(!inputEmail) return alert("Email required"); const fakeUser = { name: inputEmail.split('@')[0], email: inputEmail }; setUser(fakeUser); setApiKey(inputApiKey); localStorage.setItem('clickia_user', JSON.stringify(fakeUser)); if(inputApiKey) localStorage.setItem('clickia_apikey', inputApiKey); changeView('upload'); };
             const handleCopyText = () => { navigator.clipboard.writeText(generatedCopy); alert("Copy copiado!"); };
             const handleDownloadImage = () => { fetch(resultImage).then(response => response.blob()).then(blob => { const url = window.URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = `MAGIA_${Date.now()}.jpg`; document.body.appendChild(link); link.click(); document.body.removeChild(link); window.URL.revokeObjectURL(url); }).catch(e => { window.open(resultImage, '_blank'); }); };
-            const handlePremiumDownload = () => { playSound('click'); const confirm = window.confirm("⚡ MAG.IA PREMIUM GATEWAY ⚡\n\nEstás a punto de descargar la versión 8K ULTRA.\n\nPrecio: $0.99 USD\n\n¿Proceder al pago seguro?"); if(confirm) { setTimeout(() => { alert("✅ ¡PAGO EXITOSO!\n\nDescargando activo..."); handleDownloadImage(); }, 1500); } };
+            
+            const handlePremiumDownload = () => {
+                playSound('click');
+                const confirm = window.confirm("⚡ MAG.IA PREMIUM GATEWAY ⚡\n\nEstás a punto de descargar la versión 8K ULTRA.\n\nPrecio: $0.99 USD\n\n¿Proceder al pago seguro?");
+                if(confirm) { setTimeout(() => { alert("✅ ¡PAGO EXITOSO!\n\nDescargando activo..."); handleDownloadImage(); }, 1500); }
+            };
 
             const generateImageURL = (prompt) => { const encodedPrompt = encodeURIComponent(prompt); return `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1080&height=1080&nologo=true&seed=${Math.floor(Math.random() * 10000)}`; };
             const callGeminiAPI = async (prompt) => { if (!apiKey) return null; try { const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) }); const data = await response.json(); return data.candidates?.[0]?.content?.parts?.[0]?.text; } catch (error) { console.error("Gemini Error:", error); return null; } };
@@ -661,38 +629,43 @@
             const landingView = (
                 <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center relative fade-enter z-10">
                     <nav className="absolute top-0 w-full p-6 flex justify-center items-center z-50">
-                        <div className="flex flex-wrap justify-center gap-4 items-center glass px-4 py-2 rounded-full">
-                            <div className="flex items-center gap-3 px-4 border-r border-gray-300/30">{['ES', 'EN', 'FR', 'ZH'].map(l => (<button key={l} onClick={() => { playSound('click'); setLang(l); }} className={`text-[10px] font-bold font-tech transition-all hover:scale-110 ${lang === l ? 'text-[#0ea5e9] scale-110' : 'text-gray-500 hover:text-gray-800'}`}>{l}</button>))}</div>
-                            <div className="flex items-center gap-2"><button onClick={() => {playSound('click'); setView('setup')}} className="text-xs font-bold text-gray-800 hover:text-[#0ea5e9] font-tech uppercase tracking-widest px-4 py-2 hover:bg-white/20 rounded-full transition-all">{t.enter}</button><button onClick={() => {playSound('click'); setView('pricing')}} className="text-xs font-bold text-gray-500 hover:text-gray-800 font-tech uppercase tracking-widest px-4 py-2 hover:bg-white/20 rounded-full transition-all">{t.prices}</button></div>
+                        <div className="flex flex-wrap justify-center gap-4 items-center glass px-2 py-2 rounded-full">
+                            <div className="flex items-center gap-3 px-4 border-r border-white/10">{['ES', 'EN', 'FR', 'ZH'].map(l => (<button key={l} onClick={() => { playSound('click'); setLang(l); }} className={`text-[10px] font-bold font-tech transition-all hover:scale-110 ${lang === l ? 'text-white scale-110' : 'text-gray-500 hover:text-white'}`}>{l}</button>))}</div>
+                            <div className="flex items-center gap-2"><button onClick={() => {playSound('click'); setView('setup')}} className="text-xs font-bold text-white hover:text-cyan-400 font-tech uppercase tracking-widest px-4 py-2 hover:bg-white/5 rounded-full transition-all">{t.enter}</button><button onClick={() => {playSound('click'); setView('pricing')}} className="text-xs font-bold text-gray-300 hover:text-white font-tech uppercase tracking-widest px-4 py-2 hover:bg-white/5 rounded-full transition-all">{t.prices}</button></div>
                         </div>
                     </nav>
                     
                     <div className="z-10 max-w-6xl w-full flex flex-col items-center mt-32">
-                        {/* LOGO GIGANTE */}
-                        <div className="flex flex-col items-center justify-center gap-2 mb-10 cursor-pointer select-none">
+                        {/* HEADER DINÁMICO */}
+                        <div className="flex flex-col items-center justify-center gap-2 mb-10 animate-pulse-fast cursor-pointer select-none">
                              <Icons.SunLogo theme={timeTheme} />
-                             <h1 className="brand-title text-8xl md:text-9xl font-logo tracking-tighter drop-shadow-xl transform -rotate-3">MAG.IA</h1>
-                             <div className="inline-flex items-center gap-2 px-5 py-2 glass rounded-full text-gray-500 text-[10px] font-bold uppercase tracking-[0.2em] mt-4"><Icons.Google /> {t.powered}</div>
+                             <h1 className="text-6xl md:text-8xl font-black font-tech tracking-tighter text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.3)]">MAG.IA</h1>
+                             <div className="inline-flex items-center gap-2 px-4 py-1 glass rounded-full text-white text-[10px] font-bold uppercase tracking-[0.2em]"><Icons.Google /> {t.powered}</div>
                         </div>
 
-                        <h2 className="text-4xl md:text-6xl font-bold font-tech mb-8 leading-tight tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#0f172a] to-[#334155] drop-shadow-sm">{t.hero_mk} <br/><span className="text-[#0ea5e9]">{t.hero_auto}</span></h2>
+                        <h2 className="text-3xl md:text-5xl font-bold font-tech mb-8 leading-tight tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50">{t.hero_mk} <br/><span className="text-white">{t.hero_auto}</span></h2>
+                        <div className="flex flex-wrap justify-center gap-4 mb-12 text-xs font-bold uppercase tracking-widest text-white/70">{t.bullets.map(b => (<div key={b} className="flex items-center gap-2 bg-white/5 px-3 py-1 rounded-full border border-white/10"><Icons.Check /> {b}</div>))}</div>
                         
-                        <div className="w-full max-w-4xl h-96 mb-12 shadow-2xl rounded-3xl overflow-hidden border-4 border-white glass-card"><ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} /></div>
+                        <div className="w-full max-w-4xl h-96 mb-12 shadow-2xl rounded-2xl overflow-hidden border border-white/20 glass"><ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} /></div>
                         
                         <div className="flex flex-col items-center gap-4 mb-12">
-                            <button onClick={() => {playSound('click'); setView('setup')}} className="tech-btn px-16 py-6 text-xl rounded-full flex items-center gap-4 mx-auto transform hover:scale-105">{t.cta_trial}</button>
-                            <div className="flex items-center gap-2 text-gray-500 font-bold text-sm uppercase tracking-widest animate-pulse"><Icons.Zap /> {t.cta_posts}</div>
+                            <button onClick={() => {playSound('click'); setView('setup')}} className="tech-btn px-16 py-6 text-xl rounded-2xl flex items-center gap-4 mx-auto">{t.cta_trial}</button>
+                            <div className="flex items-center gap-2 text-white font-bold text-sm uppercase tracking-widest animate-pulse"><Icons.Zap /> {t.cta_posts}</div>
                         </div>
                         
-                        <div className="w-full max-w-4xl glass p-10 rounded-3xl border border-white/40 mb-20 flex flex-col md:flex-row items-center gap-8 text-left relative overflow-hidden group hover:shadow-2xl transition-all">
-                            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white shadow-xl flex-shrink-0 overflow-hidden relative z-10">
+                        {/* CEO CARD - MAG.IA STYLE */}
+                        <div className="w-full max-w-4xl glass p-8 rounded-3xl border border-white/10 mb-20 flex flex-col md:flex-row items-center gap-8 text-left relative overflow-hidden group hover:border-white/30 transition-all">
+                            <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all"></div>
+                            <div className="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-white/20 shadow-2xl flex-shrink-0 overflow-hidden relative z-10 avatar-wrapper">
                                 <img src={CREATOR_IMAGE} className="w-full h-full object-cover" />
+                                <div className={`avatar-overlay overlay-${timeTheme}`}></div>
                             </div>
                             <div className="flex-1 relative z-10">
-                                <div className="text-xs font-bold text-[#0ea5e9] uppercase tracking-widest mb-2">{t.creator_title}</div>
-                                <h3 className="text-3xl font-black font-tech mb-1 text-[#0f172a]">RODDY SMITH</h3>
-                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{t.creator_role}</p>
-                                <p className="text-sm text-gray-600 leading-relaxed mb-4 italic border-l-4 border-[#0ea5e9] pl-4">"{t.creator_bio}"</p>
+                                <div className="text-xs font-bold text-white/70 uppercase tracking-widest mb-2">{t.creator_title}</div>
+                                <h3 className="text-3xl font-black font-tech mb-1 text-white">RODDY SMITH</h3>
+                                <p className="text-xs font-bold text-white/50 uppercase tracking-wider mb-4">{t.creator_role}</p>
+                                <p className="text-sm text-gray-200 leading-relaxed mb-4 italic border-l-2 border-white pl-4">"{t.creator_bio}"</p>
+                                <p className="text-xs text-gray-400 leading-relaxed">{t.creator_mission}</p>
                             </div>
                         </div>
                         <div className="floating-credit">{t.credit_text}</div>
@@ -700,30 +673,31 @@
                 </div>
             );
 
-            if (view === 'setup') return <div className="min-h-screen flex items-center justify-center p-6 z-10 relative"><div className="w-full max-w-md glass p-10 rounded-3xl text-center relative overflow-hidden"><button onClick={() => changeView('landing')} className="absolute top-4 right-4 text-gray-400 hover:text-red-500"><Icons.X /></button><h2 className="text-3xl font-bold font-tech mb-2 text-[#0f172a]">{t.setup_title}</h2><p className="text-gray-500 text-sm mb-8">{t.setup_desc}</p>{user ? (<div className="text-center mb-6"><p className="text-[#0f172a] font-bold mb-4 text-xl">¡Hola, {user.name}!</p><button onClick={() => changeView('upload')} className="tech-btn w-full mb-4">CREAR CAMPAÑA</button><div className="text-left mt-6"><h4 className="text-xs font-bold text-gray-400 mb-2">{t.cloud_welcome}</h4><div className="h-40 overflow-y-auto custom-scroll bg-white/40 rounded-lg p-2">{userCloud.length === 0 ? <p className="text-gray-500 text-xs text-center py-10">{t.cloud_desc}</p> : userCloud.map((item, i) => (<div key={i} onClick={() => restoreCampaign(item)} className="flex items-center gap-2 mb-2 p-2 bg-white/60 rounded-lg border border-white/50 cursor-pointer hover:bg-white"><img src={item.image} className="w-10 h-10 rounded object-cover" /><div className="overflow-hidden"><p className="text-[10px] text-gray-600 font-bold truncate">{item.date}</p><p className="text-[9px] text-gray-400 truncate w-40">Camp #{i+1}</p></div></div>))}</div></div></div>) : (<div className="space-y-4"><div><label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 block">{t.lbl_email}</label><input className="glass-input" placeholder={t.ph_email} value={inputEmail} onChange={e => setInputEmail(e.target.value)} /></div><div><label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 block">{t.lbl_api}</label><div className="relative"><input className="glass-input pl-10" type="password" placeholder={t.ph_api} value={inputApiKey} onChange={e => setInputApiKey(e.target.value)} /><div className="absolute left-3 top-3.5 text-gray-400"><Icons.Key /></div></div></div><button onClick={handleLogin} className="tech-btn w-full mt-4 flex items-center justify-center gap-2 text-white bg-[#0ea5e9]">{t.setup_btn} <Icons.Google /></button></div>)}</div></div>;
+            // Reutilizamos componentes con la nueva estética glass
+            if (view === 'setup') return <div className="min-h-screen flex items-center justify-center p-6 z-10 relative"><div className="w-full max-w-md glass p-10 rounded-3xl text-center relative overflow-hidden"><button onClick={() => changeView('landing')} className="absolute top-4 right-4 text-white/50 hover:text-white"><Icons.X /></button><h2 className="text-3xl font-bold font-tech mb-2">{t.setup_title}</h2><p className="text-gray-300 text-sm mb-8">{t.setup_desc}</p>{user ? (<div className="text-center mb-6"><p className="text-white font-bold mb-4">¡Hola, {user.name}!</p><button onClick={() => changeView('upload')} className="tech-btn w-full mb-4">CREAR CAMPAÑA</button><div className="text-left mt-6"><h4 className="text-xs font-bold text-gray-400 mb-2">{t.cloud_welcome}</h4><div className="h-40 overflow-y-auto custom-scroll bg-black/20 rounded-lg p-2">{userCloud.length === 0 ? <p className="text-gray-500 text-xs">{t.cloud_desc}</p> : userCloud.map((item, i) => (<div key={i} onClick={() => restoreCampaign(item)} className="flex items-center gap-2 mb-2 p-2 bg-white/5 rounded border border-white/10 cursor-pointer hover:bg-white/10"><img src={item.image} className="w-10 h-10 rounded object-cover" /><div className="overflow-hidden"><p className="text-[10px] text-gray-300 truncate">{item.date}</p><p className="text-[9px] text-gray-500 truncate w-40">Camp #{i+1}</p></div></div>))}</div></div></div>) : (<div className="space-y-4"><div><label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 block">{t.lbl_email}</label><input className="glass-input" placeholder={t.ph_email} value={inputEmail} onChange={e => setInputEmail(e.target.value)} /></div><div><label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 block">{t.lbl_api}</label><div className="relative"><input className="glass-input pl-10" type="password" placeholder={t.ph_api} value={inputApiKey} onChange={e => setInputApiKey(e.target.value)} /><div className="absolute left-3 top-3.5 text-white"><Icons.Key /></div></div></div><button onClick={handleLogin} className="tech-btn w-full mt-4 flex items-center justify-center gap-2">{t.setup_btn} <Icons.Google /></button></div>)}</div></div>;
             
-            if (view === 'upload') return <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="w-full max-w-4xl glass p-12 rounded-3xl text-center border border-white/40 mt-32"><div className="absolute top-8 left-8 cursor-pointer text-gray-400 hover:text-[#0ea5e9]" onClick={() => setView('landing')}><Icons.ChevronLeft /></div><h2 className="text-3xl font-bold font-tech mb-8 uppercase text-[#0f172a]">{t.upload_title}</h2><div className="grid md:grid-cols-2 gap-8 mb-10"><div onClick={() => fileInputProduct.current.click()} className={`relative h-64 border-2 border-dashed rounded-3xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.image ? 'border-[#0ea5e9] bg-white/30' : 'border-gray-300 hover:border-[#0ea5e9]'}`}>{formData.image ? (<><img src={formData.image} className="w-full h-full object-contain p-4" /></>) : <><div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-4 text-[#0ea5e9]"><Icons.Upload /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_prod}</span></>}<input type="file" ref={fileInputProduct} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'image')} /></div><div onClick={() => fileInputLogo.current.click()} className={`relative h-64 border-2 border-dashed rounded-3xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.logo ? 'border-[#0ea5e9] bg-white/30' : 'border-gray-300 hover:border-[#0ea5e9]'}`}>{formData.logo ? (<><img src={formData.logo} className="w-full h-full object-contain p-8" /></>) : <><div className="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center mb-4 text-purple-500"><Icons.Zap /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_logo}</span></>}<input type="file" ref={fileInputLogo} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'logo')} /></div></div><button onClick={() => { if(!formData.image) return alert("Sube producto"); playSound('click'); changeView('q1'); }} className={`tech-btn w-full py-5 text-xl uppercase tracking-widest ${!formData.image && 'opacity-50 cursor-not-allowed'}`}>{t.next}</button></div><div className="floating-credit">{t.credit_text}</div></div>;
+            if (view === 'upload') return <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="w-full max-w-4xl glass p-12 rounded-3xl text-center border border-white/10 mt-20"><div className="absolute top-8 left-8 cursor-pointer text-gray-400 hover:text-white" onClick={() => setView('landing')}><Icons.ChevronLeft /></div><h2 className="text-3xl font-bold font-tech mb-8 uppercase text-white">{t.upload_title}</h2><div className="grid md:grid-cols-2 gap-8 mb-10"><div onClick={() => fileInputProduct.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.image ? 'border-white bg-white/10' : 'border-white/20 hover:border-white'}`}>{formData.image ? (<><img src={formData.image} className="w-full h-full object-contain p-4" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Upload /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_prod}</span></>}<input type="file" ref={fileInputProduct} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'image')} /></div><div onClick={() => fileInputLogo.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.logo ? 'border-white bg-white/10' : 'border-white/20 hover:border-white'}`}>{formData.logo ? (<><img src={formData.logo} className="w-full h-full object-contain p-8" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Zap /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_logo}</span></>}<input type="file" ref={fileInputLogo} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'logo')} /></div></div><button onClick={() => { if(!formData.image) return alert("Sube producto"); playSound('click'); changeView('q1'); }} className={`tech-btn w-full py-5 text-xl uppercase tracking-widest ${!formData.image && 'opacity-50 cursor-not-allowed'}`}>{t.next}</button></div><div className="floating-credit">{t.credit_text}</div></div>;
 
-            if (view === 'processing') return <div className="min-h-screen flex flex-col items-center justify-center p-8 fade-enter relative overflow-hidden z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex flex-col items-center justify-center gap-6 w-full max-w-2xl z-10 mt-32"><div className="w-40 h-40 rounded-full bg-white/30 backdrop-blur-md border border-white/50 flex items-center justify-center animate-spin-slow shadow-[0_0_50px_rgba(14,165,233,0.3)]"><Icons.SunLogo theme={timeTheme} /></div><div className="flex flex-col items-center gap-4 w-full"><h2 className="text-4xl font-black font-tech text-[#0f172a] tracking-[0.1em] text-center animate-pulse uppercase">{loadingText}</h2><div className="flex flex-col items-center gap-2"><p className="text-gray-500 font-mono text-xs tracking-[0.3em] font-bold">{t.processing}</p><p className="text-[#0ea5e9] font-black font-mono text-xl">{Math.round(progress)}%</p></div></div><div className="w-full max-w-md h-2 bg-gray-200 rounded-full overflow-hidden"><div className="h-full bg-[#0ea5e9]" style={{ width: `${progress}%`, transition: 'width 0.2s ease' }}></div></div></div><div className="floating-credit">{t.credit_text}</div></div>;
+            if (view === 'processing') return <div className="min-h-screen flex flex-col items-center justify-center p-8 fade-enter relative overflow-hidden z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex flex-col items-center justify-center gap-6 w-full max-w-2xl z-10 mt-32"><AdBanner /><NeuralBrain /><div className="flex flex-col items-center gap-4 w-full"><h2 className="text-3xl md:text-4xl font-black font-tech text-white tracking-[0.2em] text-center animate-pulse uppercase drop-shadow-[0_0_25px_rgba(255,255,255,0.5)]">{loadingText}</h2><div className="flex flex-col items-center gap-2"><p className="text-white font-mono text-xs tracking-[0.3em] font-bold">{t.processing}</p><p className="text-white font-black font-mono text-xl">{Math.round(progress)}%</p></div></div><div className="w-full max-w-md h-1 bg-white/20 rounded-full overflow-hidden border border-white/10"><div className="h-full bg-white shadow-[0_0_20px_white]" style={{ width: `${progress}%`, transition: 'width 0.2s ease' }}></div></div></div><div className="floating-credit">{t.credit_text}</div></div>;
 
             if (view === 'result') return (
                 <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative z-10">
                     <HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} />
-                    <h2 className="text-5xl font-black font-tech text-[#0f172a] mt-24 mb-8 tracking-widest text-center drop-shadow-sm">{t.result_title}</h2>
-                    <div className="w-full max-w-7xl grid md:grid-cols-2 gap-10 glass p-8 rounded-3xl border border-white/40">
+                    <h2 className="text-5xl font-black font-tech text-white mt-24 mb-8 tracking-widest text-center">{t.result_title}</h2>
+                    <div className="w-full max-w-7xl grid md:grid-cols-2 gap-10 glass p-8 rounded-3xl border border-white/20">
                         <div className="space-y-4 relative">
-                            <div className="relative group rounded-3xl overflow-hidden border-4 border-white shadow-2xl mx-auto transition-all duration-500 h-[500px] bg-white">
+                            <div className="relative group rounded-2xl overflow-hidden border border-white/20 shadow-2xl mx-auto transition-all duration-500 h-[500px]">
                                 <ComparisonSlider beforeImage={formData.image || UGLY_BURGER_IMAGE} afterImage={resultImage} tLang={t} />
                             </div>
                             <div className="flex flex-col gap-3">
-                                <div className="flex gap-2"><button onClick={handleDownloadImage} className="flex-1 py-4 bg-[#0f172a] text-white text-xs font-bold uppercase rounded-xl hover:bg-black transition-colors flex items-center justify-center gap-2 shadow-lg"><Icons.Download /> {t.download}</button><button onClick={() => setIsEditing(true)} className="flex-1 py-4 border border-gray-300 text-gray-700 text-xs font-bold uppercase rounded-xl hover:bg-white transition-colors flex items-center justify-center gap-2"><Icons.Edit /> {t.edit_design}</button></div>
-                                <button onClick={handlePremiumDownload} className="tech-btn w-full text-xs flex items-center justify-center gap-2 border-yellow-400 bg-yellow-50 hover:bg-yellow-100 text-yellow-700"><Icons.Star /> {t.premium_download}</button>
+                                <div className="flex gap-2"><button onClick={handleDownloadImage} className="flex-1 py-3 bg-white text-black text-xs font-bold uppercase rounded-xl hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 shadow-lg"><Icons.Download /> {t.download}</button><button onClick={() => setIsEditing(true)} className="flex-1 py-3 border border-white/20 text-white text-xs font-bold uppercase rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center gap-2">{t.edit_design}</button></div>
+                                <button onClick={handlePremiumDownload} className="gold-btn w-full text-xs flex items-center justify-center gap-2"><Icons.Star /> {t.premium_download}</button>
                             </div>
                         </div>
                         <div className="flex flex-col space-y-6">
-                            <div className="bg-white/60 backdrop-blur-md p-6 rounded-2xl border border-white/50 w-full shadow-sm"><div className="flex items-center justify-between mb-2 px-2"><div className="flex items-center gap-2 text-[#0ea5e9]"><Icons.Zap /><span className="text-xs font-bold text-gray-500 uppercase tracking-widest">{t.viral_score}</span></div><div className="text-4xl font-black font-tech text-[#0f172a]">9.8</div></div><div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden mb-2"><div className="h-full bg-[#0ea5e9] w-[98%]"></div></div><p className="text-[10px] text-gray-400 text-center uppercase tracking-wider">{t.viral_desc}</p></div>
-                            <div className="glass p-6 rounded-2xl border-l-4 border-[#0ea5e9] bg-white/40"><div className="flex justify-between items-center mb-4"><h3 className="text-xs font-bold text-gray-600 uppercase tracking-widest flex items-center gap-2"><Icons.Text /> {t.copy_viral}</h3><button onClick={handleCopyText} className="text-[10px] font-bold text-gray-500 hover:text-[#0ea5e9] flex items-center gap-1 uppercase border border-gray-300 px-3 py-1 rounded-full transition-colors bg-white"><Icons.Copy /> {t.copy_clipboard}</button></div><div className="copy-area custom-scroll h-40 overflow-y-auto text-sm text-gray-700 font-mono leading-relaxed p-2">{generatedCopy}</div></div>
-                            <div className="flex gap-4 mt-auto"><button onClick={handleNewGeneration} className="w-full py-4 border border-gray-300 rounded-xl text-xs font-bold uppercase hover:bg-white text-gray-600 transition-colors">{t.new_btn}</button></div>
+                            <div className="bg-white/5 backdrop-blur-md p-4 rounded-xl border border-white/20 w-full animate-pulse-fast"><div className="flex items-center justify-between mb-2 px-2"><div className="flex items-center gap-2"><Icons.Zap /><span className="text-xs font-bold text-white uppercase tracking-widest">{t.viral_score}</span></div><div className="text-2xl font-black font-tech text-white">9.8</div></div><div className="w-full h-3 bg-gray-700 rounded-full overflow-hidden mb-2"><div className="h-full bg-white w-[98%] shadow-[0_0_10px_white]"></div></div><p className="text-[10px] text-gray-400 text-center">{t.viral_desc}</p></div>
+                            <div className="glass p-6 rounded-2xl border-l-4 border-white"><div className="flex justify-between items-center mb-4"><h3 className="text-xs font-bold text-white uppercase tracking-widest flex items-center gap-2"><Icons.Zap /> {t.copy_viral}</h3><button onClick={handleCopyText} className="text-[10px] font-bold text-gray-400 hover:text-white flex items-center gap-1 uppercase border border-white/20 px-2 py-1 rounded transition-colors"><Icons.Copy /> {t.copy_clipboard}</button></div><div className="copy-area custom-scroll h-40 overflow-y-auto text-sm text-gray-300 font-mono">{generatedCopy}</div></div>
+                            <div className="flex gap-4 mt-auto"><button onClick={handleNewGeneration} className="w-full py-4 border border-white/20 rounded-xl text-xs font-bold uppercase hover:bg-white hover:text-black transition-colors">{t.new_btn}</button></div>
                         </div>
                     </div>
                     {isEditing && <DesignEditor image={resultImage} logo={formData.logo} initialText={designState} onSave={() => setIsEditing(false)} onClose={() => setIsEditing(false)} tLang={t} />}
@@ -731,21 +705,24 @@
                 </div>
             );
 
+            // Mapeo simple de las vistas de preguntas reutilizando QuestionScreen
             if (view === 'q1') return <QuestionScreen title={t.q1_title} nextView="q2" prevView="upload" onNext={() => changeView('q2')} onPrev={() => changeView('upload')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><input className="quiz-input" placeholder={t.q1_ph} autoFocus value={formData.target} onChange={e => setFormData({...formData, target: e.target.value})} /></QuestionScreen>;
             if (view === 'q2') return <QuestionScreen title={t.q2_title} nextView="q3" prevView="q1" onNext={() => changeView('q3')} onPrev={() => changeView('q1')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-4"><input className="quiz-input" placeholder={t.q2_p1} value={formData.product.name} onChange={e => updateProduct('name', e.target.value)} /><div className="grid grid-cols-2 gap-4"><input className="quiz-input" placeholder={t.q2_p2} value={formData.product.price} onChange={e => updateProduct('price', e.target.value)} /><input className="quiz-input" placeholder={t.q2_p3} value={formData.product.promo} onChange={e => updateProduct('promo', e.target.value)} /></div></div></QuestionScreen>;
-            if (view === 'q3') return <QuestionScreen title={t.q3_title} nextView="q4" prevView="q2" onNext={() => changeView('q4')} onPrev={() => changeView('q2')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-4"><input className="quiz-input" placeholder={t.q3_p1} value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} /><div className="relative"><input className="quiz-input pl-10" placeholder={t.q3_p2} value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} /><div className="absolute left-2 top-6 text-gray-400 font-bold text-xs">WA</div></div></div></QuestionScreen>;
-            if (view === 'q4') return <QuestionScreen title={t.q4_title} nextView="q5" prevView="q3" onNext={() => changeView('q5')} onPrev={() => changeView('q3')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-6"><input className="quiz-input" placeholder={t.q4_ph1} value={formData.inspiration} onChange={e => setFormData({...formData, inspiration: e.target.value})} /><div onClick={() => fileInputInspiration.current.click()} className={`border-2 border-dashed rounded-3xl p-6 cursor-pointer transition-all text-center relative h-48 flex items-center justify-center overflow-hidden bg-white/20 ${formData.inspirationImg ? 'border-[#0ea5e9]' : 'border-gray-300 hover:border-[#0ea5e9]'}`}>{formData.inspirationImg ? (<><img src={formData.inspirationImg} className="w-full h-full object-cover absolute top-0 left-0 opacity-60" /><div className="relative z-10 bg-black/50 px-4 py-2 rounded-full text-xs font-bold text-white border border-white uppercase">{t.q4_change}</div></>) : (<div className="text-gray-500 text-xs uppercase">{t.q4_upload}</div>)}<input type="file" ref={fileInputInspiration} className="hidden" onChange={(e) => handleUpload(e, 'inspirationImg')} /></div></div></QuestionScreen>;
-            if (view === 'q5') return <QuestionScreen title={t.q5_title} nextView="style" prevView="q4" onNext={() => changeView('style')} onPrev={() => changeView('q4')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="h-64 overflow-y-auto pr-2 custom-scroll">{Object.entries(COLOR_GROUPS).map(([group, colors]) => (<div key={group} className="mb-6"><p className="text-[10px] font-bold text-gray-500 uppercase mb-3 tracking-widest text-left">{group === "NEUTROS" ? t.color_n : group === "NUDE" ? t.color_nu : group === "PRIMARIOS" ? t.color_p : group === "SECUNDARIOS" ? t.color_s : group === "TERCIARIOS" ? t.color_t : t.color_q}</p><div className="flex flex-wrap gap-3">{colors.map(c => (<div key={c} onClick={() => toggleColor(c)} className={`w-12 h-12 rounded-full cursor-pointer border-2 border-white/20 transition-transform shadow-sm ${formData.colors.includes(c) ? 'scale-110 border-[#0ea5e9] ring-2 ring-[#0ea5e9]/20' : 'hover:scale-105'}`} style={{backgroundColor: c}}></div>))}</div></div>))}</div></QuestionScreen>;
+            if (view === 'q3') return <QuestionScreen title={t.q3_title} nextView="q4" prevView="q2" onNext={() => changeView('q4')} onPrev={() => changeView('q2')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-4"><input className="quiz-input" placeholder={t.q3_p1} value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} /><div className="relative"><input className="quiz-input pl-10" placeholder={t.q3_p2} value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} /><div className="absolute left-2 top-4 text-white font-bold">WA</div></div></div></QuestionScreen>;
+            if (view === 'q4') return <QuestionScreen title={t.q4_title} nextView="q5" prevView="q3" onNext={() => changeView('q5')} onPrev={() => changeView('q3')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-6"><input className="quiz-input" placeholder={t.q4_ph1} value={formData.inspiration} onChange={e => setFormData({...formData, inspiration: e.target.value})} /><div onClick={() => fileInputInspiration.current.click()} className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all text-center relative h-48 flex items-center justify-center overflow-hidden ${formData.inspirationImg ? 'border-white' : 'border-white/20 hover:border-white'}`}>{formData.inspirationImg ? (<><img src={formData.inspirationImg} className="w-full h-full object-cover absolute top-0 left-0 opacity-60" /><div className={`scan-line opacity-100`}></div><div className="relative z-10 bg-black/50 px-4 py-2 rounded-full text-xs font-bold text-white border border-white uppercase">{t.q4_change}</div></>) : (<div className="text-gray-500 text-xs uppercase">{t.q4_upload}</div>)}<input type="file" ref={fileInputInspiration} className="hidden" onChange={(e) => handleUpload(e, 'inspirationImg')} /></div></div></QuestionScreen>;
+            if (view === 'q5') return <QuestionScreen title={t.q5_title} nextView="style" prevView="q4" onNext={() => changeView('style')} onPrev={() => changeView('q4')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="h-64 overflow-y-auto pr-2 custom-scroll">{Object.entries(COLOR_GROUPS).map(([group, colors]) => (<div key={group} className="mb-6"><p className="text-[10px] font-bold text-gray-500 uppercase mb-3 tracking-widest text-left">{group === "NEUTROS" ? t.color_n : group === "NUDE" ? t.color_nu : group === "PRIMARIOS" ? t.color_p : group === "SECUNDARIOS" ? t.color_s : group === "TERCIARIOS" ? t.color_t : t.color_q}</p><div className="flex flex-wrap gap-3">{colors.map(c => (<div key={c} onClick={() => toggleColor(c)} className={`w-10 h-10 rounded-lg cursor-pointer border-2 border-white/10 transition-transform ${formData.colors.includes(c) ? 'scale-110 border-white shadow-[0_0_15px_white]' : ''}`} style={{backgroundColor: c}}></div>))}</div></div>))}</div></QuestionScreen>;
 
-            if (view === 'style') return <div className="min-h-screen p-6 fade-enter flex flex-col relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-32"><button onClick={() => setView('q5')} className="p-3 rounded-full bg-white/40 hover:bg-white shadow-md text-gray-600"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech text-[#0f172a]">{t.style_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto w-full">{STYLES_DATA.map(s => (<div key={s.id} onClick={() => {playSound('click'); setFormData({...formData, style: t[`s_${s.id}`]}); changeView('light')}} className="glass-card rounded-3xl h-72 group cursor-pointer overflow-hidden"><img src={s.img} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" /><div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent text-white text-center font-bold font-tech uppercase tracking-wider">{t[`s_${s.id}`]}</div></div>))}</div><div className="floating-credit">{t.credit_text}</div></div>;
-            if (view === 'light') return <div className="min-h-screen p-6 fade-enter flex flex-col relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-32"><button onClick={() => changeView('style')} className="p-3 rounded-full bg-white/40 hover:bg-white shadow-md text-gray-600"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech text-[#0f172a]">{t.light_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-7xl mx-auto w-full mb-12">{LIGHTING_DATA.map(l => (<div key={l.id} onClick={() => {playSound('click'); setFormData({...formData, light: t[`l_${l.id}`]}); }} className={`glass-card rounded-3xl h-64 group cursor-pointer overflow-hidden ${formData.light === t[`l_${l.id}`] ? 'selected ring-4 ring-[#0ea5e9]/30' : ''}`}><img src={l.img} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-700" /><div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent text-white text-center"><div className="font-bold font-tech uppercase">{t[`l_${l.id}`]}</div><span className="text-[9px] text-gray-300 font-normal uppercase tracking-widest">{t[`l_${l.id}_desc`]}</span></div></div>))}</div><div onClick={() => {playSound('click'); setFormData(prev => ({...prev, googleData: !prev.googleData}));}} className={`glass p-6 rounded-3xl flex justify-between items-center border transition-all cursor-pointer mb-8 max-w-2xl mx-auto w-full bg-white/30 ${formData.googleData ? 'border-[#0ea5e9] bg-blue-50' : 'border-white/40 hover:border-[#0ea5e9]'}`}><div className="flex items-center gap-4"><div className="bg-white p-3 rounded-full text-[#0ea5e9] shadow-md"><Icons.Google /></div><div><h3 className="font-bold text-[#0f172a]">{t.google_data}</h3><p className="text-xs text-gray-500">{t.google_desc}</p></div></div><div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${formData.googleData ? 'bg-[#0ea5e9] border-[#0ea5e9] text-white' : 'border-gray-400'}`}>{formData.googleData && <Icons.Check />}</div></div><div className="max-w-7xl mx-auto w-full text-center"><button onClick={runEngine} className="tech-btn px-20 py-6 text-2xl rounded-full shadow-xl hover:shadow-2xl bg-white text-[#0f172a]">{t.gen_btn}</button></div><div className="floating-credit">{t.credit_text}</div></div>;
+            // Vistas estilo y luz actualizadas a glass
+            if (view === 'style') return <div className="min-h-screen p-6 fade-enter flex flex-col relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => setView('q5')} className="p-2 rounded-full bg-white/10 hover:bg-white/20"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech text-white">{t.style_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto w-full">{STYLES_DATA.map(s => (<div key={s.id} onClick={() => {playSound('click'); setFormData({...formData, style: t[`s_${s.id}`]}); changeView('light')}} className="glass-card rounded-xl h-64 group cursor-pointer"><img src={s.img} className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" /><div className="card-label text-white">{t[`s_${s.id}`]}</div></div>))}</div><div className="floating-credit">{t.credit_text}</div></div>;
+            if (view === 'light') return <div className="min-h-screen p-6 fade-enter flex flex-col relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => changeView('style')} className="p-2 rounded-full bg-white/10 hover:bg-white/20"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech text-white">{t.light_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-7xl mx-auto w-full mb-12">{LIGHTING_DATA.map(l => (<div key={l.id} onClick={() => {playSound('click'); setFormData({...formData, light: t[`l_${l.id}`]}); }} className={`glass-card rounded-xl h-64 group cursor-pointer ${formData.light === t[`l_${l.id}`] ? 'selected' : ''}`}><img src={l.img} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all" /><div className="card-label text-white">{t[`l_${l.id}`]} <br/><span className="text-[9px] text-gray-400 font-normal">{t[`l_${l.id}_desc`]}</span></div></div>))}</div><div onClick={() => {playSound('click'); setFormData(prev => ({...prev, googleData: !prev.googleData}));}} className={`glass p-6 rounded-2xl flex justify-between items-center border transition-all cursor-pointer mb-8 max-w-2xl mx-auto w-full ${formData.googleData ? 'border-blue-400 bg-blue-900/20' : 'border-white/10 hover:border-white/50'}`}><div className="flex items-center gap-4"><div className="bg-white/10 p-3 rounded-full text-white"><Icons.Google /></div><div><h3 className="font-bold text-white">{t.google_data}</h3><p className="text-xs text-gray-400">{t.google_desc}</p></div></div><div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${formData.googleData ? 'bg-blue-500 border-blue-500' : 'border-gray-500'}`}>{formData.googleData && <Icons.Check />}</div></div><div className="max-w-7xl mx-auto w-full text-center"><button onClick={runEngine} className="tech-btn px-20 py-6 text-2xl rounded-2xl shadow-[0_0_50px_rgba(255,255,255,0.2)]">{t.gen_btn}</button></div><div className="floating-credit">{t.credit_text}</div></div>;
 
-            if (view === 'pricing') return <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter"><button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-red-500 hover:text-white transition-all text-xl font-bold text-gray-500"><Icons.X /></button><h2 className="text-5xl font-black font-tech text-center mb-10 text-[#0f172a]">{t.plans}</h2><div className="grid md:grid-cols-3 gap-8 w-full max-w-6xl pb-10 items-center"><PricingCard title={t.p_names[0]} price="99" features={t.f_1} onSelect={() => {}} sub={t.p_subs[0]} tLang={t} /><PricingCard title={t.p_names[1]} price="297" strike="1200" recommended={true} features={t.f_2} onSelect={() => {}} sub={t.p_subs[1]} tLang={t} /><PricingCard title={t.p_names[2]} price="997" features={t.f_3} onSelect={() => {}} sub={t.p_subs[2]} tLang={t} /></div><div className="floating-credit">{t.credit_text}</div></div>;
-            if (view === 'faq') return <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter"><button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-red-500 hover:text-white transition-all text-xl font-bold text-gray-500"><Icons.X /></button><h2 className="text-5xl font-black font-tech text-center mb-16 text-[#0f172a]">{t.faq_title}</h2><div className="max-w-3xl w-full space-y-6"> {[{q: t.q1, a: t.a1}, {q: t.q2, a: t.a2}, {q: t.q3, a: t.a3}].map((item, i) => (<details key={i} className="glass p-6 rounded-2xl border border-white/40 group cursor-pointer open:bg-white/60"><summary className="font-bold text-lg flex justify-between items-center outline-none list-none uppercase font-tech text-[#0f172a]">{item.q} <span className="text-gray-400 transition-transform group-open:rotate-180"><Icons.ChevronDown /></span></summary><p className="text-gray-600 text-sm mt-4 leading-relaxed pl-4 border-l-4 border-[#0ea5e9]">{item.a}</p></details>))} </div><div className="floating-credit">{t.credit_text}</div></div>;
+            if (view === 'pricing') return <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter"><button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all text-xl font-bold"><Icons.X /></button><h2 className="text-5xl font-black font-tech text-center mb-10 text-white">{t.plans}</h2><div className="grid md:grid-cols-3 gap-8 w-full max-w-6xl pb-10 items-center"><PricingCard title={t.p_names[0]} price="99" features={t.f_1} onSelect={() => {}} sub={t.p_subs[0]} tLang={t} /><PricingCard title={t.p_names[1]} price="297" strike="1200" recommended={true} features={t.f_2} onSelect={() => {}} sub={t.p_subs[1]} tLang={t} /><PricingCard title={t.p_names[2]} price="997" features={t.f_3} onSelect={() => {}} sub={t.p_subs[2]} tLang={t} /></div><div className="floating-credit">{t.credit_text}</div></div>;
+            if (view === 'faq') return <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter"><button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all text-xl font-bold"><Icons.X /></button><h2 className="text-5xl font-black font-tech text-center mb-16 text-white">{t.faq_title}</h2><div className="max-w-3xl w-full space-y-6"> {[{q: t.q1, a: t.a1}, {q: t.q2, a: t.a2}, {q: t.q3, a: t.a3}].map((item, i) => (<details key={i} className="glass p-6 rounded-xl border border-white/10 group cursor-pointer open:bg-white/5"><summary className="font-bold text-lg flex justify-between items-center outline-none list-none uppercase font-tech text-white">{item.q} <span className="text-white transition-transform group-open:rotate-180"><Icons.ChevronDown /></span></summary><p className="text-gray-300 text-sm mt-4 leading-relaxed pl-4 border-l-2 border-white/50">{item.a}</p></details>))} </div><div className="floating-credit">{t.credit_text}</div></div>;
 
             return (
                 <div className={`theme-${timeTheme}`}>
-                    <button onClick={() => {setIsMuted(!isMuted); document.querySelectorAll('audio').forEach(el => el.muted = !isMuted)}} className="fixed bottom-5 right-5 z-50 bg-white/80 border border-white text-gray-800 w-12 h-12 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-lg">
+                    <div className="liquid-bg"></div>
+                    <button onClick={() => {setIsMuted(!isMuted); document.querySelectorAll('audio').forEach(el => el.muted = !isMuted)}} className="fixed bottom-5 right-5 z-50 bg-black/50 border border-white text-white w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform">
                         {isMuted ? <Icons.VolumeX /> : <Icons.Volume2 />}
                     </button>
                     {view === 'landing' && landingView}
