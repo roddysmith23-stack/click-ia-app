@@ -28,8 +28,9 @@
         @keyframes scan { 0% { background-position: 0% -20%; } 100% { background-position: 0% 120%; } }
         .tech-btn { background: white; color: black; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 4px; padding: 14px 32px; transition: all 0.2s; cursor: pointer; clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%); }
         .tech-btn:hover { transform: translateY(-2px); box-shadow: 0 0 25px rgba(255, 255, 255, 0.3); }
-        .editor-btn { background: #1a1a1a; color: white; font-weight: 600; font-family: 'Chakra Petch'; border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 8px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .editor-btn { background: #1a1a1a; color: white; font-weight: 600; font-family: 'Chakra Petch'; border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 8px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
         .editor-btn:hover { border-color: #06b6d4; background: rgba(6, 182, 212, 0.1); }
+        .editor-btn:active { transform: scale(0.95); }
         .quiz-input { background: transparent; border: none; border-bottom: 2px solid rgba(255,255,255,0.2); width: 100%; padding: 20px; font-size: 1.5rem; color: white; text-align: center; font-family: 'Chakra Petch'; transition: all 0.3s; }
         .quiz-input:focus { outline: none; border-color: #06b6d4; background: rgba(6, 182, 212, 0.05); }
         .glass-input { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-family: 'Chakra Petch'; padding: 12px; width: 100%; border-radius: 8px; }
@@ -92,7 +93,9 @@
             Sliders: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>,
             Instagram: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>,
             Tiktok: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>,
-            Facebook: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            Facebook: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>,
+            Undo: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>,
+            Redo: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/></svg>
         };
 
         // --- DATOS ---
@@ -324,22 +327,25 @@
             </div>
         );
 
-        // --- NANO STUDIO 2.0 (FABRIC JS INTEGRATION - SEGURIDAD MEJORADA) ---
+        // --- NANO STUDIO 2.0 (ELITE EDITION: UNDO/REDO/DUPLICATE) ---
         const DesignEditor = ({ image, logo, initialText, onSave, onClose, tLang }) => {
             const canvasRef = useRef(null);
             const fabricCanvasRef = useRef(null);
             const [selectedObj, setSelectedObj] = useState(null);
+            
+            // --- HISTORY SYSTEM ---
+            const historyRef = useRef([]);
+            const historyStepRef = useRef(-1);
+            const isTrackingRef = useRef(true);
 
-            // Inicializar Fabric CON SEGURIDAD
+            // Inicializar Fabric
             useEffect(() => {
                 let timer;
 
                 const initCanvas = () => {
                     const canvasElement = canvasRef.current;
-                    // --- SEGURIDAD FABRIC: CHECK DOM & RACE CONDITION ---
                     if (!canvasElement) return;
 
-                    // Destruir instancia previa si existe (limpieza)
                     if (fabricCanvasRef.current) {
                         try { fabricCanvasRef.current.dispose(); } catch(e) {}
                         fabricCanvasRef.current = null;
@@ -349,9 +355,15 @@
                         const canvas = new fabric.Canvas(canvasElement, { width: 800, height: 800, backgroundColor: '#000000' });
                         fabricCanvasRef.current = canvas;
 
+                        // Event listeners for Selection
                         canvas.on('selection:created', (e) => setSelectedObj(e.selected[0]));
                         canvas.on('selection:updated', (e) => setSelectedObj(e.selected[0]));
                         canvas.on('selection:cleared', () => setSelectedObj(null));
+
+                        // Event listeners for History
+                        canvas.on('object:modified', saveHistory);
+                        canvas.on('object:added', saveHistory);
+                        canvas.on('object:removed', saveHistory);
 
                         if (image) {
                             fabric.Image.fromURL(image, (img) => {
@@ -361,9 +373,14 @@
                                 canvas.setWidth(img.width * scale);
                                 canvas.setHeight(img.height * scale);
                                 img.set({ originX: 'left', originY: 'top', scaleX: scale, scaleY: scale, selectable: false, evented: false });
-                                canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+                                canvas.setBackgroundImage(img, () => {
+                                    canvas.renderAll();
+                                    saveHistory(); // Initial Save
+                                });
+                                
                                 addTextToCanvas(canvas, initialText.top || "YOUR BRAND", 50, 50, initialText.colorTop || "#FFF");
                                 addTextToCanvas(canvas, initialText.bottom || "OFFER", 50, canvas.height - 100, initialText.colorBot || "#00FFFF");
+                                
                                 if(logo) {
                                     fabric.Image.fromURL(logo, (logoImg) => {
                                         if(logoImg && fabricCanvasRef.current) {
@@ -392,11 +409,76 @@
                 };
             }, [image]); 
 
+            const saveHistory = () => {
+                if(!isTrackingRef.current || !fabricCanvasRef.current) return;
+                // Don't save if we are in undo/redo process
+                const json = JSON.stringify(fabricCanvasRef.current.toJSON());
+                
+                // If we are in the middle of history stack, cut the rest
+                if (historyStepRef.current < historyRef.current.length - 1) {
+                    historyRef.current = historyRef.current.slice(0, historyStepRef.current + 1);
+                }
+                historyRef.current.push(json);
+                historyStepRef.current = historyRef.current.length - 1;
+            };
+
+            const undo = () => {
+                if (historyStepRef.current > 0 && fabricCanvasRef.current) {
+                    isTrackingRef.current = false;
+                    historyStepRef.current -= 1;
+                    const previousState = historyRef.current[historyStepRef.current];
+                    fabricCanvasRef.current.loadFromJSON(previousState, () => {
+                        fabricCanvasRef.current.renderAll();
+                        isTrackingRef.current = true;
+                    });
+                }
+            };
+
+            const redo = () => {
+                if (historyStepRef.current < historyRef.current.length - 1 && fabricCanvasRef.current) {
+                    isTrackingRef.current = false;
+                    historyStepRef.current += 1;
+                    const nextState = historyRef.current[historyStepRef.current];
+                    fabricCanvasRef.current.loadFromJSON(nextState, () => {
+                        fabricCanvasRef.current.renderAll();
+                        isTrackingRef.current = true;
+                    });
+                }
+            };
+
+            const duplicate = () => {
+                if(!fabricCanvasRef.current) return;
+                const activeObj = fabricCanvasRef.current.getActiveObject();
+                if(activeObj) {
+                    activeObj.clone((cloned) => {
+                        fabricCanvasRef.current.discardActiveObject();
+                        cloned.set({
+                            left: cloned.left + 20,
+                            top: cloned.top + 20,
+                            evented: true
+                        });
+                        if (cloned.type === 'activeSelection') {
+                            cloned.canvas = fabricCanvasRef.current;
+                            cloned.forEachObject((obj) => {
+                                fabricCanvasRef.current.add(obj);
+                            });
+                            cloned.setCoords();
+                        } else {
+                            fabricCanvasRef.current.add(cloned);
+                        }
+                        fabricCanvasRef.current.setActiveObject(cloned);
+                        fabricCanvasRef.current.requestRenderAll();
+                        saveHistory();
+                    });
+                }
+            };
+
             const addTextToCanvas = (canvas, text, x, y, color) => {
                 if(!canvas) return;
                 const t = new fabric.IText(text, { left: x, top: y, fontFamily: 'Chakra Petch', fill: color, fontSize: 40, fontWeight: 'bold', shadow: 'rgba(0,0,0,0.8) 2px 2px 5px' });
                 canvas.add(t);
                 canvas.setActiveObject(t);
+                saveHistory();
             };
 
             const addNewText = () => { if(fabricCanvasRef.current) addTextToCanvas(fabricCanvasRef.current, "TEXTO NUEVO", 100, 100, "#FFFFFF"); };
@@ -409,14 +491,15 @@
                         fabric.Image.fromURL(f.target.result, (img) => {
                             img.scaleToWidth(200); img.set({ left: 100, top: 100 });
                             fabricCanvasRef.current.add(img); fabricCanvasRef.current.setActiveObject(img);
+                            saveHistory();
                         });
                     };
                     reader.readAsDataURL(file);
                 }
             };
 
-            const updateSelected = (prop, value) => { if(fabricCanvasRef.current && selectedObj) { selectedObj.set(prop, value); fabricCanvasRef.current.requestRenderAll(); } };
-            const deleteSelected = () => { if(fabricCanvasRef.current && selectedObj) { fabricCanvasRef.current.remove(selectedObj); setSelectedObj(null); } };
+            const updateSelected = (prop, value) => { if(fabricCanvasRef.current && selectedObj) { selectedObj.set(prop, value); fabricCanvasRef.current.requestRenderAll(); saveHistory(); } };
+            const deleteSelected = () => { if(fabricCanvasRef.current && selectedObj) { fabricCanvasRef.current.remove(selectedObj); setSelectedObj(null); saveHistory(); } };
 
             const download = () => {
                 if(fabricCanvasRef.current) {
@@ -430,6 +513,14 @@
                     <div className="w-full max-w-7xl h-[90vh] flex border border-gray-800 rounded-xl overflow-hidden bg-[#050505]">
                         <div className="w-72 bg-[#111] border-r border-gray-800 p-6 flex flex-col gap-6 overflow-y-auto">
                              <h3 className="font-tech text-cyan-400 text-2xl mb-2">{tLang.editor_title}</h3>
+                             
+                             {/* UNDO / REDO / COPY TOOLBAR */}
+                             <div className="flex gap-2 mb-2">
+                                <button onClick={undo} className="editor-btn flex-1 py-2 text-xs" title="Deshacer"><Icons.Undo /> UNDO</button>
+                                <button onClick={redo} className="editor-btn flex-1 py-2 text-xs" title="Rehacer"><Icons.Redo /> REDO</button>
+                             </div>
+                             <button onClick={duplicate} className="editor-btn w-full py-3 text-xs flex gap-2 justify-center" title="Duplicar"><Icons.Copy /> DUPLICAR</button>
+
                              <div className="grid grid-cols-2 gap-2">
                                 <button onClick={addNewText} className="editor-btn text-xs flex-col py-3"><Icons.Text /> TEXTO</button>
                                 <label className="editor-btn text-xs flex-col py-3 cursor-pointer"><Icons.Image /> IMAGEN <input type="file" hidden onChange={handleImageUpload} /></label>
@@ -472,7 +563,7 @@
 
                                      <button onClick={deleteSelected} className="w-full py-2 bg-red-900/30 text-red-400 rounded text-xs flex items-center justify-center gap-2 hover:bg-red-900/50"><Icons.Trash /> ELIMINAR</button>
                                  </div>
-                             ) : <div className="text-center py-10 text-gray-600 text-xs">Selecciona un elemento en el canvas.</div>}
+                             ) : <div className="text-center py-10 text-gray-600 text-xs">Selecciona un elemento para editar.</div>}
 
                              <div className="mt-auto flex flex-col gap-2">
                                 <button onClick={download} className="tech-btn bg-cyan-500 text-black border-none w-full flex justify-center gap-2"><Icons.Download /> EXPORTAR HD</button>
@@ -561,9 +652,17 @@
                     if(!formData.style) return alert("Elige un estilo");
                     if(credits <= 0) return alert("¡Te has quedado sin créditos! Por favor recarga para continuar.");
                     playSound('process'); setView('processing');
+                    
+                    // --- PROMPT REFINADO Y LIMPIO ---
                     const promptBase = formData.product.name || "luxury product";
                     const colorsStr = formData.colors ? formData.colors.join(", ") : "";
-                    const magicPrompt = `Hyper-ultra-realistic 8k commercial photography of ${promptBase}, ${formData.style} aesthetic, ${formData.light}, perfect composition, golden ratio, product centered, vivid colors ${colorsStr}, highly detailed texture, 8k render, unreal engine 5 style, cinematic lighting, volumetric fog, professional advertising, award winning photography`;
+                    
+                    // INSTRUCCIONES NEGATIVAS Y DE FIDELIDAD
+                    const cleanInstruction = "DO NOT generate ANY text, letters, watermarks, or logos INSIDE the image. The image must be clean, product and environment only.";
+                    const fidelityInstruction = "Maintain structural fidelity of the described product. Improve lighting and environment to cinematic level, but respect the main object.";
+                    
+                    const magicPrompt = `Hyper-ultra-realistic 8k commercial photography of ${promptBase}, ${formData.style} aesthetic, ${formData.light}. ${cleanInstruction} ${fidelityInstruction} Perfect composition, golden ratio, product centered, vivid colors ${colorsStr}, highly detailed texture, 8k render, unreal engine 5 style, cinematic lighting, volumetric fog, professional advertising, award winning photography`;
+                    
                     const newImageURL = generateImageURL(magicPrompt);
                     let finalCopy = "";
                     let copyPromise = null;
