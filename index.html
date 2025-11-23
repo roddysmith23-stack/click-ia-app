@@ -322,7 +322,7 @@
                 schedule: "Calendrier IA", copy_viral: "Copy Viral", star_text: "TEXTE STAR ★",
                 trends: "Tendances Détectées", publish: "PUBLIER MAINTENANT", new_btn: "NOUVEAU", ready: "PRÊT",
                 credits: "CRÉDITS", color_n: "NEUTRES", color_nu: "NUDE", color_p: "PRIMAIRES", color_s: "SECONDAIRES", color_t: "TERTIAIRES", color_q: "QUATERNAIRES",
-                loading_steps: ["RECHERCHE WEB...", "ANALYSE TENDANCES...", "STRUCTURATION STRATÉGIE...", "GÉNÉRATION IMAGE 8K...", "RÉDACTION COPY VIRAL..."],
+                loading_steps: ["RECHERCHE WEB...", "ANALYSE TENDANCES...", "STRUCTURATION STRATÉGIE...", "GÉNÉRATION IMAGE 8K...", "REDACTANDO COPY VIRAL..."],
                 credit_text: '"La créativité, c\'est l\'intelligence qui s\'amuse." - Albert Einstein',
                 creator_title: "RENCONTREZ LE CRÉATEUR", creator_role: "CO-FONDATEUR & CSIO", creator_bio: "Visionnaire stratégique maîtrisant l'IA et les algorithmes. Roddy Smith ne se contente pas de prédire l'avenir du marketing, il le construit.", creator_mission: "Notre mission est de briser les barrières. CLICK IA est né pour changer le monde, en donnant à chaque entrepreneur la technologie autrefois réservée aux géants.",
                 download: "TÉLÉCHARGER IMAGE", copy_clipboard: "COPIER TEXTE",
@@ -848,7 +848,7 @@
                         </div>
                     </div>
                     <div className="floating-credit">{t.credit_text}</div>
-                    {isEditing && <FabricEditor image={resultImage} logo={formData.logo} initialText={designState} onSave={saveDesign} onClose={() => setIsEditing(false)} tLang={t} />}
+                    {isEditing && <DesignEditor image={resultImage} logo={formData.logo} initialText={designState} onSave={saveDesign} onClose={() => setIsEditing(false)} tLang={t} />}
                 </div>
             );
 
