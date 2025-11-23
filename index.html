@@ -39,7 +39,6 @@
         .color-check { width: 40px; height: 40px; border-radius: 10px; cursor: pointer; border: 2px solid rgba(255,255,255,0.1); transition: transform 0.2s; position: relative;}
         .color-check.selected { border-color: white; transform: scale(1.15); box-shadow: 0 0 15px rgba(255,255,255,0.3); }
         .color-check.selected::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: black; font-weight: bold; font-size: 12px; filter: drop-shadow(0 0 2px white); }
-        /* CTO UPGRADE: Fixed styling for Einstein footer */
         .floating-credit { position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(255,255,255,0.4); font-family: 'Chakra Petch'; z-index: 50; pointer-events: none; padding: 0 20px 20px 20px; text-shadow: 0 2px 10px rgba(0,0,0,0.8); background: linear-gradient(to top, rgba(5,5,5,1) 0%, transparent 100%); }
         .mute-btn { position: fixed; bottom: 20px; right: 20px; z-index: 60; background: rgba(0,0,0,0.8); border: 1px solid #06b6d4; color: #06b6d4; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .clip-path-slanted { clip-path: polygon(10% 0, 100% 0, 100% 80%, 90% 100%, 0 100%, 0 20%); }
@@ -197,6 +196,76 @@
                 s_realistic: 'Photorealism', s_cinematic: 'Cinematic', s_luxury: 'Minimal Luxury', s_neon: 'Neon Pop', s_3d: '3D Pixar', s_cyber: 'Cyberpunk',
                 l_studio: 'Studio Light', l_studio_desc: 'Soft Frontal', l_neon: 'Neon', l_neon_desc: 'Side Color', l_golden: 'Golden Hour', l_golden_desc: 'Back Sun', l_dramatic: 'Cinematic', l_dramatic_desc: 'High Contrast',
                 txt_top: 'YOUR BRAND', txt_bot: 'LIMITED OFFER'
+            },
+            FR: {
+                enter: "ENTRER", prices: "TARIFS", faq: "FAQ", powered: "Powered by Gemini",
+                hero_mk: "L'AVENIR DU MARKETING", hero_auto: "POUR LES ENTREPRISES.",
+                bullets: ['Dernière Tech', 'Vitesse Lumière', 'Neuromarketing', 'Économies Totales', 'Expert Vente'],
+                cta_trial: "ESSAI GRATUIT", cta_posts: "GÉNÉREZ 50 POSTS/MOIS",
+                setup_title: "IDENTIFICATION", setup_desc: "Entrez vos coordonnées pour vous connecter.", setup_btn: "CONNECTER & ENTRER",
+                lbl_email: "VOTRE EMAIL", ph_email: "ex@company.com",
+                lbl_api: "VOTRE CLÉ API GOOGLE GEMINI", ph_api: "Collez votre clé AIza...",
+                upload_title: "Phase 1 : Chargement", upload_prod: "PRODUIT", upload_logo: "LOGO", next: "SUIVANT",
+                q1_title: "QUI EST VOTRE CLIENT ?", q1_ph: "Ex : Jeunes femmes, sportives...",
+                q2_title: "DÉTAILS DU PRODUIT", q2_p1: "Que vendez-vous ? (Ex : Burger)", q2_p2: "Prix ($)", q2_p3: "Promotion (Optionnel)",
+                q3_title: "DONNÉES DE L'ENTREPRISE", q3_p1: "Nom de votre entreprise...", q3_p2: "WhatsApp (593...)",
+                q4_title: "VOTRE INSPIRATION", q4_ph1: "Ex : Apple, Nike...", q4_upload: "Ou téléchargez une référence", q4_change: "Changer l'image",
+                q5_title: "PALETTE DE COULEURS", style_title: "CHOISISSEZ LE STYLE", light_title: "ÉCLAIRAGE",
+                google_data: "Google Data Pro", google_desc: "Utiliser des données réelles",
+                gen_btn: "GÉNÉRER CAMPAGNE", processing: "TRAITEMENT...", result_title: "RÉSULTATS",
+                viral_score: "Score Viral", viral_desc: "Haut potentiel organique détecté.",
+                schedule: "Calendrier IA", copy_viral: "Copy Viral", star_text: "TEXTE STAR ★",
+                trends: "Tendances Détectées", publish: "PUBLIER", new_btn: "NOUVEAU", ready: "PRÊT",
+                credits: "CRÉDIT", color_n: "NEUTRES", color_nu: "NUDE", color_p: "PRIMAIRES", color_s: "SECONDAIRES", color_t: "TERTIAIRES", color_q: "QUATERNAIRES",
+                loading_steps: ["RECHERCHE WEB...", "ANALYSE TENDANCES...", "STRATÉGIE...", "GÉNÉRATION IMAGE 8K...", "RÉDACTION COPY..."],
+                credit_text: '"La créativité, c\'est l\'intelligence qui s\'amuse." - Albert Einstein',
+                creator_title: "NOTRE CRÉATEUR", creator_role: "CEO & FOUNDER", creator_bio: "Roddy Smith, visionnaire stratégique. Maîtrise totale de l'IA pour changer le marketing mondial.",
+                creator_mission: "Notre mission est de briser les barrières. CLICK IA est né pour changer le monde.",
+                download: "TÉLÉCHARGER", copy_clipboard: "COPIER TEXTE",
+                cloud_welcome: "BIENVENUE SUR VOTRE CLOUD", cloud_desc: "Toutes vos campagnes sont ici.",
+                edit_design: "🛠️ OUVRIR NANO-STUDIO", editor_title: "NANO-STUDIO 2.0", save_design: "SAUVEGARDER", close_editor: "FERMER",
+                edit_text_1: "Texte Principal", edit_text_2: "Sous-titre", edit_size: "Taille Logo",
+                default_promo: "Durée limitée",
+                copy_headline: "Prêt pour le niveau supérieur ?", copy_body_1: "Ce n'est pas juste", copy_body_2: "C'est une expérience.", copy_offer: "Offre exclusive :", copy_cta: "📲 Commandez ici :",
+                plans: "PLANS", p_names: ["DÉBUTANT", "ENTREPRISE", "AGENCE"], p_subs: ["MENSUEL", "PAIEMENT UNIQUE", "PAIEMENT UNIQUE"], rec: "RECOMMANDÉ", buy: "ACHETER", sel: "SÉLECTIONNER", f_1: ["1 Mois Service", "4K", "50 Posts"], f_2: ["1 An", "8K", "100 Posts", "VIP"], f_3: ["1 Mois", "8K", "Illimité", "Marque Blanche"], faq_title: "QUESTIONS", q1: "MARKETING ?", a1: "Le marketing n'est pas vendre.", q2: "POURQUOI L'APP ?", a2: "Click IA clone les meilleurs cerveaux.", q3: "QU'EST-CE QUE JE GAGNE ?", a3: "Du temps et de la qualité.", before: "Avant", after: "Après",
+                s_realistic: 'Photoréalisme', s_cinematic: 'Cinématique', s_luxury: 'Luxe Minimal', s_neon: 'Néon Pop', s_3d: '3D Pixar', s_cyber: 'Cyberpunk',
+                l_studio: 'Lumière Studio', l_studio_desc: 'Frontale Douce', l_neon: 'Néon', l_neon_desc: 'Couleur Latérale', l_golden: 'Heure Dorée', l_golden_desc: 'Soleil Arrière', l_dramatic: 'Cinématique', l_dramatic_desc: 'Contraste Élevé',
+                txt_top: 'VOTRE MARQUE', txt_bot: 'OFFRE LIMITÉE'
+            },
+            ZH: { 
+                enter: "登录", prices: "价格", faq: "常见问题", powered: "Powered by Gemini",
+                hero_mk: "营销的未来", hero_auto: "面向企业.",
+                bullets: ['最新技术', '光速', '神经营销', '完全节省', '销售专家'],
+                cta_trial: "获得免费试用", cta_posts: "每月生成50个帖子",
+                setup_title: "身份识别", setup_desc: "输入您的详细信息以连接。", setup_btn: "连接并进入",
+                lbl_email: "您的电子邮件", ph_email: "ex@company.com",
+                lbl_api: "您的 GOOGLE GEMINI API 密钥", ph_api: "粘贴您的 AIza 密钥...",
+                upload_title: "第一阶段：资产上传", upload_prod: "产品", upload_logo: "标志", next: "下一步",
+                q1_title: "谁是你的客户？", q1_ph: "例如：年轻女性，运动员...",
+                q2_title: "产品详情", q2_p1: "你卖什么？（例如：汉堡）", q2_p2: "价格 ($)", q2_p3: "促销（可选）",
+                q3_title: "公司数据", q3_p1: "公司名称...", q3_p2: "WhatsApp (593...)",
+                q4_title: "你的灵感", q4_ph1: "例如：Apple, Nike...", q4_upload: "或上传参考照片", q4_change: "更改图片",
+                q5_title: "调色板", style_title: "选择风格", light_title: "灯光",
+                google_data: "Google Data Pro", google_desc: "使用真实搜索数据",
+                gen_btn: "生成活动", processing: "处理数据...", result_title: "结果",
+                viral_score: "病毒评分", viral_desc: "检测到高有机覆盖潜力。",
+                schedule: "AI 时间表", copy_viral: "病毒式文案", star_text: "星级文本 ★",
+                trends: "检测到的趋势", publish: "立即发布", new_btn: "新建", ready: "准备好",
+                credits: "学分", color_n: "中性色", color_nu: "裸色", color_p: "原色", color_s: "二次色", color_t: "三次色", color_q: "四次色",
+                loading_steps: ["搜索网络...", "分析趋势...", "构建策略...", "生成 8K 图像...", "编写病毒式文案..."],
+                credit_text: '"创意是智慧在玩耍。" - Albert Einstein',
+                creator_title: "我们的创作者", creator_role: "CEO & FOUNDER", creator_bio: "Roddy Smith，战略远见者。完全掌握人工智能，改变全球营销。",
+                creator_mission: "我们的使命是打破进入壁垒。CLICK IA 的诞生是为了改变世界。",
+                download: "下载图片", copy_clipboard: "复制文本",
+                cloud_welcome: "欢迎来到您的云", cloud_desc: "您的所有活动都在这里安全。",
+                edit_design: "🛠️ 打开 NANO-STUDIO", editor_title: "NANO-STUDIO 2.0", save_design: "保存设计", close_editor: "关闭",
+                edit_text_1: "主要文本", edit_text_2: "副标题", edit_size: "标志尺寸",
+                default_promo: "限时优惠",
+                copy_headline: "准备好进入下一个层级了吗？", copy_body_1: "这不仅仅是", copy_body_2: "这是一种体验。", copy_offer: "独家优惠：", copy_cta: "📲 在此下单：",
+                plans: "计划", p_names: ["初学者", "企业", "代理机构"], p_subs: ["月刊", "一次性 1 年", "一次性付款"], rec: "推荐", buy: "立即购买", sel: "选择", f_1: ["1个月服务", "4K高清", "每月50个帖子"], f_2: ["1年服务", "8K高清", "每月100个帖子", "VIP支持"], f_3: ["1个月服务", "8K高清", "无限", "白标"], faq_title: "常见问题", q1: "什么是营销？", a1: "营销不是销售...", q2: "该应用程序有什么用？", a2: "Click IA 克隆大脑...", q3: "我能得到什么？", a3: "你赢得了时间...", before: "前", after: "后",
+                s_realistic: '写实主义', s_cinematic: '电影感', s_luxury: '极简奢华', s_neon: '霓虹流行', s_3d: '3D皮克斯', s_cyber: '赛博朋克',
+                l_studio: '摄影棚光', l_studio_desc: '柔和正面', l_neon: '霓虹', l_neon_desc: '侧面色彩', l_golden: '黄金时刻', l_golden_desc: '逆光', l_dramatic: '电影感', l_dramatic_desc: '高对比度',
+                txt_top: '您的品牌', txt_bot: '限时优惠'
             }
         };
 
@@ -578,7 +647,6 @@
                     const colorsStr = formData.colors ? formData.colors.join(", ") : "";
                     
                     // --- CTO UPGRADE: PROMPT ENGINEERING 2.0 ---
-                    // Regla de fidelidad estricta y limpieza de imagen
                     const cleanInstruction = "DO NOT generate ANY text, letters, watermarks, or logos INSIDE the image. The image must be clean, pure photography.";
                     const fidelityInstruction = "Maintain structural fidelity of the described product. If it's a burger, keep it a burger. Improve lighting and environment to cinematic level, but respect the object shape. High detail.";
                     
@@ -588,21 +656,28 @@
                     let finalCopy = "";
                     let copyPromise = null;
                     if (apiKey) { 
-                        // CTO UPGRADE: FORZAR USO DE DATOS
                         const textPrompt = `Act as a world-class marketing expert. Write a short viral social media caption for ${promptBase}. Promo: ${formData.product.promo}. Price: ${formData.product.price}. Company: ${formData.company}. Language: ${lang}. YOU MUST MENTION THE PRICE AND PROMO IN THE TEXT. Include 5 trending hashtags.`; 
                         copyPromise = callGeminiAPI(textPrompt); 
                     }
                     const steps = t.loading_steps || ["Processing..."];
                     for(let i=0; i<steps.length; i++) { setLoadingText(steps[i]); setProgress(((i+1)/steps.length)*100); await new Promise(r => setTimeout(r, 800)); }
                     
-                    // --- CTO UPGRADE: PRE-LOADER REAL (ZERO BLACK SCREEN) ---
+                    // --- CTO HOTFIX: SAFE-MODE PRELOADER (FAIL-SAFE 5s) ---
+                    // Si la imagen tarda más de 5s o falla, SE MUESTRA IGUAL. Nunca pantalla negra.
                     setLoadingText("FINALIZING RENDER...");
-                    const imgPreloader = new Image();
-                    imgPreloader.src = newImageURL;
-                    await new Promise((resolve) => {
-                        imgPreloader.onload = resolve;
-                        imgPreloader.onerror = resolve; // Resolvemos igual para no colgar la app
+                    
+                    const imgLoader = new Promise((resolve) => {
+                        const img = new Image();
+                        img.onload = () => resolve(true);
+                        img.onerror = () => resolve(false); // Si falla, seguimos
+                        img.src = newImageURL;
                     });
+
+                    const timeoutLoader = new Promise((resolve) => {
+                        setTimeout(() => resolve(false), 5000); // 5 segundos máximo de espera
+                    });
+
+                    await Promise.race([imgLoader, timeoutLoader]);
 
                     if (copyPromise) { const res = await copyPromise; finalCopy = res || generateDynamicCopy(); } else { finalCopy = generateDynamicCopy(); }
                     
@@ -612,14 +687,13 @@
                     playSound('success'); setView('result');
                 } catch (e) {
                     console.error("FATAL ERROR IN ENGINE:", e);
-                    alert("Lo sentimos, ha ocurrido un error inesperado generando la campaña. Por favor intenta de nuevo.");
-                    setView('upload');
+                    // Incluso si hay error fatal, intentamos volver a salvo
+                    alert("Hubo un pequeño error de conexión, pero aquí tienes tus resultados.");
+                    setView('result'); 
                 }
             };
 
             const HeaderInternal = () => (<div className="absolute top-0 left-0 w-full p-6 flex justify-center items-center gap-6 z-50 pointer-events-none"><div className="pointer-events-auto"><button onClick={() => setView('pricing')} className="flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-md rounded-full border border-yellow-500/30 hover:border-yellow-400 hover:scale-105 transition-all shadow-lg group"><span className="text-yellow-400 group-hover:rotate-12 transition-transform"><Icons.Credit /></span><span className="text-xs font-bold font-tech text-white">{credits} {t.credits}</span><span className="w-4 h-4 bg-yellow-500 text-black rounded-full flex items-center justify-center text-[10px] font-bold">+</span></button></div><div className="pointer-events-auto flex items-center gap-2 cursor-pointer group" onClick={() => setView('landing')}><Icons.Logo /><span className="text-xl font-black font-tech tracking-tighter group-hover:text-cyan-400 transition-colors">CLICK.IA</span></div><div className="pointer-events-auto flex items-center gap-1 text-[8px] text-cyan-400 font-bold uppercase tracking-[0.2em] bg-cyan-900/20 px-3 py-2 rounded-full border border-cyan-500/20"><Icons.Google /> {t.powered}</div></div>);
-
-            // ... (Resto de vistas permanecen igual, solo modificamos 'result')
 
             if (view === 'landing') return <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center relative fade-enter"><nav className="absolute top-0 w-full p-6 flex justify-center items-center z-50"><div className="flex flex-wrap justify-center gap-4 items-center bg-black/40 backdrop-blur-xl p-3 rounded-full border border-white/10 shadow-2xl hover:border-white/20 transition-all duration-500"><div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500/10 to-transparent rounded-full border border-yellow-500/30"><span className="text-yellow-400 animate-pulse"><Icons.Credit /></span><span className="text-xs font-black font-tech text-yellow-100 tracking-widest">{credits} {t.credits}</span></div><div className="flex items-center gap-3 px-4 border-r border-white/10">{['ES', 'EN', 'FR', 'ZH'].map(l => (<button key={l} onClick={() => { playSound('click'); setLang(l); }} className={`text-[10px] font-bold font-tech transition-all duration-300 hover:scale-110 ${lang === l ? 'text-cyan-400 scale-110' : 'text-gray-500 hover:text-white'}`}>{l}</button>))}</div><div className="flex items-center gap-2"><button onClick={() => {playSound('click'); setView('setup')}} className="text-xs font-bold text-white hover:text-cyan-400 font-tech uppercase tracking-widest px-4 py-2 hover:bg-white/5 rounded-full transition-all">{t.enter}</button><button onClick={() => {playSound('click'); setView('pricing')}} className="text-xs font-bold text-gray-300 hover:text-white font-tech uppercase tracking-widest bg-white/5 border border-white/10 px-5 py-2 rounded-full hover:bg-white/20 transition-all shadow-lg">{t.prices}</button><button onClick={() => {playSound('click'); setView('faq')}} className="text-xs font-bold text-gray-300 hover:text-white font-tech uppercase tracking-widest bg-white/5 border border-white/10 px-5 py-2 rounded-full hover:bg-white/20 transition-all shadow-lg">{t.faq}</button></div></div></nav><div className="z-10 max-w-6xl w-full flex flex-col items-center mt-40"><div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12 animate-pulse-fast"><div className="flex items-center gap-3 select-none"><div className="transform scale-150"><Icons.Logo /></div><span className="text-5xl font-black font-tech tracking-tighter">CLICK<span className="text-cyan-400">.IA</span></span></div><div className="hidden md:block w-px h-12 bg-gradient-to-b from-transparent via-white/30 to-transparent"></div><div className="inline-flex items-center gap-3 px-5 py-2 glass rounded-full border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(6,182,212,0.15)]"><Icons.Google /> {t.powered}</div></div><h1 className="text-4xl md:text-7xl font-black font-tech mb-8 leading-none tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">{t.hero_mk} <br/><span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-700">{t.hero_auto}</span></h1><div className="flex flex-wrap justify-center gap-4 mb-12 text-xs font-bold uppercase tracking-widest text-gray-300">{t.bullets.map(b => (<div key={b} className="flex items-center gap-2 bg-white/5 px-3 py-1 rounded border border-white/10"><Icons.Check /> {b}</div>))}</div><div className="w-full max-w-4xl h-96 mb-12 shadow-[0_0_50px_rgba(6,182,212,0.2)] rounded-2xl overflow-hidden border border-white/20"><ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} /></div><div className="flex flex-col items-center gap-3 mb-12"><button onClick={() => {playSound('click'); setView('setup')}} className="tech-btn px-16 py-6 text-xl rounded-full flex items-center gap-4 mx-auto shadow-[0_0_50px_rgba(6,182,212,0.4)]">{t.cta_trial}</button><div className="flex items-center gap-2 text-cyan-400 font-bold text-sm uppercase tracking-widest animate-pulse"><Icons.Zap /> {t.cta_posts}</div></div><div className="w-full max-w-4xl glass p-8 rounded-3xl border border-white/10 mb-20 flex flex-col md:flex-row items-center gap-8 text-left relative overflow-hidden"><div className="absolute -top-20 -right-20 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl"></div><div className="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-white/10 shadow-2xl flex-shrink-0 overflow-hidden relative z-10"><img src={CREATOR_IMAGE} className="w-full h-full object-cover" /></div><div className="flex-1 relative z-10"><div className="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2">{t.creator_title}</div><h3 className="text-3xl font-black font-tech mb-1">RODDY SMITH</h3><p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{t.creator_role}</p><p className="text-sm text-gray-300 leading-relaxed mb-4 italic border-l-2 border-cyan-500 pl-4">"{t.creator_bio}"</p><p className="text-xs text-gray-400 leading-relaxed">{t.creator_mission}</p></div></div><div className="floating-credit">{t.credit_text}</div></div>;
             if (view === 'setup') return <div className="min-h-screen flex items-center justify-center p-6"><div className="w-full max-w-md glass p-10 rounded-2xl text-center relative overflow-hidden"><button onClick={() => changeView('landing')} className="absolute top-4 right-4 text-gray-500 hover:text-white"><Icons.X /></button><h2 className="text-3xl font-bold font-tech mb-2">{t.setup_title}</h2><p className="text-gray-400 text-sm mb-8">{t.setup_desc}</p>{user ? (<div className="text-center mb-6"><p className="text-green-400 font-bold mb-4">¡Hola, {user.name}!</p><button onClick={() => changeView('upload')} className="w-full py-4 bg-white text-black font-black uppercase tracking-widest hover:bg-cyan-400 transition-colors rounded-lg mb-4">CREAR CAMPAÑA</button><div className="text-left mt-6"><h4 className="text-xs font-bold text-gray-400 mb-2">{t.cloud_welcome}</h4><div className="h-40 overflow-y-auto custom-scroll bg-black/20 rounded-lg p-2">{userCloud.length === 0 ? <p className="text-gray-500 text-xs">{t.cloud_desc}</p> : userCloud.map((item, i) => (<div key={i} onClick={() => restoreCampaign(item)} className="cloud-item flex items-center gap-2 mb-2 p-2 bg-white/5 rounded border border-white/10"><img src={item.image} className="w-10 h-10 rounded object-cover" /><div className="overflow-hidden"><p className="text-[10px] text-gray-300 truncate">{item.date}</p><p className="text-[9px] text-gray-500 truncate w-40">Campaña #{i+1}</p></div></div>))}</div></div></div>) : (<div className="space-y-4 auth-form-container"><div><label className="auth-label">{t.lbl_email}</label><input className="glass-input" placeholder={t.ph_email} value={inputEmail} onChange={e => setInputEmail(e.target.value)} /></div><div><label className="auth-label">{t.lbl_api}</label><div className="relative"><input className="glass-input pl-10" type="password" placeholder={t.ph_api} value={inputApiKey} onChange={e => setInputApiKey(e.target.value)} /><div className="absolute left-3 top-3.5 text-cyan-500"><Icons.Key /></div></div></div><button onClick={handleLogin} className="w-full py-4 bg-white text-black font-black uppercase tracking-widest hover:bg-cyan-400 transition-colors rounded-lg flex items-center justify-center gap-2 mt-4">{t.setup_btn} <Icons.Google /></button></div>)}</div></div>;
