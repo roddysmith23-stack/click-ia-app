@@ -177,6 +177,7 @@
         <source src="https://cdn.pixabay.com/video/2020/12/18/59791-494669276_large.mp4" type="video/mp4">
     </video>
 
+    <!-- AUDIO SYSTEM -->
     <audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/05/17/audio_1832016087.mp3"></audio>
     <audio id="sfx-click" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a7346b.mp3"></audio>
     <audio id="sfx-process" src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_c2b3b469b7.mp3"></audio>
@@ -405,7 +406,7 @@
                 schedule: "Calendrier IA", copy_viral: "Copy Viral", star_text: "TEXTE STAR ★",
                 trends: "Tendances Détectées", publish: "PUBLIER MAINTENANT", new_btn: "NOUVEAU", ready: "PRÊT",
                 credits: "CRÉDITS", color_n: "NEUTRES", color_nu: "NUDE", color_p: "PRIMAIRES", color_s: "SECONDAIRES", color_t: "TERTIAIRES", color_q: "QUATERNAIRES",
-                loading_steps: ["RECHERCHE WEB...", "ANALYSE TENDANCES...", "STRUCTURATION STRATÉGIE...", "GÉNÉRATION IMAGE 8K...", "RÉDACTION COPY VIRAL..."],
+                loading_steps: ["RECHERCHE WEB...", "ANALYSE TENDANCES...", "STRUCTURATION STRATÉGIE...", "GÉNÉRATION IMAGE 8K...", "REDACTANDO COPY VIRAL..."],
                 credit_text: '"La créativité, c\'est l\'intelligence qui s\'amuse." - Albert Einstein',
                 creator_title: "RENCONTREZ LE CRÉATEUR", creator_role: "CO-FONDATEUR & CSIO", creator_bio: "Visionnaire stratégique maîtrisant l'IA et les algorithmes. Roddy Smith ne se contente pas de prédire l'avenir du marketing, il le construit.", creator_mission: "Notre mission est de briser les barrières. CLICK IA est né pour changer le monde, en donnant à chaque entrepreneur la technologie autrefois réservée aux géants.",
                 download: "TÉLÉCHARGER IMAGE", copy_clipboard: "COPIER TEXTE",
@@ -718,8 +719,15 @@
             const handleDownloadImage = () => { fetch(resultImage).then(response => response.blob()).then(blob => { const url = window.URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = `CLICK_IA_${Date.now()}.jpg`; document.body.appendChild(link); link.click(); document.body.removeChild(link); window.URL.revokeObjectURL(url); }).catch(e => { window.open(resultImage, '_blank'); }); };
             const saveDesign = (newState) => { setDesignState(newState); setIsEditing(false); playSound('success'); };
             
-            // --- GENERADOR DE IMAGEN (Conectado a Pollinations.ai) ---
-            const generateImageURL = (prompt) => { const encodedPrompt = encodeURIComponent(prompt); return `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1080&height=1080&nologo=true&seed=${Math.floor(Math.random() * 10000)}`; };
+            // --- GENERADOR DE IMAGEN (HOTFIX: TRIM & ENCODE) ---
+            const generateImageURL = (prompt) => { 
+                if (!prompt) return MAGIC_RESULT_IMAGE_DEFAULT;
+                // Limpieza crítica: quitar saltos de línea y espacios extra
+                const cleanPrompt = prompt.replace(/(\r\n|\n|\r)/gm, " ").trim();
+                // Codificación para URL (Vital para manejar comas y caracteres especiales)
+                const encodedPrompt = encodeURIComponent(cleanPrompt); 
+                return `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1080&height=1080&nologo=true&seed=${Math.floor(Math.random() * 10000)}`; 
+            };
             
             // --- LLAMADA A GEMINI ---
             const callGeminiAPI = async (prompt) => { if (!apiKey) return null; try { const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) }); const data = await response.json(); return data.candidates?.[0]?.content?.parts?.[0]?.text; } catch (error) { console.error("Gemini Error:", error); return null; } };
@@ -729,17 +737,15 @@
             
             const restoreCampaign = (item) => { setResultImage(item.image); setGeneratedCopy(item.copy); setFormData(prev => ({...prev, logo: item.logo || null })); setView('result'); };
 
-            // --- NUEVO MOTOR DE INTELIGENCIA ARTIFICIAL (OPTIMIZADO) ---
+            // --- NUEVO MOTOR DE INTELIGENCIA ARTIFICIAL (DEBUG & HOTFIX) ---
             const runEngine = async () => {
                 if(!formData.style) return alert("Elige un estilo");
                 if(credits <= 0) return alert("¡Te has quedado sin créditos! Por favor recarga para continuar.");
                 
-                // 1. Iniciar UI
                 playSound('process'); 
                 setView('processing');
 
                 try {
-                    // Simulación rápida de carga
                     const steps = t.loading_steps;
                     for(let i=0; i<3; i++) { 
                         setLoadingText(steps[i]); 
@@ -747,44 +753,55 @@
                         await new Promise(r => setTimeout(r, 600)); 
                     }
 
-                    // 2. CONSTRUCCIÓN DEL PROMPT MADRE (MODIFICADO CON TOKEN STRICT STRUCTURE)
+                    // 2. CONSTRUCCIÓN DEL PROMPT MADRE (MODIFICADO CON TOKEN STRICT STRUCTURE & JSON)
                     const promptSystem = `
-            ### ROL Y OBJETIVO PRINCIPAL ###
-            Eres un EQUIPO DE ÉLITE MUNDIAL en Marketing Digital. Tu objetivo es transformar datos crudos en una CAMPAÑA DE MARKETING VISUAL Y TEXTUAL DE IMPACTO MASIVO.
+            ### ROL ###
+            Eres un GENERADOR DE JSON PARA API. NO escribas introducciones. NO uses Markdown. Tu salida será parseada directamente por código.
 
-            ### DATOS DE ENTRADA ###
-            Usa estos datos que te da el usuario:
-            - Empresa: ${formData.company || "Empresa Genérica"}
-            - Producto: ${formData.product.name || "Producto Premium"}
-            - Precio: ${formData.product.price || "Consultar"}
-            - Promoción: ${formData.product.promo || "Oferta Limitada"}
-            - WhatsApp: ${formData.whatsapp || "N/A"}
-            - Ubicación: ${formData.city || "Ciudad Global"}, ${formData.country || "Mundo"}
-            - Target: ${formData.target || "Público General"}
-            - Inspiración: ${formData.inspiration || "Tendencias 2025"}
-            - Paleta Colores: ${formData.colors.join(", ") || "Colores Corporativos"}
-            - Estilo Visual: ${formData.style}
+            ### INPUT DATA ###
+            - Empresa: ${formData.company || "Empresa"}
+            - Producto: ${formData.product.name || "Producto"}
+            - Precio: ${formData.product.price}
+            - Promoción: ${formData.product.promo}
+            - Location: ${formData.city || "Ciudad"}, ${formData.country || "País"}
+            - Estilo: ${formData.style}
             - Iluminación: ${formData.light}
 
-            ### INSTRUCCIONES DE OUTPUT (JSON ESTRICTO) ###
-            Devuelve SOLO un objeto JSON (sin markdown, sin \`\`\`) con estas 4 claves:
-
-            1. "prompt_imagen_comercial": Genera un string de SOLO PALABRAS CLAVE en Inglés, separadas por comas. NO uses frases. Sigue esta estructura estricta: [SUJETO PRINCIPAL DEL PRODUCTO] + [ESTILO VISUAL ELEGIDO] + [TIPO DE ILUMINACIÓN] + "8k, award winning photography, macro lens, hyper-detailed, unreal engine 5 render, commercial lighting, white balance perfect". Ejemplo: "Juicy gourmet burger, melting cheese, steam rising, cinematic lighting, cyberpunk colors, 8k, macro shot, hyper-realistic".
-            2. "copy_viral": Texto persuasivo para redes, con emojis, hashtags y el link de WhatsApp formateado (https://wa.me/...).
-            3. "viral_score": Un número (ej: 9.8) del potencial de viralidad.
-            4. "cronograma_ia": Array con 3 sugerencias de horario optimizadas para la ciudad del usuario.
+            ### OUTPUT STRICT JSON ###
+            Devuelve un JSON crudo con estas claves:
+            {
+              "prompt_imagen_comercial": "STRING. SOLO palabras clave en Inglés separadas por comas. MÁXIMO 30 palabras. Estructura: [MAIN SUBJECT], [ACTION], [ENVIRONMENT], [LIGHTING], [STYLE KEYWORDS]. Ejemplo: 'Delicious burger, melting cheese, steam, dark background, neon lights, cyberpunk style, 8k render, unreal engine 5'.",
+              "copy_viral": "Texto para redes sociales en español con emojis y hashtags.",
+              "viral_score": "Número decimal (ej: 9.5)",
+              "cronograma_ia": ["Hora 1", "Hora 2", "Hora 3"]
+            }
                     `;
 
                     setLoadingText("CONECTANDO NEURAL BRAIN...");
                     
-                    // 3. LLAMADA A GEMINI API
                     let aiData = null;
                     if (apiKey) {
                         const rawResponse = await callGeminiAPI(promptSystem);
+                        
                         if(rawResponse) {
-                            // Limpieza de JSON
-                            const cleanJson = rawResponse.replace(/```json/g, '').replace(/```/g, '').trim();
-                            try { aiData = JSON.parse(cleanJson); } catch (e) { console.error("Error JSON", e); }
+                            // LIMPIEZA AGRESIVA DE JSON
+                            let cleanJson = rawResponse.replace(/```json/g, '').replace(/```/g, '');
+                            const firstBrace = cleanJson.indexOf('{');
+                            const lastBrace = cleanJson.lastIndexOf('}');
+                            if (firstBrace !== -1 && lastBrace !== -1) {
+                                cleanJson = cleanJson.substring(firstBrace, lastBrace + 1);
+                            }
+
+                            try { 
+                                aiData = JSON.parse(cleanJson); 
+                                // DEBUG
+                                console.log("--- DEBUG START ---");
+                                console.log("PROMPT CRUDO DE GEMINI:", aiData.prompt_imagen_comercial);
+                                console.log("COPY GENERADO:", aiData.copy_viral);
+                                console.log("--- DEBUG END ---");
+                            } catch (e) { 
+                                console.error("Error Parseando JSON:", e, "Raw:", rawResponse); 
+                            }
                         }
                     }
 
@@ -792,10 +809,13 @@
                     setProgress(85);
 
                     // 4. GENERACIÓN DE IMAGEN
-                    const imagePrompt = aiData ? aiData.prompt_imagen_comercial : `${formData.product.name}, ${formData.style}, ${formData.light}, 8k commercial photography`;
+                    const imagePrompt = (aiData && aiData.prompt_imagen_comercial) 
+                        ? aiData.prompt_imagen_comercial 
+                        : `${formData.product.name}, ${formData.style}, ${formData.light}, professional photography, 8k, commercial render`;
+                        
                     const newImageURL = generateImageURL(imagePrompt);
 
-                    await new Promise(r => setTimeout(r, 1000));
+                    await new Promise(r => setTimeout(r, 1500));
 
                     // 5. ACTUALIZAR ESTADO FINAL
                     const finalCopy = aiData ? aiData.copy_viral : generateDynamicCopy();
@@ -813,8 +833,8 @@
                     setView('result');
 
                 } catch (error) {
-                    console.error("Error crítico:", error);
-                    alert("Hubo un error. Verifica tu API Key.");
+                    console.error("Error crítico en runEngine:", error);
+                    alert("Ocurrió un error inesperado. Revisa la consola (F12).");
                     setView('result');
                 }
             };
