@@ -161,15 +161,15 @@
         }
         .yt-embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         
-        .auth-form-container {
-            width: 100%; text-align: left; margin-bottom: 20px;
-        }
-        .auth-label {
-            display: block; font-size: 10px; font-weight: bold; color: #06b6d4; margin-bottom: 6px; letter-spacing: 0.1em; text-transform: uppercase;
-        }
+        .auth-form-container { width: 100%; text-align: left; margin-bottom: 20px; }
+        .auth-label { display: block; font-size: 10px; font-weight: bold; color: #06b6d4; margin-bottom: 6px; letter-spacing: 0.1em; text-transform: uppercase; }
         
         .cloud-item { cursor: pointer; transition: all 0.2s; }
         .cloud-item:hover { background: rgba(255,255,255,0.1); border-color: #06b6d4; }
+
+        /* Animation for fade-in */
+        .fade-enter { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -192,7 +192,24 @@
         const MAGIC_RESULT_IMAGE_DEFAULT = "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2865"; 
         const UGLY_BURGER_IMAGE = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=2799"; 
         const CREATOR_IMAGE = "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop"; 
-        const INITIAL_CREDITS = 3;
+        const INITIAL_CREDITS = 5;
+
+        // PROMPT MAESTRO DEL SISTEMA (La orden secreta para Gemini)
+        const MARKETING_SYSTEM_PROMPT = `
+        ERES EL EXPERTO MAS GRANDE MARKETING DEL MUNDO. TU MISIÓN ES CREAR UN COPY VIRAL Y ESTRATÉGICO.
+        
+        INSTRUCCIONES:
+        1. ANALIZA EXHAUSTIVAMENTE LA MARCA Y EL PRODUCTO DEL USUARIO.
+        2. CREA UN COPY POTENTE PARA REDES SOCIALES (INSTAGRAM/TIKTOK).
+        3. EL COPY DEBE CONTENER:
+           - UN GANCHO (HOOK) IRRESISTIBLE AL INICIO.
+           - CUERPO PERSUASIVO USANDO TÉCNICA AIDA (ATENCIÓN, INTERÉS, DESEO, ACCIÓN).
+           - LA INFORMACIÓN DE LA EMPRESA, PROMOCIÓN Y UBICACIÓN PROPORCIONADA.
+           - LLAMADA A LA ACCIÓN (CTA) CLARA HACIA EL WHATSAPP.
+           - HASHTAGS VIRALES RELEVANTES.
+        4. EL TONO DEBE SER PROFESIONAL PERO CERCANO Y ENÉRGICO.
+        5. RESPONDE SOLAMENTE CON EL TEXTO DEL COPY, SIN SALUDOS NI EXPLICACIONES ADICIONALES.
+        `;
 
         // --- ICONOS SVG ---
         const Icons = {
@@ -304,6 +321,7 @@
                 copy_offer: "Oferta exclusiva:", copy_cta: "📲 Haz tu pedido aquí:",
                 plans: "PLANES", p_names: ["PRINCIPIANTE", "EMPRESA", "AGENCIA"], p_subs: ["MENSUAL", "PAGO ÚNICO 1 AÑO", "PAGO ÚNICO"], rec: "RECOMENDADO", buy: "COMPRAR AHORA", sel: "SELECCIONAR", f_1: ["1 Mes de Servicio", "4K High Definition", "50 Post Mensuales"], f_2: ["1 AÑO de Servicio", "8K High Definition", "100 Post Mensuales", "Soporte VIP"], f_3: ["1 Mes de Servicio", "8K High Definition", "Ilimitado", "Marca Blanca"], faq_title: "PREGUNTAS FRECUENTES", q1: "¿QUÉ ES MARKETING?", a1: "El Marketing no es vender. Es que te elijan.", q2: "¿PARA QUE SIRVE LA APP?", a2: "Click IA clona el cerebro de los mejores publicistas.", q3: "¿QUÉ GANO CON LA APP?", a3: "Ganas tiempo y calidad mundial.", before: "Antes", after: "Después"
             },
+            // ... (Other languages follow same pattern)
              EN: {
                 enter: "LOGIN", prices: "PRICING", faq: "FAQ",
                 powered: "Powered by Gemini",
@@ -314,10 +332,10 @@
                 lbl_email: "YOUR EMAIL", ph_email: "ex@company.com",
                 lbl_api: "YOUR GOOGLE GEMINI API KEY", ph_api: "Paste your AIza key...",
                 upload_title: "Phase 1: Asset Upload", upload_prod: "PRODUCT", upload_logo: "LOGO", next: "NEXT",
-                q1_title: "WHO IS YOUR CLIENT?", q1_ph: "Ex: Young women, athletes...",
-                q2_title: "PRODUCT DETAILS", q2_p1: "What do you sell? (Ex: Burger)", q2_p2: "Price ($)", q2_p3: "Promo (Optional)",
-                q3_title: "COMPANY DATA", q3_p1: "Company Name...", q3_p2: "WhatsApp (593...)",
-                q4_title: "YOUR INSPIRATION", q4_ph1: "Ex: Apple, Nike...", q4_upload: "Or Upload reference", q4_change: "Change Image",
+                q1_title: "WHO IS YOUR CLIENT?", q1_ph: "Ex: Young women...",
+                q2_title: "PRODUCT DETAILS", q2_p1: "What do you sell?", q2_p2: "Price", q2_p3: "Promo",
+                q3_title: "COMPANY DATA", q3_p1: "Company Name", q3_p2: "WhatsApp",
+                q4_title: "YOUR INSPIRATION", q4_ph1: "Ex: Apple...", q4_upload: "Or Upload reference", q4_change: "Change Image",
                 q5_title: "COLOR PALETTE", style_title: "CHOOSE STYLE", light_title: "LIGHTING",
                 google_data: "Google Data Pro", google_desc: "Use real search data",
                 gen_btn: "GENERATE CAMPAIGN", processing: "PROCESSING DATA...", result_title: "RESULTS",
@@ -335,7 +353,7 @@
                 default_promo: "Limited time only",
                 copy_headline: "Ready for the next level?", copy_body_1: "It's not just", copy_body_2: "It's an experience.", 
                 copy_offer: "Exclusive offer:", copy_cta: "📲 Order here:",
-                plans: "PLANES", p_names: ["BEGINNER", "BUSINESS", "AGENCY"], p_subs: ["MONTHLY", "ONE TIME 1 YEAR", "ONE TIME PAYMENT"], rec: "RECOMMENDED", buy: "BUY NOW", sel: "SELECT", f_1: ["1 Month Service", "4K High Definition", "50 Post Mensuales"], f_2: ["1 AÑO de Servicio", "8K High Definition", "100 Post Mensuales", "Soporte VIP"], f_3: ["1 Mes de Servicio", "8K High Definition", "Ilimitado", "Marca Blanca"], faq_title: "PREGUNTAS FRECUENTES", q1: "¿QUÉ ES MARKETING?", a1: "El Marketing no es vender. Es que te elijan.", q2: "¿PARA QUE SIRVE LA APP?", a2: "Click IA clona el cerebro de los mejores publicistas.", q3: "¿QUÉ GANO CON LA APP?", a3: "Ganas tiempo y calidad mundial.", before: "Before", after: "After"
+                plans: "PLANES", p_names: ["BEGINNER", "BUSINESS", "AGENCY"], p_subs: ["MONTHLY", "ONE TIME 1 YEAR", "ONE TIME PAYMENT"], rec: "RECOMMENDED", buy: "BUY NOW", sel: "SELECT", f_1: ["1 Month Service", "4K High Definition", "50 Posts Monthly"], f_2: ["1 YEAR Service", "8K High Definition", "100 Posts Monthly", "VIP Support"], f_3: ["1 Month Service", "8K High Definition", "Unlimited", "White Label"], faq_title: "FREQUENT QUESTIONS", q1: "WHAT IS MARKETING?", a1: "Marketing is not selling.", q2: "WHAT IS THE APP FOR?", a2: "Click IA clones...", q3: "WHAT DO I GAIN?", a3: "You gain 6 hours...", before: "Before", after: "After"
             },
             ZH: {
                 enter: "登录", prices: "价格", faq: "常问问题",
@@ -376,18 +394,6 @@
                 hero_mk: "L'AVENIR DU MARKETING", hero_auto: "POUR LES ENTREPRISES.",
                 bullets: ['Dernière Tech', 'Vitesse Lumière', 'Neuromarketing', 'Économies Totales', 'Expert Vente'],
                 cta_trial: "ESSAI GRATUIT", cta_posts: "GÉNÉREZ 50 POSTS/MOIS",
-                before: "Avant", after: "Après",
-                plans: "PLANS",
-                p_names: ["DÉBUTANT", "ENTREPRISE", "AGENCE"],
-                p_subs: ["MENSUEL", "PAIEMENT UNIQUE 1 AN", "PAIEMENT UNIQUE"],
-                rec: "RECOMMANDÉ", buy: "ACHETER", sel: "SÉLECTIONNER",
-                f_1: ["1 Mois de Service", "4K Haute Définition", "50 Posts Mensuels"],
-                f_2: ["1 AN de Service", "8K Haute Définition", "100 Posts Mensuels", "Support VIP"],
-                f_3: ["1 Mois de Service", "8K Haute Définition", "Illimité", "Marque Blanche"],
-                faq_title: "QUESTIONS FRÉQUENTES",
-                q1: "QU'EST-CE QUE LE MARKETING ?", a1: "Le marketing n'est pas la vente. C'est être choisi avant même de connaître le prix. Aujourd'hui, si vous ne captez pas l'attention en 3 secondes, vous êtes invisible.",
-                q2: "À QUOI SERT L'APP ?", a2: "Click IA clone le cerveau des meilleurs publicitaires du monde et le met dans votre poche.",
-                q3: "QUE GAGNEZ-VOUS ?", a3: "Vous gagnez les 6 heures par jour perdues à concevoir. Vous gagnez une autorité immédiate car votre marque ressemblera à une entreprise mondiale.",
                 setup_title: "IDENTIFICATION", setup_desc: "Entrez vos coordonnées pour vous connecter.", setup_btn: "CONNECTER & ENTRER",
                 lbl_email: "VOTRE EMAIL", ph_email: "ex@company.com",
                 lbl_api: "VOTRE CLÉ API GOOGLE GEMINI", ph_api: "Collez votre clé AIza...",
@@ -412,7 +418,8 @@
                 edit_text_1: "Texte Principal", edit_text_2: "Sous-titre", edit_size: "Taille Logo",
                 default_promo: "Durée limitée",
                 copy_headline: "Prêt pour le niveau supérieur ?", copy_body_1: "Ce n'est pas juste", copy_body_2: "C'est une expérience.", 
-                copy_offer: "Offre exclusive :", copy_cta: "📲 Commandez ici :"
+                copy_offer: "Offre exclusive :", copy_cta: "📲 Commandez ici :",
+                plans: "PLANES", p_names: ["PRINCIPIANTE", "EMPRESA", "AGENCIA"], p_subs: ["MENSUAL", "PAGO ÚNICO 1 AÑO", "PAGO ÚNICO"], rec: "RECOMENDADO", buy: "COMPRAR AHORA", sel: "SELECCIONAR", f_1: ["1 Mes de Servicio", "4K High Definition", "50 Post Mensuales"], f_2: ["1 AÑO de Servicio", "8K High Definition", "100 Post Mensuales", "Soporte VIP"], f_3: ["1 Mes de Servicio", "8K High Definition", "Ilimitado", "Marca Blanca"], faq_title: "PREGUNTAS FRECUENTES", q1: "¿QUÉ ES MARKETING?", a1: "El Marketing no es vender. Es que te elijan.", q2: "¿PARA QUE SIRVE LA APP?", a2: "Click IA clona el cerebro de los mejores publicistas.", q3: "¿QUÉ GANO CON LA APP?", a3: "Ganas tiempo y calidad mundial.", before: "Avant", after: "Après"
             }
         };
 
@@ -546,7 +553,9 @@
                 if(file) {
                     const reader = new FileReader();
                     reader.onload = (f) => {
-                        setElements([...elements, { id: Date.now(), type: 'image', content: f.target.result, x: 200, y: 200, size: 200 }]);
+                        const img = new Image();
+                        img.onload = () => setElements([...elements, { id: Date.now(), type: 'image', content: f.target.result, x: 200, y: 200, size: 200 }]);
+                        img.src = f.target.result;
                     };
                     reader.readAsDataURL(file);
                 }
@@ -578,7 +587,7 @@
             
             const download = () => {
                 const link = document.createElement('a');
-                link.download = `CLICK_IA_EDIT_${Date.now()}.jpg`;
+                link.download = `CLICK_IA_MASTERPIECE_${Date.now()}.jpg`;
                 link.href = canvasRef.current.toDataURL('image/jpeg', 0.95);
                 link.click();
             };
