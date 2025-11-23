@@ -6,7 +6,7 @@
     <title>MAG.IA - The Future of Marketing</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=Chakra+Petch:wght@400;600;700&family=Oswald:wght@500&family=Playfair+Display:wght@600&family=Montserrat:wght@700&family=Roboto+Mono:wght@400;500&family=Bebas+Neue&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=Chakra+Petch:wght@400;600;700&family=Oswald:wght@500&family=Playfair+Display:ital,wght@0,600;1,600&family=Dancing+Script:wght@700&family=Montserrat:wght@700&family=Roboto+Mono:wght@400;500&family=Bebas+Neue&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
     
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -17,11 +17,14 @@
         /* --- MAG.IA CORE STYLES --- */
         body { margin: 0; overflow-x: hidden; font-family: 'Inter', sans-serif; background: #000; color: white; transition: none; }
         h1, h2, h3, .font-tech { font-family: 'Chakra Petch', sans-serif; }
+        
+        /* CURSIVA ESTILIZADA PARA EL LOGO */
+        .font-brand { font-family: 'Dancing Script', cursive; }
 
-        /* FONDO UNIFICADO (Azul/Morado Profundo) */
+        /* FONDO UNIFICADO (Azul/Morado Profundo - NO TOCAR) */
         .liquid-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
-            background-image: linear-gradient(-45deg, #020617, #1e1b4b, #312e81, #000000); /* Fixed deep gradient */
+            background-image: linear-gradient(-45deg, #020617, #1e1b4b, #312e81, #000000);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             transition: none;
@@ -39,7 +42,6 @@
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            /* Added Cyan Glow */
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 30px rgba(6, 182, 212, 0.3); 
             border-radius: 24px;
         }
@@ -48,15 +50,15 @@
         .sun-icon { 
             transition: all 1s ease; 
             color: #06b6d4; /* Cyan Color */
-            filter: drop-shadow(0 0 15px #06b6d4); /* Unified Cyan Glow */
+            filter: drop-shadow(0 0 15px #06b6d4);
         }
 
-        /* Avatar Adaptativo - UNIFIED */
+        /* Avatar Adaptativo */
         .avatar-wrapper { position: relative; overflow: hidden; border-radius: 999px; transition: all 0.5s ease; }
         .avatar-overlay { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; mix-blend-mode: overlay; 
             opacity: 0.7; transition: none; pointer-events: none; 
-            background: linear-gradient(to bottom, #1e3a8a, #4c1d95); /* Fixed Dark Overlay */
+            background: linear-gradient(to bottom, #1e3a8a, #4c1d95);
         }
 
         /* UI Elements */
@@ -86,20 +88,20 @@
         
         .card-label { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 20px 10px 15px 10px; text-align: center; font-family: 'Chakra Petch'; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; }
 
-        /* Scanline sutil para toque tech */
+        /* Scanline sutil */
         .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent); background-size: 100% 30%; animation: scan 3s linear infinite; pointer-events: none; z-index: 20; opacity: 0.3; }
         @keyframes scan { 0% { background-position: 0% -30%; } 100% { background-position: 0% 130%; } }
 
-        /* Inputs - Cyan focused */
+        /* Inputs */
         .quiz-input { background: transparent; border: none; border-bottom: 2px solid rgba(6, 182, 212, 0.5); width: 100%; padding: 20px; font-size: 1.5rem; color: white; text-align: center; font-family: 'Chakra Petch'; transition: all 0.3s; }
         .quiz-input:focus { outline: none; border-color: #06b6d4; background: rgba(6, 182, 212, 0.05); }
         .glass-input { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-family: 'Chakra Petch'; padding: 14px; width: 100%; border-radius: 12px; backdrop-filter: blur(5px); }
         .glass-input:focus { outline: none; border-color: #06b6d4; background: rgba(255, 255, 255, 0.2); }
 
-        /* Frase CEO */
+        /* Frase CEO Actualizada */
         .floating-credit { 
-            position: relative; margin-top: 50px; padding-bottom: 30px; width: 100%; 
-            text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; 
+            position: relative; margin-top: 50px; padding-bottom: 50px; width: 100%; 
+            text-align: center; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; 
             color: rgba(255,255,255,0.6); font-family: 'Chakra Petch'; pointer-events: none;
             text-shadow: 0 2px 10px rgba(0,0,0,0.5); 
             max-width: 800px; margin-left: auto; margin-right: auto;
@@ -120,7 +122,7 @@
         }
         .gold-btn:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(251, 191, 36, 0.6); }
 
-        /* Nano Studio Fixes - Consistent dark aesthetic */
+        /* Nano Studio Fixes */
         .editor-btn { background: rgba(0,0,0,0.6); color: white; border: 1px solid rgba(255,255,255,0.2); }
         .editor-btn:hover { background: rgba(255,255,255,0.1); border-color: #06b6d4; }
     </style>
@@ -135,30 +137,27 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // --- HOOK DEL TIEMPO (CEREBRO DINÁMICO) - FIXED TO DARK THEME ---
         const useTimeTheme = () => 'night'; 
         
         // ==============================================================================
-        // ✅ CONFIGURACIÓN CRÍTICA DE URLS - HARDCODED RAW GITHUB LINKS ✅
+        // ✅ CONFIGURACIÓN CRÍTICA DE URLS - HARDCODED RAW GITHUB LINKS (JORDAN 1) ✅
         // ==============================================================================
-        // Se utilizan las rutas RAW de GitHub construidas a partir de la estructura del repositorio.
+        // Se utilizan las rutas RAW de GitHub.
         const JORDAN_ANTES_URL = 'https://raw.githubusercontent.com/roddysmith23-stack/click-ia-app/main/IMG_8399.jpg'; 
-        
         const JORDAN_DESPUES_URL = 'https://raw.githubusercontent.com/roddysmith23-stack/click-ia-app/main/IMG_8401.jpg';
         // ==============================================================================
 
         // --- CONSTANTES ---
-        // Se utilizan las variables hardcodeadas para las imágenes "Antes" y "Después".
         const MAGIC_RESULT_IMAGE_DEFAULT = JORDAN_DESPUES_URL; 
-        const UGLY_BURGER_IMAGE = JORDAN_ANTES_URL; 
+        const UGLY_IMAGE = JORDAN_ANTES_URL; 
         const CREATOR_IMAGE = "./roddy-ceo.jpg"; 
         const INITIAL_CREDITS = 3;
 
         // --- ICONOS ---
         const Icons = {
-            // NUEVO SOL MAG.IA - Removed theme prop usage
+            // NUEVO SOL MAG.IA
             SunLogo: () => (
-                <svg className={`sun-icon w-16 h-16 md:w-20 md:h-20 mb-2`} viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                <svg className={`sun-icon w-20 h-20 md:w-24 md:h-24 mb-4`} viewBox="0 0 24 24" fill="currentColor" stroke="none">
                     <circle cx="12" cy="12" r="6" />
                     <g stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                         <line x1="12" y1="1" x2="12" y2="4" />
@@ -227,7 +226,7 @@
 
         const TRANSLATIONS = {
             ES: {
-                enter: "INGRESAR", prices: "VER PRECIOS", faq: "PREGUNTAS", powered: "Potenciado por Google Gemini",
+                enter: "INGRESAR", prices: "VER PRECIOS", faq: "PREGUNTAS", powered: "POTENCIADO POR GOOGLE GEMINI",
                 hero_mk: "EL FUTURO DEL MARKETING", hero_auto: "PARA EMPRESAS.",
                 bullets: ['Última Tecnología', 'Velocidad Luz', 'Neuromarketing', 'Ahorro Total', 'Experto en Ventas'],
                 cta_trial: "RECIBE UNA PRUEBA GRATIS", cta_posts: "GENERA 50 POST AL MES",
@@ -352,7 +351,7 @@
             </div>
         );
 
-        // --- NANO STUDIO 2.0 (MODIFIED FOR NEW UI) ---
+        // --- NANO STUDIO 2.0 ---
         const DesignEditor = ({ image, logo, initialText, onSave, onClose, tLang }) => {
             const canvasRef = useRef(null);
             const fabricCanvasRef = useRef(null);
@@ -428,7 +427,6 @@
             return (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 fade-enter backdrop-blur-md">
                     <div className="w-[95%] h-[90%] flex border border-white/10 rounded-2xl overflow-hidden bg-black/80 shadow-2xl">
-                        {/* Nano-Studio Sidebar - Applied glass aesthetic */}
                         <div className="w-80 glass border-r-0 p-6 flex flex-col gap-6 overflow-y-auto custom-scroll">
                              <h3 className="font-tech text-white text-2xl mb-2">{tLang.editor_title}</h3>
                              <div className="flex gap-2 mb-2"><button onClick={undo} className="editor-btn flex-1 py-2 text-xs rounded-lg" title="Deshacer"><Icons.Undo /> UNDO</button><button onClick={redo} className="editor-btn flex-1 py-2 text-xs rounded-lg" title="Rehacer"><Icons.Redo /> REDO</button></div>
@@ -441,7 +439,7 @@
                                          <>
                                             <div className="flex gap-2"><input type="color" className="h-8 w-8 bg-transparent cursor-pointer rounded" onChange={e => updateSelected('fill', e.target.value)} /><input type="range" className="flex-1 accent-[#06b6d4]" min="10" max="200" value={selectedObj.fontSize} onChange={e => updateSelected('fontSize', parseInt(e.target.value))} /></div>
                                             <select className="glass-input text-xs" onChange={e => updateSelected('fontFamily', e.target.value)} value={selectedObj.fontFamily}>
-                                                <option value="Chakra Petch">Tech (Chakra)</option><option value="Inter">Modern (Inter)</option><option value="Oswald">Impact (Oswald)</option><option value="Playfair Display">Luxury (Serif)</option><option value="Montserrat">Clean (Montserrat)</option><option value="Roboto Mono">Code (Mono)</option><option value="Bebas Neue">Bebas (Condensed)</option><option value="Roboto Slab">Slab (Geometric)</option>
+                                                <option value="Chakra Petch">Tech (Chakra)</option><option value="Inter">Modern (Inter)</option><option value="Oswald">Impact (Oswald)</option><option value="Playfair Display">Luxury (Serif)</option><option value="Montserrat">Clean (Montserrat)</option><option value="Roboto Mono">Code (Mono)</option><option value="Bebas Neue">Bebas (Condensed)</option><option value="Roboto Slab">Slab (Geometric)</option><option value="Dancing Script">Cursive (Brand)</option>
                                             </select>
                                          </>
                                      )}
@@ -471,7 +469,7 @@
             </div>
         );
 
-        // --- NEW MAG.IA HEADER - ADJUSTED FOR ALIGNMENT ---
+        // --- NEW HEADER INTERNAL - MAG.IA BRANDING ---
         const HeaderInternal = ({ credits, setView, t, theme }) => (
             <div className="absolute top-0 left-0 w-full p-4 md:p-6 flex justify-center items-start gap-6 z-50 pointer-events-none">
                 {/* Créditos Flotantes */}
@@ -483,21 +481,15 @@
                     </button>
                 </div>
 
-                {/* LOGO CENTRAL MAG.IA - FIXED ALIGNMENT */}
+                {/* LOGO CENTRAL MAG.IA - REBRANDED */}
                 <div className="pointer-events-auto flex flex-col items-center cursor-pointer group mt-2" onClick={() => setView('landing')}>
-                    <div className="flex flex-col items-center mb-1"> 
+                    <div className="flex flex-col items-center mb-2"> 
                         <Icons.SunLogo />
-                        {/* Use leading-none and negative margin for the integrated visual effect */}
-                        <h1 className="text-3xl font-black font-tech tracking-tighter text-white drop-shadow-[0_0_40px_rgba(6, 182, 212, 0.5)] leading-none -mt-4">MAG.IA</h1>
+                        <h1 className="text-3xl md:text-4xl font-brand font-bold tracking-wide text-white drop-shadow-[0_0_40px_rgba(6, 182, 212, 0.5)] leading-none mt-2">MAG.IA</h1>
                     </div>
-                    <div className="flex items-center gap-1 text-[8px] text-white/70 font-bold uppercase tracking-[0.1em]">
+                    <div className="flex items-center gap-1 text-[8px] text-white/70 font-bold uppercase tracking-[0.1em] mt-1">
                         <Icons.Google /> {t.powered}
                     </div>
-                </div>
-
-                {/* Settings / Lang placeholder right */}
-                <div className="absolute right-4 md:right-8 top-6 pointer-events-auto">
-                    {/* Placeholder for future menu or user icon */}
                 </div>
             </div>
         );
@@ -620,18 +612,18 @@
                     </nav>
                     
                     <div className="z-10 max-w-6xl w-full flex flex-col items-center mt-32">
-                        {/* HEADER DINÁMICO */}
+                        {/* HEADER DINÁMICO - MAG.IA REBRAND */}
                         <div className="flex flex-col items-center justify-center gap-2 mb-10 animate-pulse-fast cursor-pointer select-none">
                              <Icons.SunLogo />
-                             <h1 className="text-6xl md:text-8xl font-black font-tech tracking-tighter text-white drop-shadow-[0_0_40px_rgba(6, 182, 212, 0.5)]">MAG.IA</h1>
-                             <div className="inline-flex items-center gap-2 px-4 py-1 glass rounded-full text-white text-[10px] font-bold uppercase tracking-[0.2em]"><Icons.Google /> {t.powered}</div>
+                             <h1 className="text-7xl md:text-9xl font-brand font-bold tracking-wide text-white drop-shadow-[0_0_40px_rgba(6, 182, 212, 0.5)] leading-none mt-2">MAG.IA</h1>
+                             <div className="inline-flex items-center gap-2 px-4 py-2 glass rounded-full text-white text-[10px] font-bold uppercase tracking-[0.2em] mt-4"><Icons.Google /> {t.powered}</div>
                         </div>
 
                         <h2 className="text-3xl md:text-5xl font-bold font-tech mb-8 leading-tight tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50">{t.hero_mk} <br/><span className="text-white">{t.hero_auto}</span></h2>
                         <div className="flex flex-wrap justify-center gap-4 mb-12 text-xs font-bold uppercase tracking-widest text-white/70">{t.bullets.map(b => (<div key={b} className="flex items-center gap-2 bg-white/5 px-3 py-1 rounded-full border border-white/10"><Icons.Check /> {b}</div>))}</div>
                         
-                        {/* Comparison Slider with updated images (Shoe placeholders) */}
-                        <div className="w-full max-w-4xl h-96 mb-12 shadow-2xl rounded-2xl overflow-hidden border border-white/20 glass"><ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} /></div>
+                        {/* Comparison Slider with HARDCODED JORDAN 1 IMAGES */}
+                        <div className="w-full max-w-4xl h-96 mb-12 shadow-2xl rounded-2xl overflow-hidden border border-white/20 glass"><ComparisonSlider beforeImage={UGLY_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} /></div>
                         
                         <div className="flex flex-col items-center gap-4 mb-12">
                             <button onClick={() => {playSound('click'); setView('setup')}} className="tech-btn px-16 py-6 text-xl rounded-2xl flex items-center gap-4 mx-auto">{t.cta_trial}</button>
@@ -673,7 +665,7 @@
                         <div className="space-y-4 relative">
                             {/* Comparison slider with glass aesthetic */}
                             <div className="relative group rounded-2xl overflow-hidden border border-white/20 shadow-2xl mx-auto transition-all duration-500 h-[500px]">
-                                <ComparisonSlider beforeImage={formData.image || UGLY_BURGER_IMAGE} afterImage={resultImage} tLang={t} />
+                                <ComparisonSlider beforeImage={formData.image || UGLY_IMAGE} afterImage={resultImage} tLang={t} />
                             </div>
                             <div className="flex flex-col gap-3">
                                 <div className="flex gap-2"><button onClick={handleDownloadImage} className="flex-1 py-3 bg-white text-black text-xs font-bold uppercase rounded-xl hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 shadow-lg"><Icons.Download /> {t.download}</button><button onClick={() => setIsEditing(true)} className="flex-1 py-3 border border-white/20 text-white text-xs font-bold uppercase rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center gap-2">{t.edit_design}</button></div>
