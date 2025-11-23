@@ -154,7 +154,7 @@
         const MAGIC_RESULT_IMAGE_DEFAULT = "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2865"; 
         const UGLY_BURGER_IMAGE = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=2799"; 
         
-        // --- CAMBIO DE CEO AQUÍ ---
+        // --- CEO UPDATE ---
         const CREATOR_IMAGE = "./roddy-ceo.jpg"; 
         const INITIAL_CREDITS = 3;
 
@@ -208,7 +208,7 @@
             "CUATERNARIOS": ["#800000", "#808000", "#008080", "#000080"]
         };
 
-        // --- SISTEMA DE TRADUCCIÓN ROBUSTO (SIN ERRORES) ---
+        // --- SISTEMA DE TRADUCCIÓN ROBUSTO ---
         const TRANSLATIONS = {
             ES: {
                 enter: "INGRESAR", prices: "VER PRECIOS", faq: "PREGUNTAS",
@@ -310,7 +310,7 @@
                 viral_score: "Score Viral", viral_desc: "Haut potentiel organique détecté.",
                 schedule: "Calendrier IA", copy_viral: "Copy Viral", star_text: "TEXTE STAR ★",
                 trends: "Tendances Détectées", publish: "PUBLIER", new_btn: "NOUVEAU", ready: "PRÊT",
-                credits: "CRÉDITS", color_n: "NEUTRES", color_nu: "NUDE", color_p: "PRIMAIRES", color_s: "SECONDAIRES", color_t: "TERTIAIRES", color_q: "QUATERNAIRES",
+                credits: "CRÉDIT", color_n: "NEUTRES", color_nu: "NUDE", color_p: "PRIMAIRES", color_s: "SECONDAIRES", color_t: "TERTIAIRES", color_q: "QUATERNAIRES",
                 loading_steps: ["RECHERCHE WEB...", "ANALYSE TENDANCES...", "STRATÉGIE...", "GÉNÉRATION IMAGE 8K...", "RÉDACTION COPY..."],
                 credit_text: '"La créativité, c\'est l\'intelligence qui s\'amuse." - Albert Einstein',
                 creator_title: "NOTRE CRÉATEUR", creator_role: "CEO & FOUNDER", creator_bio: "Roddy Smith, visionnaire stratégique. Maîtrise totale de l'IA pour changer le marketing mondial.",
@@ -330,7 +330,7 @@
                 l_dramatic: 'Cinématique', l_dramatic_desc: 'Contraste Élevé',
                 txt_top: 'VOTRE MARQUE', txt_bot: 'OFFRE LIMITÉE'
             },
-            ZH: { // "CN" o "ZH" corregido
+            ZH: { 
                 enter: "登录", prices: "价格", faq: "常见问题",
                 powered: "Powered by Gemini",
                 hero_mk: "营销的未来", hero_auto: "面向企业.",
@@ -378,7 +378,7 @@
             const canvasRef = useRef(null);
             useEffect(() => {
                 const canvas = canvasRef.current;
-                if (!canvas) return;
+                if (!canvas) return; // Safety check
                 const ctx = canvas.getContext('2d');
                 let width = canvas.width = 300; let height = canvas.height = 300;
                 let particles = [];
@@ -432,25 +432,30 @@
             </div>
         );
 
-        // --- NANO STUDIO 2.0 (FABRIC JS INTEGRATION) ---
+        // --- NANO STUDIO 2.0 (FABRIC JS INTEGRATION - SEGURIDAD MEJORADA) ---
         const DesignEditor = ({ image, logo, initialText, onSave, onClose, tLang }) => {
             const canvasRef = useRef(null);
             const fabricCanvasRef = useRef(null);
             const [selectedObj, setSelectedObj] = useState(null);
 
-            // Inicializar Fabric
+            // Inicializar Fabric CON SEGURIDAD
             useEffect(() => {
+                let timer;
+
                 const initCanvas = () => {
                     const canvasElement = canvasRef.current;
-                    // --- SEGURIDAD FABRIC: CHECK DOM ---
+                    // --- SEGURIDAD FABRIC: CHECK DOM & RACE CONDITION ---
                     if (!canvasElement) {
-                        console.error("Canvas element not found");
+                        // Si aún no existe, no hacemos nada (React podría estar desmontando)
                         return;
                     }
 
-                    // Destruir instancia previa si existe
+                    // Destruir instancia previa si existe (limpieza)
                     if (fabricCanvasRef.current) {
-                        fabricCanvasRef.current.dispose();
+                        try {
+                            fabricCanvasRef.current.dispose();
+                        } catch(e) {}
+                        fabricCanvasRef.current = null;
                     }
 
                     try {
@@ -470,7 +475,7 @@
                         // Cargar imagen de fondo
                         if (image) {
                             fabric.Image.fromURL(image, (img) => {
-                                if(!img) return;
+                                if(!img || !fabricCanvasRef.current) return; // Check ref existence
                                 const maxWidth = 800;
                                 const scale = maxWidth / img.width;
                                 
@@ -494,7 +499,7 @@
                                 // Añadir logo si existe (CON TRUCO MULTIPLY)
                                 if(logo) {
                                     fabric.Image.fromURL(logo, (logoImg) => {
-                                        if(logoImg) {
+                                        if(logoImg && fabricCanvasRef.current) {
                                             logoImg.scaleToWidth(150);
                                             logoImg.set({
                                                 left: canvas.width / 2 - 75,
@@ -514,16 +519,23 @@
                     }
                 };
 
-                // Pequeño delay para asegurar que el DOM está listo
-                setTimeout(initCanvas, 100);
+                // --- TIMEOUT DE SEGURIDAD (300ms) ---
+                // Esperamos a que React termine de pintar el DOM
+                timer = setTimeout(initCanvas, 300);
 
+                // --- CLEANUP FUNCTION (CRITICO PARA EVITAR CRASH) ---
                 return () => {
+                    clearTimeout(timer); // Cancelar init si el usuario cierra rápido
                     if (fabricCanvasRef.current) {
-                        fabricCanvasRef.current.dispose();
+                        try {
+                            fabricCanvasRef.current.dispose();
+                        } catch (e) {
+                            console.warn("Error disposing canvas", e);
+                        }
                         fabricCanvasRef.current = null;
                     }
-                }
-            }, [image]);
+                };
+            }, [image]); // Solo reiniciar si cambia la imagen base
 
             const addTextToCanvas = (canvas, text, x, y, color) => {
                 if(!canvas) return;
@@ -753,6 +765,8 @@
                         await new Promise(r => setTimeout(r, 800)); 
                     }
                     
+                    // --- GUARDIA DE DATOS DE LA API ---
+                    // Si la promesa falla o devuelve null, usamos el generador dinámico local
                     if (copyPromise) { 
                         const res = await copyPromise; 
                         finalCopy = res || generateDynamicCopy(); 
