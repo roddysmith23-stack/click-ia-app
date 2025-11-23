@@ -5,29 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CLICK IA - The Future of Marketing</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=Chakra+Petch:wght@400;600;700&family=Oswald:wght@500&family=Playfair+Display:wght@600&family=Montserrat:wght@700&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=Chakra+Petch:wght@400;600;700&family=Oswald:wght@500&family=Playfair+Display:wght@600&family=Montserrat:wght@700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
     <style>
         /* --- ESTÉTICA FINAL --- */
-        body { background-color: #000; color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        body { background-color: #050505; color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         h1, h2, h3, .font-tech { font-family: 'Chakra Petch', sans-serif; }
         
         #bg-video {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; z-index: -1; opacity: 0.3;
-            filter: contrast(1.1) brightness(0.6) hue-rotate(190deg);
+            object-fit: cover; z-index: -1; opacity: 0.2;
+            filter: contrast(1.2) brightness(0.5) hue-rotate(190deg) grayscale(0.5);
         }
 
         .glass { 
-            background: rgba(10, 12, 18, 0.9); backdrop-filter: blur(20px); 
-            border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.9); 
+            background: rgba(15, 15, 20, 0.85); backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
         }
         .glass-panel {
-            background: rgba(20, 20, 25, 0.95); backdrop-filter: blur(30px);
-            border-right: 1px solid rgba(255,255,255,0.1);
+            background: rgba(10, 10, 12, 0.98); 
+            border: 1px solid rgba(255,255,255,0.1);
         }
         .glass-card { 
             background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); 
@@ -65,10 +65,10 @@
 
         .tech-btn {
             background: white; color: black; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em;
-            border-radius: 9999px; padding: 16px 32px; transition: all 0.2s; cursor: pointer;
-            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+            border-radius: 4px; padding: 14px 32px; transition: all 0.2s; cursor: pointer;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
         }
-        .tech-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(255, 255, 255, 0.5); }
+        .tech-btn:hover { transform: translateY(-2px); box-shadow: 0 0 25px rgba(255, 255, 255, 0.3); }
         
         .editor-btn {
             background: #1a1a1a; color: white; font-weight: 600; font-family: 'Chakra Petch';
@@ -155,6 +155,11 @@
             font-size: 14px; color: #e5e7eb; white-space: pre-wrap; max-height: 200px; overflow-y: auto;
         }
         .copy-area:focus { outline: none; border-color: #06b6d4; }
+
+        .yt-embed-container {
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin-bottom: 10px;
+        }
+        .yt-embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         
         .auth-form-container {
             width: 100%; text-align: left; margin-bottom: 20px;
@@ -189,6 +194,7 @@
         const CREATOR_IMAGE = "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop"; 
         const INITIAL_CREDITS = 3;
 
+        // --- ICONOS SVG ---
         const Icons = {
             Logo: () => <svg width="32" height="32" viewBox="0 0 100 100" fill="none"><path d="M50 10L90 80C90 80 70 70 50 70C30 70 10 80 10 80L50 10Z" fill="white"/></svg>,
             Google: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"/></svg>,
@@ -225,7 +231,7 @@
             Trash: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
         };
 
-        // --- DATOS Y CONFIGURACIÓN ---
+        // --- DATOS ---
         const STYLES_DATA = [
             { id: 'realistic', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400', music: 'Lofi Chill' },
             { id: 'cinematic', img: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=400', music: 'Epic Orchestral' }, 
@@ -251,10 +257,16 @@
             "CUATERNARIOS": ["#800000", "#808000", "#008080", "#000080"]
         };
 
-        const VIRAL_SONGS = [
-            { title: "Flowers - Miley Cyrus", artist: "Miley Cyrus" },
-            { title: "As It Was", artist: "Harry Styles" },
-            { title: "Glimpse of Us", artist: "Joji" }
+        const REAL_MUSIC_IDS = [
+            { title: "Epic Cinematic", id: "p7Z9y8eZtMc" }, 
+            { title: "Corporate Upbeat", id: "3y3r2p7kC_k" },
+            { title: "Fashion House", id: "n61ULEU7CO0" } 
+        ];
+
+        const BEST_TIMES = [
+            { icon: <Icons.Instagram />, platform: "Instagram", time: "18:30", day: "Hoy" },
+            { icon: <Icons.Tiktok />, platform: "TikTok", time: "20:00", day: "Hoy" },
+            { icon: <Icons.Facebook />, platform: "Facebook", time: "09:00", day: "Mañana" }
         ];
 
         const TRANSLATIONS = {
@@ -264,18 +276,6 @@
                 hero_mk: "EL FUTURO DEL MARKETING", hero_auto: "PARA EMPRESAS.",
                 bullets: ['Última Tecnología', 'Velocidad Luz', 'Neuromarketing', 'Ahorro Total', 'Experto en Ventas'],
                 cta_trial: "RECIBE UNA PRUEBA GRATIS", cta_posts: "GENERA 50 POST AL MES",
-                before: "Antes", after: "Después",
-                plans: "PLANES",
-                p_names: ["PRINCIPIANTE", "EMPRESA", "AGENCIA"],
-                p_subs: ["MENSUAL", "PAGO ÚNICO 1 AÑO", "PAGO ÚNICO"],
-                rec: "RECOMENDADO", buy: "COMPRAR AHORA", sel: "SELECCIONAR",
-                f_1: ["1 Mes de Servicio", "4K High Definition", "50 Post Mensuales"],
-                f_2: ["1 AÑO de Servicio", "8K High Definition", "100 Post Mensuales", "Soporte VIP"],
-                f_3: ["1 Mes de Servicio", "8K High Definition", "Ilimitado", "Marca Blanca"],
-                faq_title: "PREGUNTAS FRECUENTES",
-                q1: "¿QUÉ ES MARKETING?", a1: "El Marketing no es vender. Es que te elijan a ti antes de que sepan el precio. Hoy si no captas la atención en 3 segundos, eres invisible.",
-                q2: "¿PARA QUE SIRVE LA APP?", a2: "Click IA clona el cerebro de los mejores publicistas del mundo y lo pone en tu bolsillo.",
-                q3: "¿QUÉ GANO CON LA APP?", a3: "Ganas las 6 horas diarias que pierdes diseñando. Ganas autoridad inmediata porque tu marca se verá como una empresa mundial.",
                 setup_title: "IDENTIFICACIÓN", setup_desc: "Ingresa tus datos para conectar tu cuenta.", setup_btn: "CONECTAR Y ENTRAR",
                 lbl_email: "TU CORREO ELECTRÓNICO", ph_email: "ejemplo@empresa.com",
                 lbl_api: "TU GOOGLE GEMINI API KEY", ph_api: "Pega tu clave AIza...",
@@ -292,29 +292,132 @@
                 trends: "Tendencias Detectadas", publish: "PUBLICAR AHORA", new_btn: "NUEVO", ready: "LISTO",
                 credits: "CRÉDITOS", color_n: "NEUTROS", color_nu: "NUDE", color_p: "PRIMARIOS", color_s: "SECUNDARIOS", color_t: "TERCIARIOS", color_q: "CUATERNARIOS",
                 loading_steps: ["BUSCANDO EN LA WEB...", "ANALIZANDO TENDENCIAS...", "ESTRUCTURANDO ESTRATEGIA...", "GENERANDO IMAGEN 8K...", "REDACTANDO COPY VIRAL..."],
-                txt_top: "TU MARCA", txt_bot: "OFERTA LIMITADA",
                 credit_text: '"La creatividad es la inteligencia divirtiéndose." - Albert Einstein',
-                creator_title: "NUESTRO CREADOR",
-                creator_role: "CO-FOUNDER & CSIO",
-                creator_bio: "Visionario estratégico con dominio total de la IA y el algoritmo. Roddy Smith no solo predice el futuro del marketing, lo está construyendo.",
+                creator_title: "NUESTRO CREADOR", creator_role: "CO-FOUNDER & CSIO", creator_bio: "Visionario estratégico con dominio total de la IA y el algoritmo. Roddy Smith no solo predice el futuro del marketing, lo está construyendo.",
                 creator_mission: "Nuestra misión es romper las barreras de entrada. CLICK IA nació para cambiar el mundo, empoderando a cada emprendedor con la tecnología que antes solo tenían los gigantes.",
-                s_realistic: 'Fotorealismo', s_cinematic: 'Cinemático', s_luxury: 'Lujo Minimal', s_neon: 'Neon Pop', s_3d: '3D Pixar', s_cyber: 'Cyberpunk',
-                l_studio: 'Luz de Estudio', l_studio_desc: 'Frontal Suave',
-                l_neon: 'Neón', l_neon_desc: 'Lateral Color',
-                l_golden: 'Hora Dorada', l_golden_desc: 'Trasera Solar',
-                l_dramatic: 'Cinemático', l_dramatic_desc: 'Contraste Alto',
                 download: "DESCARGAR IMAGEN", copy_clipboard: "COPIAR TEXTO",
                 cloud_welcome: "BIENVENIDO A TU NUBE", cloud_desc: "Aquí guardamos todas tus campañas.",
                 edit_design: "🛠️ ABRIR ESTUDIO DE DISEÑO", editor_title: "NANO-STUDIO", save_design: "GUARDAR DISEÑO", close_editor: "CERRAR",
                 edit_text_1: "Texto Principal", edit_text_2: "Subtítulo", edit_size: "Tamaño Logo",
-                before: "Antes", after: "Después", default_promo: "Por tiempo limitado", 
+                default_promo: "Por tiempo limitado",
                 copy_headline: "¿Listo para el siguiente nivel?", copy_body_1: "No es solo", copy_body_2: "Es una experiencia.", 
-                copy_offer: "Oferta exclusiva:", copy_cta: "📲 Haz tu pedido aquí:"
+                copy_offer: "Oferta exclusiva:", copy_cta: "📲 Haz tu pedido aquí:",
+                plans: "PLANES", p_names: ["PRINCIPIANTE", "EMPRESA", "AGENCIA"], p_subs: ["MENSUAL", "PAGO ÚNICO 1 AÑO", "PAGO ÚNICO"], rec: "RECOMENDADO", buy: "COMPRAR AHORA", sel: "SELECCIONAR", f_1: ["1 Mes de Servicio", "4K High Definition", "50 Post Mensuales"], f_2: ["1 AÑO de Servicio", "8K High Definition", "100 Post Mensuales", "Soporte VIP"], f_3: ["1 Mes de Servicio", "8K High Definition", "Ilimitado", "Marca Blanca"], faq_title: "PREGUNTAS FRECUENTES", q1: "¿QUÉ ES MARKETING?", a1: "El Marketing no es vender. Es que te elijan.", q2: "¿PARA QUE SIRVE LA APP?", a2: "Click IA clona el cerebro de los mejores publicistas.", q3: "¿QUÉ GANO CON LA APP?", a3: "Ganas tiempo y calidad mundial.", before: "Antes", after: "Después"
             },
-            // ... (English, Chinese, French would follow same pattern)
+             EN: {
+                enter: "LOGIN", prices: "PRICING", faq: "FAQ",
+                powered: "Powered by Gemini",
+                hero_mk: "THE FUTURE OF MARKETING", hero_auto: "FOR BUSINESSES.",
+                bullets: ['Latest Tech', 'Light Speed', 'Neuromarketing', 'Total Savings', 'Sales Expert'],
+                cta_trial: "GET A FREE TRIAL", cta_posts: "GENERATE 50 POSTS/MO",
+                setup_title: "IDENTIFICATION", setup_desc: "Enter your details to connect.", setup_btn: "CONNECT & ENTER",
+                lbl_email: "YOUR EMAIL", ph_email: "ex@company.com",
+                lbl_api: "YOUR GOOGLE GEMINI API KEY", ph_api: "Paste your AIza key...",
+                upload_title: "Phase 1: Asset Upload", upload_prod: "PRODUCT", upload_logo: "LOGO", next: "NEXT",
+                q1_title: "WHO IS YOUR CLIENT?", q1_ph: "Ex: Young women, athletes...",
+                q2_title: "PRODUCT DETAILS", q2_p1: "What do you sell? (Ex: Burger)", q2_p2: "Price ($)", q2_p3: "Promo (Optional)",
+                q3_title: "COMPANY DATA", q3_p1: "Company Name...", q3_p2: "WhatsApp (593...)",
+                q4_title: "YOUR INSPIRATION", q4_ph1: "Ex: Apple, Nike...", q4_upload: "Or Upload reference", q4_change: "Change Image",
+                q5_title: "COLOR PALETTE", style_title: "CHOOSE STYLE", light_title: "LIGHTING",
+                google_data: "Google Data Pro", google_desc: "Use real search data",
+                gen_btn: "GENERATE CAMPAIGN", processing: "PROCESSING DATA...", result_title: "RESULTS",
+                viral_score: "Viral Score", viral_desc: "High organic reach potential detected.",
+                schedule: "AI Schedule", copy_viral: "Viral Copy", star_text: "STAR TEXT ★",
+                trends: "Detected Trends", publish: "PUBLISH NOW", new_btn: "NEW", ready: "READY",
+                credits: "CREDITS", color_n: "NEUTRALS", color_nu: "NUDE", color_p: "PRIMARY", color_s: "SECONDARY", color_t: "TERTIARY", color_q: "QUATERNARY",
+                loading_steps: ["SEARCHING WEB...", "ANALYZING TRENDS...", "STRUCTURING STRATEGY...", "GENERATING 8K IMAGE...", "WRITING VIRAL COPY..."],
+                credit_text: '"Creativity is intelligence having fun." - Albert Einstein',
+                creator_title: "MEET THE CREATOR", creator_role: "CO-FOUNDER & CSIO", creator_bio: "Strategic visionary mastering AI and algorithms. Roddy Smith isn't just predicting the future of marketing, he is building it.", creator_mission: "Our mission is to shatter entry barriers. CLICK IA was born to change the world, empowering every entrepreneur with tech once reserved for giants.",
+                download: "DOWNLOAD IMAGE", copy_clipboard: "COPY TEXT",
+                cloud_welcome: "WELCOME TO YOUR CLOUD", cloud_desc: "All your campaigns are safe here.",
+                edit_design: "🛠️ OPEN DESIGN STUDIO", editor_title: "NANO-STUDIO", save_design: "SAVE DESIGN", close_editor: "CLOSE",
+                edit_text_1: "Main Text", edit_text_2: "Subtitle", edit_size: "Logo Size",
+                default_promo: "Limited time only",
+                copy_headline: "Ready for the next level?", copy_body_1: "It's not just", copy_body_2: "It's an experience.", 
+                copy_offer: "Exclusive offer:", copy_cta: "📲 Order here:",
+                plans: "PLANES", p_names: ["BEGINNER", "BUSINESS", "AGENCY"], p_subs: ["MONTHLY", "ONE TIME 1 YEAR", "ONE TIME PAYMENT"], rec: "RECOMMENDED", buy: "BUY NOW", sel: "SELECT", f_1: ["1 Month Service", "4K High Definition", "50 Post Mensuales"], f_2: ["1 AÑO de Servicio", "8K High Definition", "100 Post Mensuales", "Soporte VIP"], f_3: ["1 Mes de Servicio", "8K High Definition", "Ilimitado", "Marca Blanca"], faq_title: "PREGUNTAS FRECUENTES", q1: "¿QUÉ ES MARKETING?", a1: "El Marketing no es vender. Es que te elijan.", q2: "¿PARA QUE SIRVE LA APP?", a2: "Click IA clona el cerebro de los mejores publicistas.", q3: "¿QUÉ GANO CON LA APP?", a3: "Ganas tiempo y calidad mundial.", before: "Before", after: "After"
+            },
+            ZH: {
+                enter: "登录", prices: "价格", faq: "常问问题",
+                powered: "Powered by Gemini",
+                hero_mk: "营销的未来", hero_auto: "面向企业.",
+                bullets: ['最新技术', '光速', '神经营销', '完全节省', '销售专家'],
+                cta_trial: "获得免费试用", cta_posts: "每月生成50个帖子",
+                setup_title: "身份识别", setup_desc: "输入您的详细信息以连接。", setup_btn: "连接并进入",
+                lbl_email: "您的电子邮件", ph_email: "ex@company.com",
+                lbl_api: "您的 GOOGLE GEMINI API 密钥", ph_api: "粘贴您的 AIza 密钥...",
+                upload_title: "第一阶段：资产上传", upload_prod: "产品", upload_logo: "标志", next: "下一步",
+                q1_title: "谁是你的客户？", q1_ph: "例如：年轻女性，运动员...",
+                q2_title: "产品详情", q2_p1: "你卖什么？（例如：汉堡）", q2_p2: "价格 ($)", q2_p3: "促销（可选）",
+                q3_title: "公司数据", q3_p1: "公司名称...", q3_p2: "WhatsApp (593...)",
+                q4_title: "你的灵感", q4_ph1: "例如：Apple, Nike...", q4_upload: "或上传参考照片", q4_change: "更改图片",
+                q5_title: "调色板", style_title: "选择风格", light_title: "灯光",
+                google_data: "Google Data Pro", google_desc: "使用真实搜索数据",
+                gen_btn: "生成活动", processing: "处理数据...", result_title: "结果",
+                viral_score: "病毒评分", viral_desc: "检测到高有机覆盖潜力。",
+                schedule: "AI 时间表", copy_viral: "病毒式文案", star_text: "星级文本 ★",
+                trends: "检测到的趋势", publish: "立即发布", new_btn: "新建", ready: "准备好",
+                credits: "学分", color_n: "中性色", color_nu: "裸色", color_p: "原色", color_s: "二次色", color_t: "三次色", color_q: "四次色",
+                loading_steps: ["搜索网络...", "分析趋势...", "构建策略...", "生成 8K 图像...", "编写病毒式文案..."],
+                credit_text: '"创意是智慧在玩耍。" - Albert Einstein',
+                creator_title: "遇见创作者", creator_role: "联合创始人 & 首席战略官", creator_bio: "掌握人工智能和算法的战略远见者。Roddy Smith 不仅仅是在预测营销的未来，他正在创造它。", creator_mission: "我们的使命是打破进入壁垒。CLICK IA 的诞生是为了改变世界，用曾经只有巨头才拥有的技术赋予每一位企业家权力。",
+                download: "下载图片", copy_clipboard: "复制文本",
+                cloud_welcome: "欢迎来到您的云", cloud_desc: "您的所有活动都在这里安全。",
+                edit_design: "🛠️ 打开设计工作室", editor_title: "纳米工作室", save_design: "保存设计", close_editor: "关闭",
+                edit_text_1: "主要文本", edit_text_2: "副标题", edit_size: "标志尺寸",
+                default_promo: "限时优惠",
+                copy_headline: "准备好进入下一个层级了吗？", copy_body_1: "这不仅仅是", copy_body_2: "这是一种体验。", 
+                copy_offer: "独家优惠：", copy_cta: "📲 在此下单：",
+                plans: "PLANES", p_names: ["PRINCIPIANTE", "EMPRESA", "AGENCIA"], p_subs: ["MENSUAL", "PAGO ÚNICO 1 AÑO", "PAGO ÚNICO"], rec: "RECOMENDADO", buy: "COMPRAR AHORA", sel: "SELECCIONAR", f_1: ["1 Mes de Servicio", "4K High Definition", "50 Post Mensuales"], f_2: ["1 AÑO de Servicio", "8K High Definition", "100 Post Mensuales", "Soporte VIP"], f_3: ["1 Mes de Servicio", "8K High Definition", "Ilimitado", "Marca Blanca"], faq_title: "PREGUNTAS FRECUENTES", q1: "¿QUÉ ES MARKETING?", a1: "El Marketing no es vender. Es que te elijan.", q2: "¿PARA QUE SIRVE LA APP?", a2: "Click IA clona el cerebro de los mejores publicistas.", q3: "¿QUÉ GANO CON LA APP?", a3: "Ganas tiempo y calidad mundial.", before: "前", after: "后"
+            },
+            FR: {
+                enter: "S'IDENTIFIER", prices: "TARIFS", faq: "FAQ",
+                powered: "Powered by Gemini",
+                hero_mk: "L'AVENIR DU MARKETING", hero_auto: "POUR LES ENTREPRISES.",
+                bullets: ['Dernière Tech', 'Vitesse Lumière', 'Neuromarketing', 'Économies Totales', 'Expert Vente'],
+                cta_trial: "ESSAI GRATUIT", cta_posts: "GÉNÉREZ 50 POSTS/MOIS",
+                before: "Avant", after: "Après",
+                plans: "PLANS",
+                p_names: ["DÉBUTANT", "ENTREPRISE", "AGENCE"],
+                p_subs: ["MENSUEL", "PAIEMENT UNIQUE 1 AN", "PAIEMENT UNIQUE"],
+                rec: "RECOMMANDÉ", buy: "ACHETER", sel: "SÉLECTIONNER",
+                f_1: ["1 Mois de Service", "4K Haute Définition", "50 Posts Mensuels"],
+                f_2: ["1 AN de Service", "8K Haute Définition", "100 Posts Mensuels", "Support VIP"],
+                f_3: ["1 Mois de Service", "8K Haute Définition", "Illimité", "Marque Blanche"],
+                faq_title: "QUESTIONS FRÉQUENTES",
+                q1: "QU'EST-CE QUE LE MARKETING ?", a1: "Le marketing n'est pas la vente. C'est être choisi avant même de connaître le prix. Aujourd'hui, si vous ne captez pas l'attention en 3 secondes, vous êtes invisible.",
+                q2: "À QUOI SERT L'APP ?", a2: "Click IA clone le cerveau des meilleurs publicitaires du monde et le met dans votre poche.",
+                q3: "QUE GAGNEZ-VOUS ?", a3: "Vous gagnez les 6 heures par jour perdues à concevoir. Vous gagnez une autorité immédiate car votre marque ressemblera à une entreprise mondiale.",
+                setup_title: "IDENTIFICATION", setup_desc: "Entrez vos coordonnées pour vous connecter.", setup_btn: "CONNECTER & ENTRER",
+                lbl_email: "VOTRE EMAIL", ph_email: "ex@company.com",
+                lbl_api: "VOTRE CLÉ API GOOGLE GEMINI", ph_api: "Collez votre clé AIza...",
+                upload_title: "Phase 1 : Chargement des actifs", upload_prod: "PRODUIT", upload_logo: "LOGO", next: "SUIVANT",
+                q1_title: "QUI EST VOTRE CLIENT ?", q1_ph: "Ex : Jeunes femmes, sportives...",
+                q2_title: "DÉTAILS DU PRODUIT", q2_p1: "Que vendez-vous ? (Ex : Burger)", q2_p2: "Prix ($)", q2_p3: "Promotion (Optionnel)",
+                q3_title: "DONNÉES DE L'ENTREPRISE", q3_p1: "Nom de votre entreprise...", q3_p2: "WhatsApp (593...)",
+                q4_title: "VOTRE INSPIRATION", q4_ph1: "Ex : Apple, Nike...", q4_upload: "Ou téléchargez une photo", q4_change: "Changer l'image",
+                q5_title: "PALETTE DE COULEURS", style_title: "CHOISISSEZ LE STYLE", light_title: "ÉCLAIRAGE",
+                google_data: "Google Data Pro", google_desc: "Utiliser des données réelles",
+                gen_btn: "GÉNÉRER CAMPAGNE", processing: "TRAITEMENT DES DONNÉES...", result_title: "RÉSULTATS",
+                viral_score: "Score Viral", viral_desc: "Haut potentiel de portée organique détecté.",
+                schedule: "Calendrier IA", copy_viral: "Copy Viral", star_text: "TEXTE STAR ★",
+                trends: "Tendances Détectées", publish: "PUBLIER MAINTENANT", new_btn: "NOUVEAU", ready: "PRÊT",
+                credits: "CRÉDITS", color_n: "NEUTRES", color_nu: "NUDE", color_p: "PRIMAIRES", color_s: "SECONDAIRES", color_t: "TERTIAIRES", color_q: "QUATERNAIRES",
+                loading_steps: ["RECHERCHE WEB...", "ANALYSE TENDANCES...", "STRUCTURATION STRATÉGIE...", "GÉNÉRATION IMAGE 8K...", "RÉDACTION COPY VIRAL..."],
+                credit_text: '"La créativité, c\'est l\'intelligence qui s\'amuse." - Albert Einstein',
+                creator_title: "RENCONTREZ LE CRÉATEUR", creator_role: "CO-FONDATEUR & CSIO", creator_bio: "Visionnaire stratégique maîtrisant l'IA et les algorithmes. Roddy Smith ne se contente pas de prédire l'avenir du marketing, il le construit.", creator_mission: "Notre mission est de briser les barrières. CLICK IA est né pour changer le monde, en donnant à chaque entrepreneur la technologie autrefois réservée aux géants.",
+                download: "TÉLÉCHARGER IMAGE", copy_clipboard: "COPIER TEXTE",
+                cloud_welcome: "BIENVENUE SUR VOTRE CLOUD", cloud_desc: "Toutes vos campagnes sont ici.",
+                edit_design: "🛠️ OUVRIR STUDIO DE DESIGN", editor_title: "NANO-STUDIO", save_design: "SAUVEGARDER", close_editor: "FERMER",
+                edit_text_1: "Texte Principal", edit_text_2: "Sous-titre", edit_size: "Taille Logo",
+                default_promo: "Durée limitée",
+                copy_headline: "Prêt pour le niveau supérieur ?", copy_body_1: "Ce n'est pas juste", copy_body_2: "C'est une expérience.", 
+                copy_offer: "Offre exclusive :", copy_cta: "📲 Commandez ici :"
+            }
         };
 
-        // --- COMPONENTES ---
+        // --- COMPONENTES PRINCIPALES ---
+        
         const NeuralBrain = () => {
             const canvasRef = useRef(null);
             useEffect(() => {
@@ -354,12 +457,12 @@
                 setSliderPos(Math.min(100, Math.max(0, x)));
             };
             return (
-                <div className="relative w-full h-full overflow-hidden cursor-ew-resize select-none rounded-xl border border-white/20 shadow-2xl" ref={containerRef} onMouseMove={handleMove} onTouchMove={handleMove}>
+                <div className="relative w-full h-full overflow-hidden cursor-ew-resize select-none rounded-xl border border-white/20 shadow-2xl bg-black" ref={containerRef} onMouseMove={handleMove} onTouchMove={handleMove}>
                     <img src={afterImage} alt="After" className="absolute top-0 left-0 w-full h-full object-cover" />
                     <div className="absolute top-0 left-0 h-full overflow-hidden border-r-2 border-white" style={{ width: `${sliderPos}%` }}><img src={beforeImage} alt="Before" className="absolute top-0 left-0 h-full max-w-none object-cover" style={{ width: containerRef.current ? containerRef.current.offsetWidth : '100%' }} /></div>
                     <div className="absolute top-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center text-black shadow-lg transform -translate-y-1/2 -translate-x-1/2 pointer-events-none" style={{ left: `${sliderPos}%` }}><Icons.Sliders /></div>
-                    <div className="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded uppercase">{tLang.before}</div>
-                    <div className="absolute bottom-4 right-4 bg-green-500 text-black text-xs font-bold px-2 py-1 rounded uppercase">{tLang.after}</div>
+                    <div className="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded uppercase shadow-md">{tLang.before}</div>
+                    <div className="absolute bottom-4 right-4 bg-green-500 text-black text-xs font-bold px-2 py-1 rounded uppercase shadow-md">{tLang.after}</div>
                 </div>
             );
         };
@@ -381,20 +484,26 @@
             const [loading, setLoading] = useState(true);
 
             useEffect(() => {
+                if (!image) return;
                 const img = new Image();
-                img.crossOrigin = "anonymous"; // Importante para CORS
+                img.crossOrigin = "anonymous";
                 img.src = image;
                 img.onload = () => {
                     setLoading(false);
                     if(canvasRef.current) {
                         const ctx = canvasRef.current.getContext('2d');
-                        // Set canvas size matches image aspect ratio for better quality, limited to 800px width
                         const ratio = img.height / img.width;
                         canvasRef.current.width = 800;
                         canvasRef.current.height = 800 * ratio;
                         drawCanvas();
                     }
                 };
+                if(elements.length === 0) {
+                    setElements([
+                         { id: 1, type: 'text', content: initialText.top, x: 50, y: 100, size: 60, color: initialText.colorTop, font: 'Chakra Petch' },
+                         { id: 2, type: 'text', content: initialText.bottom, x: 50, y: 700, size: 40, color: initialText.colorBot, font: 'Chakra Petch' }
+                    ]);
+                }
             }, [image]);
 
             const drawCanvas = useCallback(() => {
@@ -410,7 +519,7 @@
 
                 elements.forEach(el => {
                     if (el.type === 'text') {
-                        ctx.font = `bold ${el.size}px ${el.font || 'Chakra Petch'}`;
+                        ctx.font = `bold ${el.size}px "${el.font || 'Chakra Petch'}"`;
                         ctx.fillStyle = el.color;
                         ctx.fillText(el.content, el.x, el.y);
                         if (el.id === selectedId) {
@@ -431,30 +540,29 @@
 
             useEffect(() => { if (!loading) drawCanvas(); }, [drawCanvas, loading, elements]);
 
-            const addText = () => setElements([...elements, { id: Date.now(), type: 'text', content: 'TEXTO', x: 50, y: 100, size: 40, color: '#FFF', font: 'Chakra Petch' }]);
+            const addText = () => setElements([...elements, { id: Date.now(), type: 'text', content: 'NUEVO TEXTO', x: 100, y: 300, size: 50, color: '#FFFFFF', font: 'Chakra Petch' }]);
             const handleImageUpload = (e) => {
                 const file = e.target.files[0];
                 if(file) {
                     const reader = new FileReader();
                     reader.onload = (f) => {
-                        const img = new Image();
-                        img.onload = () => setElements([...elements, { id: Date.now(), type: 'image', content: f.target.result, x: 100, y: 100, size: 100 }]);
-                        img.src = f.target.result;
+                        setElements([...elements, { id: Date.now(), type: 'image', content: f.target.result, x: 200, y: 200, size: 200 }]);
                     };
                     reader.readAsDataURL(file);
                 }
             };
-            
-             const handleMouseDown = (e) => {
+            const handleMouseDown = (e) => {
                 const rect = canvasRef.current.getBoundingClientRect();
                 const scaleX = canvasRef.current.width / rect.width;
                 const scaleY = canvasRef.current.height / rect.height;
                 const x = (e.clientX - rect.left) * scaleX;
                 const y = (e.clientY - rect.top) * scaleY;
-                const clicked = elements.slice().reverse().find(el => Math.abs(el.x - x) < 50 && Math.abs(el.y - y) < 50);
+                const clicked = elements.slice().reverse().find(el => {
+                    if(el.type === 'text') return Math.abs(el.x - x) < 150 && Math.abs(el.y - y) < 50; // Rough hitbox
+                    return Math.abs(el.x - x) < el.size && Math.abs(el.y - y) < el.size;
+                });
                 if (clicked) { setSelectedId(clicked.id); setDragging(true); } else { setSelectedId(null); }
             };
-
             const handleMouseMove = (e) => {
                 if (dragging && selectedId) {
                     const rect = canvasRef.current.getBoundingClientRect();
@@ -465,12 +573,10 @@
                     setElements(prev => prev.map(el => el.id === selectedId ? { ...el, x, y } : el));
                 }
             };
-
             const updateSelected = (key, value) => setElements(prev => prev.map(el => el.id === selectedId ? { ...el, [key]: value } : el));
             const deleteSelected = () => { setElements(prev => prev.filter(el => el.id !== selectedId)); setSelectedId(null); };
-
+            
             const download = () => {
-                // Force download
                 const link = document.createElement('a');
                 link.download = `CLICK_IA_EDIT_${Date.now()}.jpg`;
                 link.href = canvasRef.current.toDataURL('image/jpeg', 0.95);
@@ -479,43 +585,46 @@
 
             return (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 fade-enter">
-                    <div className="w-full max-w-6xl h-[90vh] flex border border-gray-800 rounded-xl overflow-hidden">
-                        <div className="w-64 bg-[#111] border-r border-gray-800 p-4 flex flex-col gap-4">
-                             <h3 className="font-tech text-cyan-400 text-xl mb-4">{tLang.editor_title}</h3>
-                             <button onClick={addText} className="editor-btn"><Icons.Text /> Add Text</button>
-                             <label className="editor-btn cursor-pointer"><Icons.Image /> Add Img <input type="file" hidden onChange={handleImageUpload} /></label>
-                             
-                             {selectedId && (
-                                 <div className="space-y-2 animate-pulse-fast">
+                    <div className="w-full max-w-7xl h-[90vh] flex border border-gray-800 rounded-xl overflow-hidden bg-[#050505]">
+                        <div className="w-72 bg-[#111] border-r border-gray-800 p-6 flex flex-col gap-6">
+                             <h3 className="font-tech text-cyan-400 text-2xl mb-2">{tLang.editor_title}</h3>
+                             <div className="grid grid-cols-2 gap-2">
+                                <button onClick={addText} className="editor-btn text-xs flex-col py-3"><Icons.Text /> TEXTO</button>
+                                <label className="editor-btn text-xs flex-col py-3 cursor-pointer"><Icons.Image /> IMAGEN <input type="file" hidden onChange={handleImageUpload} /></label>
+                             </div>
+                             {selectedId ? (
+                                 <div className="space-y-4 animate-pulse-fast bg-white/5 p-4 rounded-lg">
+                                     <p className="text-[10px] font-bold text-gray-400 uppercase">EDITANDO</p>
                                      {elements.find(e => e.id === selectedId)?.type === 'text' && (
                                          <>
                                             <input className="glass-input text-xs" value={elements.find(e => e.id === selectedId).content} onChange={e => updateSelected('content', e.target.value)} />
-                                            <input type="color" onChange={e => updateSelected('color', e.target.value)} />
-                                            <input type="range" min="10" max="100" onChange={e => updateSelected('size', e.target.value)} />
+                                            <div className="flex gap-2">
+                                                <input type="color" className="h-8 w-8 bg-transparent cursor-pointer" onChange={e => updateSelected('color', e.target.value)} />
+                                                <input type="range" className="flex-1" min="10" max="200" value={elements.find(e => e.id === selectedId).size} onChange={e => updateSelected('size', e.target.value)} />
+                                            </div>
                                             <select className="glass-input text-xs" onChange={e => updateSelected('font', e.target.value)}>
-                                                <option value="Chakra Petch">Tech</option>
-                                                <option value="Inter">Modern</option>
-                                                <option value="Oswald">Bold</option>
-                                                <option value="Playfair Display">Luxury</option>
-                                                <option value="Montserrat">Clean</option>
+                                                <option value="Chakra Petch">Tech (Chakra)</option>
+                                                <option value="Inter">Modern (Inter)</option>
+                                                <option value="Oswald">Impact (Oswald)</option>
+                                                <option value="Playfair Display">Luxury (Serif)</option>
+                                                <option value="Montserrat">Clean (Montserrat)</option>
+                                                <option value="Roboto Mono">Code (Mono)</option>
                                             </select>
                                          </>
                                      )}
                                      {elements.find(e => e.id === selectedId)?.type === 'image' && (
-                                         <input type="range" min="50" max="500" onChange={e => updateSelected('size', e.target.value)} />
+                                         <input type="range" min="50" max="800" value={elements.find(e => e.id === selectedId).size} onChange={e => updateSelected('size', e.target.value)} />
                                      )}
-                                     <button onClick={deleteSelected} className="w-full py-2 bg-red-900/50 text-red-400 rounded text-xs flex items-center justify-center gap-2"><Icons.Trash /> Delete</button>
+                                     <button onClick={deleteSelected} className="w-full py-2 bg-red-900/30 text-red-400 rounded text-xs flex items-center justify-center gap-2 hover:bg-red-900/50"><Icons.Trash /> ELIMINAR</button>
                                  </div>
-                             )}
-
-                             <div className="mt-auto flex gap-2">
-                                <button onClick={onClose} className="flex-1 py-2 border border-gray-700 rounded text-xs">{tLang.close_editor}</button>
+                             ) : <div className="text-center py-10 text-gray-600 text-xs">Selecciona un elemento para editar.</div>}
+                             <div className="mt-auto flex flex-col gap-2">
+                                <button onClick={download} className="tech-btn bg-cyan-500 text-black border-none w-full flex justify-center gap-2"><Icons.Download /> DESCARGAR HD</button>
+                                <button onClick={onClose} className="w-full py-3 border border-gray-700 rounded text-xs hover:bg-white/5">{tLang.close_editor}</button>
                              </div>
                         </div>
-                        <div className="flex-1 bg-[#050505] canvas-container flex items-center justify-center relative">
-                             {loading ? <div className="text-cyan-500 animate-pulse">Loading Studio...</div> : 
-                             <canvas ref={canvasRef} className="bg-white shadow-2xl cursor-move max-w-full max-h-full" onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={() => setDragging(false)} />}
-                             <button onClick={download} className="absolute top-4 right-4 tech-btn bg-cyan-500 text-black border-none">{tLang.save_design}</button>
+                        <div className="flex-1 bg-[#080808] canvas-container flex items-center justify-center relative overflow-hidden p-10">
+                             {loading ? <div className="text-cyan-500 animate-pulse font-tech text-xl">CARGANDO ESTUDIO...</div> : <canvas ref={canvasRef} className="bg-white shadow-2xl cursor-move max-w-full max-h-full border border-gray-700" onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={() => setDragging(false)} onMouseLeave={() => setDragging(false)} />}
                         </div>
                     </div>
                 </div>
@@ -547,26 +656,25 @@
             const [user, setUser] = useState(null); 
             const [userCloud, setUserCloud] = useState([]);
             const [isEditing, setIsEditing] = useState(false);
-            const [viewingCampaign, setViewingCampaign] = useState(null);
 
-            const [formData, setFormData] = useState({ image: null, logo: null, inspirationImg: null, target: '', company: '', whatsapp: '', product: { name: '', price: '', promo: '' }, textOnImage: '', style: '', light: '', colors: [], googleData: false, inspiration: '', connected: { fb: false, ig: false, tk: false }, format: 'post' });
+            const initialForm = { image: null, logo: null, inspirationImg: null, target: '', company: '', whatsapp: '', product: { name: '', price: '', promo: '' }, textOnImage: '', style: '', light: '', colors: [], googleData: false, inspiration: '', connected: { fb: false, ig: false, tk: false }, format: 'post' };
+            const [formData, setFormData] = useState(initialForm);
             const [loadingText, setLoadingText] = useState('');
             const [progress, setProgress] = useState(0);
             const [isMuted, setIsMuted] = useState(false);
             const [textOverlay, setTextOverlay] = useState({ top: "TU MARCA", bottom: "OFERTA LIMITADA" });
+            const [designState, setDesignState] = useState({ top: "TU MARCA", bottom: "OFERTA LIMITADA", logoSize: 24, colorTop: "#FFFFFF", colorBot: "#06b6d4", posTop: 33, posBot: 66 });
             const [resultImage, setResultImage] = useState(MAGIC_RESULT_IMAGE_DEFAULT);
             const [generatedCopy, setGeneratedCopy] = useState("");
-            const [suggestedMusic, setSuggestedMusic] = useState([]);
             const [apiKey, setApiKey] = useState('');
             const [inputEmail, setInputEmail] = useState('');
             const [inputApiKey, setInputApiKey] = useState('');
-            
             const fileInputProduct = useRef(null);
             const fileInputLogo = useRef(null);
             const fileInputInspiration = useRef(null);
             const t = TRANSLATIONS[lang];
 
-            useEffect(() => { setTextOverlay({ top: t.txt_top, bottom: t.txt_bot }); }, [lang]);
+            useEffect(() => { setTextOverlay({ top: t.txt_top, bottom: t.txt_bot }); setDesignState(prev => ({ ...prev, top: t.txt_top, bottom: t.txt_bot })); }, [lang]);
             useEffect(() => { const storedUser = localStorage.getItem('clickia_user'); const storedCloud = JSON.parse(localStorage.getItem('clickia_cloud') || '[]'); const storedKey = localStorage.getItem('clickia_apikey'); if (storedUser) { setUser(JSON.parse(storedUser)); setUserCloud(storedCloud); if(storedKey) setApiKey(storedKey); } }, []);
 
             const playSound = (type) => { if (isMuted) return; const audio = document.getElementById(`sfx-${type}`); if(audio) { audio.currentTime = 0; audio.play().catch(()=>{}); } if(type === 'click') { const bg = document.getElementById('bg-music'); if(bg && bg.paused) { bg.volume = 0.2; bg.play().catch(()=>{}); } } };
@@ -574,113 +682,39 @@
             const handleUpload = (e, field) => { const file = e.target.files[0]; if(file) { playSound('click'); setFormData(prev => ({...prev, [field]: URL.createObjectURL(file)})); } };
             const updateProduct = (field, value) => { setFormData(prev => ({ ...prev, product: { ...prev.product, [field]: value } })); };
             const toggleColor = (color) => { playSound('click'); setFormData(prev => { const newColors = prev.colors.includes(color) ? prev.colors.filter(c => c !== color) : [...prev.colors, color].slice(0, 4); return { ...prev, colors: newColors }; }); };
-            const toggleMusic = (id) => { playSound('click'); setPlayingMusic(playingMusic === id ? null : id); };
-            const handleNewGeneration = () => { playSound('click'); setFormData({ image: null, logo: null, inspirationImg: null, target: '', company: '', whatsapp: '', product: { name: '', price: '', promo: '' }, textOnImage: '', style: '', light: '', colors: [], googleData: false, inspiration: '', connected: { fb: false, ig: false, tk: false }, format: 'post' }); setResultImage(MAGIC_RESULT_IMAGE_DEFAULT); setView('upload'); };
+            const handleNewGeneration = () => { playSound('click'); setFormData(initialForm); setResultImage(MAGIC_RESULT_IMAGE_DEFAULT); setGeneratedCopy(""); setView('upload'); };
             const handleLogin = () => { if(!inputEmail) return alert("Email required"); const fakeUser = { name: inputEmail.split('@')[0], email: inputEmail }; setUser(fakeUser); setApiKey(inputApiKey); localStorage.setItem('clickia_user', JSON.stringify(fakeUser)); if(inputApiKey) localStorage.setItem('clickia_apikey', inputApiKey); changeView('upload'); };
             const handleCopyText = () => { navigator.clipboard.writeText(generatedCopy); alert("Copy copiado!"); };
-            
-            const handleDownloadImage = () => { 
-                 // Método robusto usando fetch para evitar problemas de CORS con Pollinations/Unsplash
-                 fetch(resultImage)
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const url = window.URL.createObjectURL(blob);
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.download = `CLICK_IA_${Date.now()}.jpg`;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        window.URL.revokeObjectURL(url);
-                    })
-                    .catch(e => {
-                        // Fallback: abrir en nueva pestaña si falla
-                         window.open(resultImage, '_blank');
-                    });
-            };
-
+            const handleDownloadImage = () => { fetch(resultImage).then(response => response.blob()).then(blob => { const url = window.URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = `CLICK_IA_${Date.now()}.jpg`; document.body.appendChild(link); link.click(); document.body.removeChild(link); window.URL.revokeObjectURL(url); }).catch(e => { window.open(resultImage, '_blank'); }); };
+            const saveDesign = (newState) => { setDesignState(newState); setIsEditing(false); playSound('success'); };
             const generateImageURL = (prompt) => { const encodedPrompt = encodeURIComponent(prompt); return `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1080&height=1080&nologo=true&seed=${Math.floor(Math.random() * 10000)}`; };
+            const callGeminiAPI = async (prompt) => { if (!apiKey) return null; try { const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) }); const data = await response.json(); return data.candidates?.[0]?.content?.parts?.[0]?.text; } catch (error) { console.error("Gemini Error:", error); return null; } };
+            const generateDynamicCopy = () => { const product = formData.product.name || "Producto"; const promo = formData.product.promo || t.default_promo; const contact = formData.whatsapp || "5939999999"; const company = formData.company || "Tu Empresa"; let copy = ""; if (lang === 'ES') { copy = `🚀 **¡${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${promo}\n📍 Disponible en: ${company}\n\n👇 **¡No esperes más!** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; } else { copy = `🚀 **${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${promo}\n📍 Available at: ${company}\n\n👇 **Don't wait!** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; } return copy; };
             
-            const callGeminiAPI = async (prompt) => {
-                if (!apiKey) return null;
-                try {
-                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-                        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-                    });
-                    const data = await response.json();
-                    return data.candidates?.[0]?.content?.parts?.[0]?.text;
-                } catch (error) { console.error("Gemini Error:", error); return null; }
-            };
-
-            const generateDynamicCopy = () => {
-                const product = formData.product.name || "Producto Increíble";
-                const promo = formData.product.promo || t.default_promo;
-                const contact = formData.whatsapp || "5939999999";
-                const company = formData.company || "Tu Empresa";
-                let copy = "";
-                if (lang === 'ES') { copy = `🚀 **¡${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${promo}\n📍 Disponible en: ${company}\n\n👇 **¡No esperes más!** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; } 
-                else { copy = `🚀 **${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${promo}\n📍 Available at: ${company}\n\n👇 **Don't wait!** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; }
-                return copy;
-            };
-            
-            // RESTAURAR CAMPAÑA ANTIGUA
-            const restoreCampaign = (item) => {
-                setResultImage(item.image);
-                setGeneratedCopy(item.copy);
-                setSuggestedMusic(REAL_MUSIC_IDS);
-                setView('result');
-            };
+            const restoreCampaign = (item) => { setResultImage(item.image); setGeneratedCopy(item.copy); setFormData(prev => ({...prev, logo: item.logo || null })); setView('result'); };
 
             const runEngine = async () => {
                 if(!formData.style) return alert("Elige un estilo");
                 if(credits <= 0) return alert("¡Te has quedado sin créditos! Por favor recarga para continuar.");
                 playSound('process'); setView('processing');
-                
                 const promptBase = formData.product.name || "luxury product";
-                // Prompt Mejorado con Neuromarketing Visual
                 const magicPrompt = `Hyper-ultra-realistic 8k commercial photography of ${promptBase}, ${formData.style} aesthetic, ${formData.light}, perfect composition, golden ratio, product centered, vivid colors ${formData.colors.join(", ")}, highly detailed texture, 8k render, unreal engine 5 style, cinematic lighting, volumetric fog, professional advertising, award winning photography`;
-                
-                // Generamos la URL
                 const newImageURL = generateImageURL(magicPrompt);
-                
-                // Gemini con Await Real (Si hay key)
                 let finalCopy = "";
-                
-                // Cargando Pasos
+                let copyPromise = null;
+                if (apiKey) { const textPrompt = `Act as a world-class marketing expert. Write a short viral social media caption for ${promptBase}. Promo: ${formData.product.promo}. Company: ${formData.company}. Language: ${lang}. Include 5 trending hashtags.`; copyPromise = callGeminiAPI(textPrompt); }
                 const steps = t.loading_steps;
-                for(let i=0; i<steps.length; i++) { 
-                    setLoadingText(steps[i]); 
-                    setProgress(((i+1)/steps.length)*100); 
-                    
-                    // Simulamos "pensamiento" pero si estamos en el paso de texto, llamamos a Gemini
-                    if (i === 3 && apiKey) {
-                         const textPrompt = `Act as a world-class marketing expert. Write a short viral social media caption for ${promptBase}. Promo: ${formData.product.promo}. Company: ${formData.company}. Language: ${lang}. Include 5 trending hashtags.`;
-                         const geminiResponse = await callGeminiAPI(textPrompt);
-                         finalCopy = geminiResponse || generateDynamicCopy();
-                    }
-                    
-                    await new Promise(r => setTimeout(r, 1200)); // Tiempo para leer
-                }
-                
-                if (!finalCopy) finalCopy = generateDynamicCopy(); // Fallback
-                
-                setGeneratedCopy(finalCopy);
-                setSuggestedMusic(REAL_MUSIC_IDS);
-                setResultImage(newImageURL);
-                setCredits(prev => prev - 1);
-                
-                const newItem = { id: Date.now(), image: newImageURL, copy: finalCopy, date: new Date().toLocaleDateString() };
-                const updatedCloud = [newItem, ...userCloud];
-                setUserCloud(updatedCloud);
-                localStorage.setItem('clickia_cloud', JSON.stringify(updatedCloud));
-                
+                for(let i=0; i<steps.length; i++) { setLoadingText(steps[i]); setProgress(((i+1)/steps.length)*100); await new Promise(r => setTimeout(r, 800)); }
+                if (copyPromise) { const res = await copyPromise; finalCopy = res || generateDynamicCopy(); } else { finalCopy = generateDynamicCopy(); }
+                setResultImage(generateImageURL(magicPrompt)); setGeneratedCopy(finalCopy); setCredits(prev => prev - 1);
+                const newItem = { id: Date.now(), image: generateImageURL(magicPrompt), copy: finalCopy, logo: formData.logo, date: new Date().toLocaleDateString() };
+                const updatedCloud = [newItem, ...userCloud]; setUserCloud(updatedCloud); localStorage.setItem('clickia_cloud', JSON.stringify(updatedCloud));
                 playSound('success'); setView('result');
             };
 
             const HeaderInternal = () => (<div className="absolute top-0 left-0 w-full p-6 flex justify-center items-center gap-6 z-50 pointer-events-none"><div className="pointer-events-auto"><button onClick={() => setView('pricing')} className="flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-md rounded-full border border-yellow-500/30 hover:border-yellow-400 hover:scale-105 transition-all shadow-lg group"><span className="text-yellow-400 group-hover:rotate-12 transition-transform"><Icons.Credit /></span><span className="text-xs font-bold font-tech text-white">{credits} {t.credits}</span><span className="w-4 h-4 bg-yellow-500 text-black rounded-full flex items-center justify-center text-[10px] font-bold">+</span></button></div><div className="pointer-events-auto flex items-center gap-2 cursor-pointer group" onClick={() => setView('landing')}><Icons.Logo /><span className="text-xl font-black font-tech tracking-tighter group-hover:text-cyan-400 transition-colors">CLICK.IA</span></div><div className="pointer-events-auto flex items-center gap-1 text-[8px] text-cyan-400 font-bold uppercase tracking-[0.2em] bg-cyan-900/20 px-3 py-2 rounded-full border border-cyan-500/20"><Icons.Google /> {t.powered}</div></div>);
 
-            // --- VISTAS ---
-             if (view === 'landing') return <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center relative fade-enter"><nav className="absolute top-0 w-full p-6 flex justify-center items-center z-50"><div className="flex flex-wrap justify-center gap-4 items-center bg-black/40 backdrop-blur-xl p-3 rounded-full border border-white/10 shadow-2xl hover:border-white/20 transition-all duration-500"><div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500/10 to-transparent rounded-full border border-yellow-500/30"><span className="text-yellow-400 animate-pulse"><Icons.Credit /></span><span className="text-xs font-black font-tech text-yellow-100 tracking-widest">{credits} {t.credits}</span></div><div className="flex items-center gap-3 px-4 border-r border-white/10">{['ES', 'EN', 'ZH', 'FR'].map(l => (<button key={l} onClick={() => { playSound('click'); setLang(l); }} className={`text-[10px] font-bold font-tech transition-all duration-300 hover:scale-110 ${lang === l ? 'text-cyan-400 scale-110' : 'text-gray-500 hover:text-white'}`}>{l}</button>))}</div><div className="flex items-center gap-2"><button onClick={() => {playSound('click'); setView('setup')}} className="text-xs font-bold text-white hover:text-cyan-400 font-tech uppercase tracking-widest px-4 py-2 hover:bg-white/5 rounded-full transition-all">{t.enter}</button><button onClick={() => {playSound('click'); setView('pricing')}} className="text-xs font-bold text-gray-300 hover:text-white font-tech uppercase tracking-widest bg-white/5 border border-white/10 px-5 py-2 rounded-full hover:bg-white/20 transition-all shadow-lg">{t.prices}</button><button onClick={() => {playSound('click'); setView('faq')}} className="text-xs font-bold text-gray-300 hover:text-white font-tech uppercase tracking-widest bg-white/5 border border-white/10 px-5 py-2 rounded-full hover:bg-white/20 transition-all shadow-lg">{t.faq}</button></div></div></nav><div className="z-10 max-w-6xl w-full flex flex-col items-center mt-40"><div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12 animate-pulse-fast"><div className="flex items-center gap-3 select-none"><div className="transform scale-150"><Icons.Logo /></div><span className="text-5xl font-black font-tech tracking-tighter">CLICK<span className="text-cyan-400">.IA</span></span></div><div className="hidden md:block w-px h-12 bg-gradient-to-b from-transparent via-white/30 to-transparent"></div><div className="inline-flex items-center gap-3 px-5 py-2 glass rounded-full border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(6,182,212,0.15)]"><Icons.Google /> {t.powered}</div></div><h1 className="text-4xl md:text-7xl font-black font-tech mb-8 leading-none tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">{t.hero_mk} <br/><span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-700">{t.hero_auto}</span></h1><div className="flex flex-wrap justify-center gap-4 mb-12 text-xs font-bold uppercase tracking-widest text-gray-300">{t.bullets.map(b => (<div key={b} className="flex items-center gap-2 bg-white/5 px-3 py-1 rounded border border-white/10"><Icons.Check /> {b}</div>))}</div><div className="w-full max-w-4xl h-96 mb-12 shadow-[0_0_50px_rgba(6,182,212,0.2)] rounded-2xl overflow-hidden border border-white/20"><ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} /></div><div className="flex flex-col items-center gap-3 mb-12"><button onClick={() => {playSound('click'); setView('setup')}} className="tech-btn px-16 py-6 text-xl rounded-full flex items-center gap-4 mx-auto shadow-[0_0_50px_rgba(6,182,212,0.4)]">{t.cta_trial}</button><div className="flex items-center gap-2 text-cyan-400 font-bold text-sm uppercase tracking-widest animate-pulse"><Icons.Zap /> {t.cta_posts}</div></div><div className="w-full max-w-4xl glass p-8 rounded-3xl border border-white/10 mb-20 flex flex-col md:flex-row items-center gap-8 text-left relative overflow-hidden"><div className="absolute -top-20 -right-20 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl"></div><div className="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-white/10 shadow-2xl flex-shrink-0 overflow-hidden relative z-10"><img src={CREATOR_IMAGE} className="w-full h-full object-cover" /></div><div className="flex-1 relative z-10"><div className="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2">{t.creator_title}</div><h3 className="text-3xl font-black font-tech mb-1">RODDY SMITH</h3><p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{t.creator_role}</p><p className="text-sm text-gray-300 leading-relaxed mb-4 italic border-l-2 border-cyan-500 pl-4">"{t.creator_bio}"</p><p className="text-xs text-gray-400 leading-relaxed">{t.creator_mission}</p></div></div><div className="floating-credit">{t.credit_text}</div></div></div>;
+            if (view === 'landing') return <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center relative fade-enter"><nav className="absolute top-0 w-full p-6 flex justify-center items-center z-50"><div className="flex flex-wrap justify-center gap-4 items-center bg-black/40 backdrop-blur-xl p-3 rounded-full border border-white/10 shadow-2xl hover:border-white/20 transition-all duration-500"><div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500/10 to-transparent rounded-full border border-yellow-500/30"><span className="text-yellow-400 animate-pulse"><Icons.Credit /></span><span className="text-xs font-black font-tech text-yellow-100 tracking-widest">{credits} {t.credits}</span></div><div className="flex items-center gap-3 px-4 border-r border-white/10">{['ES', 'EN', 'ZH', 'FR'].map(l => (<button key={l} onClick={() => { playSound('click'); setLang(l); }} className={`text-[10px] font-bold font-tech transition-all duration-300 hover:scale-110 ${lang === l ? 'text-cyan-400 scale-110' : 'text-gray-500 hover:text-white'}`}>{l}</button>))}</div><div className="flex items-center gap-2"><button onClick={() => {playSound('click'); setView('setup')}} className="text-xs font-bold text-white hover:text-cyan-400 font-tech uppercase tracking-widest px-4 py-2 hover:bg-white/5 rounded-full transition-all">{t.enter}</button><button onClick={() => {playSound('click'); setView('pricing')}} className="text-xs font-bold text-gray-300 hover:text-white font-tech uppercase tracking-widest bg-white/5 border border-white/10 px-5 py-2 rounded-full hover:bg-white/20 transition-all shadow-lg">{t.prices}</button><button onClick={() => {playSound('click'); setView('faq')}} className="text-xs font-bold text-gray-300 hover:text-white font-tech uppercase tracking-widest bg-white/5 border border-white/10 px-5 py-2 rounded-full hover:bg-white/20 transition-all shadow-lg">{t.faq}</button></div></div></nav><div className="z-10 max-w-6xl w-full flex flex-col items-center mt-40"><div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12 animate-pulse-fast"><div className="flex items-center gap-3 select-none"><div className="transform scale-150"><Icons.Logo /></div><span className="text-5xl font-black font-tech tracking-tighter">CLICK<span className="text-cyan-400">.IA</span></span></div><div className="hidden md:block w-px h-12 bg-gradient-to-b from-transparent via-white/30 to-transparent"></div><div className="inline-flex items-center gap-3 px-5 py-2 glass rounded-full border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(6,182,212,0.15)]"><Icons.Google /> {t.powered}</div></div><h1 className="text-4xl md:text-7xl font-black font-tech mb-8 leading-none tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">{t.hero_mk} <br/><span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-700">{t.hero_auto}</span></h1><div className="flex flex-wrap justify-center gap-4 mb-12 text-xs font-bold uppercase tracking-widest text-gray-300">{t.bullets.map(b => (<div key={b} className="flex items-center gap-2 bg-white/5 px-3 py-1 rounded border border-white/10"><Icons.Check /> {b}</div>))}</div><div className="w-full max-w-4xl h-96 mb-12 shadow-[0_0_50px_rgba(6,182,212,0.2)] rounded-2xl overflow-hidden border border-white/20"><ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} /></div><div className="flex flex-col items-center gap-3 mb-12"><button onClick={() => {playSound('click'); setView('setup')}} className="tech-btn px-16 py-6 text-xl rounded-full flex items-center gap-4 mx-auto shadow-[0_0_50px_rgba(6,182,212,0.4)]">{t.cta_trial}</button><div className="flex items-center gap-2 text-cyan-400 font-bold text-sm uppercase tracking-widest animate-pulse"><Icons.Zap /> {t.cta_posts}</div></div><div className="w-full max-w-4xl glass p-8 rounded-3xl border border-white/10 mb-20 flex flex-col md:flex-row items-center gap-8 text-left relative overflow-hidden"><div className="absolute -top-20 -right-20 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl"></div><div className="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-white/10 shadow-2xl flex-shrink-0 overflow-hidden relative z-10"><img src={CREATOR_IMAGE} className="w-full h-full object-cover" /></div><div className="flex-1 relative z-10"><div className="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2">{t.creator_title}</div><h3 className="text-3xl font-black font-tech mb-1">RODDY SMITH</h3><p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{t.creator_role}</p><p className="text-sm text-gray-300 leading-relaxed mb-4 italic border-l-2 border-cyan-500 pl-4">"{t.creator_bio}"</p><p className="text-xs text-gray-400 leading-relaxed">{t.creator_mission}</p></div></div><div className="floating-credit">{t.credit_text}</div></div></div>;
             if (view === 'setup') return <div className="min-h-screen flex items-center justify-center p-6"><div className="w-full max-w-md glass p-10 rounded-2xl text-center relative overflow-hidden"><button onClick={() => changeView('landing')} className="absolute top-4 right-4 text-gray-500 hover:text-white"><Icons.X /></button><h2 className="text-3xl font-bold font-tech mb-2">{t.setup_title}</h2><p className="text-gray-400 text-sm mb-8">{t.setup_desc}</p>{user ? (<div className="text-center mb-6"><p className="text-green-400 font-bold mb-4">¡Hola, {user.name}!</p><button onClick={() => changeView('upload')} className="w-full py-4 bg-white text-black font-black uppercase tracking-widest hover:bg-cyan-400 transition-colors rounded-lg mb-4">CREAR CAMPAÑA</button><div className="text-left mt-6"><h4 className="text-xs font-bold text-gray-400 mb-2">{t.cloud_welcome}</h4><div className="h-40 overflow-y-auto custom-scroll bg-black/20 rounded-lg p-2">{userCloud.length === 0 ? <p className="text-gray-500 text-xs">{t.cloud_desc}</p> : userCloud.map((item, i) => (<div key={i} onClick={() => restoreCampaign(item)} className="cloud-item flex items-center gap-2 mb-2 p-2 bg-white/5 rounded border border-white/10"><img src={item.image} className="w-10 h-10 rounded object-cover" /><div className="overflow-hidden"><p className="text-[10px] text-gray-300 truncate">{item.date}</p><p className="text-[9px] text-gray-500 truncate w-40">Campaña #{i+1}</p></div></div>))}</div></div></div>) : (<div className="space-y-4 auth-form-container"><div><label className="auth-label">{t.lbl_email}</label><input className="glass-input" placeholder={t.ph_email} value={inputEmail} onChange={e => setInputEmail(e.target.value)} /></div><div><label className="auth-label">{t.lbl_api}</label><div className="relative"><input className="glass-input pl-10" type="password" placeholder={t.ph_api} value={inputApiKey} onChange={e => setInputApiKey(e.target.value)} /><div className="absolute left-3 top-3.5 text-cyan-500"><Icons.Key /></div></div></div><button onClick={handleLogin} className="w-full py-4 bg-white text-black font-black uppercase tracking-widest hover:bg-cyan-400 transition-colors rounded-lg flex items-center justify-center gap-2 mt-4">{t.setup_btn} <Icons.Google /></button></div>)}<div className="embedded-credit">{t.credit_text}</div></div></div>;
             if (view === 'upload') return <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative"><HeaderInternal /><div className="w-full max-w-4xl glass p-12 rounded-3xl text-center border border-white/10 mt-20"><div className="absolute top-8 left-8 cursor-pointer text-gray-500 hover:text-white" onClick={() => setView('landing')}><Icons.ChevronLeft /></div><h2 className="text-3xl font-bold font-tech mb-8 uppercase">{t.upload_title}</h2><div className="grid md:grid-cols-2 gap-8 mb-10"><div onClick={() => fileInputProduct.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.image ? 'border-cyan-500 bg-cyan-900/10' : 'border-white/20 hover:border-cyan-500'}`}>{formData.image ? (<><img src={formData.image} className="w-full h-full object-contain p-4" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Upload /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_prod}</span></>}<input type="file" ref={fileInputProduct} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'image')} /></div><div onClick={() => fileInputLogo.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.logo ? 'border-purple-500 bg-purple-900/10' : 'border-white/20 hover:border-purple-500'}`}>{formData.logo ? (<><img src={formData.logo} className="w-full h-full object-contain p-8" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Zap /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_logo}</span></>}<input type="file" ref={fileInputLogo} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'logo')} /></div></div><button onClick={() => { if(!formData.image) return alert("Sube producto"); playSound('click'); changeView('q1'); }} className={`tech-btn w-full py-5 text-xl uppercase tracking-widest ${!formData.image && 'opacity-50 cursor-not-allowed'}`}>{t.next}</button><div className="embedded-credit">{t.credit_text}</div></div></div>;
             if (view === 'q1') return <QuestionScreen title={t.q1_title} color="text-cyan-400" nextView="q2" prevView="upload" onNext={() => changeView('q2')} onPrev={() => changeView('upload')} credits={credits} setView={setView} tLang={t}><input className="quiz-input" placeholder={t.q1_ph} autoFocus value={formData.target} onChange={e => setFormData({...formData, target: e.target.value})} /></QuestionScreen>;
@@ -699,102 +733,24 @@
                     
                     <div className="w-full max-w-7xl grid md:grid-cols-2 gap-10 glass p-8 rounded-3xl border border-white/20">
                         <div className="space-y-4 relative">
-                            {/* ANTES Y DESPUÉS COMPARATOR */}
                             <div className="relative group rounded-2xl overflow-hidden border border-white/20 shadow-2xl mx-auto transition-all duration-500 h-[500px]">
-                                <ComparisonSlider 
-                                    beforeImage={formData.image || UGLY_BURGER_IMAGE} 
-                                    afterImage={resultImage} 
-                                    tLang={t} 
-                                />
+                                <ComparisonSlider beforeImage={formData.image || UGLY_BURGER_IMAGE} afterImage={resultImage} tLang={t} />
                             </div>
-                            
                             <div className="flex gap-2">
-                                <button onClick={handleDownloadImage} className="flex-1 py-3 bg-cyan-500 text-black text-xs font-bold uppercase rounded-xl hover:bg-cyan-400 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20">
-                                    <Icons.Download /> {t.download}
-                                </button>
-                                <button onClick={() => setIsEditing(true)} className="flex-1 py-3 border border-white/20 text-white text-xs font-bold uppercase rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
-                                    {t.edit_design}
-                                </button>
+                                <button onClick={handleDownloadImage} className="flex-1 py-3 bg-cyan-500 text-black text-xs font-bold uppercase rounded-xl hover:bg-cyan-400 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20"><Icons.Download /> {t.download}</button>
+                                <button onClick={() => setIsEditing(true)} className="flex-1 py-3 border border-white/20 text-white text-xs font-bold uppercase rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center gap-2">{t.edit_design}</button>
                             </div>
                         </div>
-                        
                         <div className="flex flex-col space-y-6">
-                            {/* VIRAL SCORE */}
-                            <div className="bg-black/40 backdrop-blur-md p-4 rounded-xl border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.1)] w-full animate-pulse-fast flex flex-col justify-center">
-                                <div className="flex items-center justify-between mb-2 px-2">
-                                    <div className="flex items-center gap-2">
-                                        <Icons.Zap />
-                                        <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest">{t.viral_score}</span>
-                                    </div>
-                                    <div className="text-2xl font-black font-tech text-white">9.8<span className="text-sm text-gray-500">/10</span></div>
-                                </div>
-                                <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden mb-2">
-                                    <div className="h-full bg-gradient-to-r from-cyan-400 to-blue-600 w-[98%]"></div>
-                                </div>
-                                <p className="text-[10px] text-gray-400 text-center">{t.viral_desc}</p>
-                            </div>
-
-                            {/* CRONOGRAMA IA */}
-                            <div className="glass p-6 rounded-2xl border-l-4 border-blue-500">
-                                <h3 className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                    <Icons.Clock /> {t.schedule}
-                                </h3>
-                                <div className="grid grid-cols-3 gap-2">
-                                    {BEST_TIMES.map((bt, i) => (
-                                        <div key={i} className="bg-white/5 p-3 rounded-lg text-center border border-white/5 hover:bg-white/10 transition-colors">
-                                            <div className="flex justify-center mb-2 text-gray-300 scale-75">{bt.icon}</div>
-                                            <div className="text-lg font-black font-tech">{bt.time}</div>
-                                            <div className="text-[10px] text-gray-500 uppercase">{bt.day}</div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* COPY VIRAL GENERADO */}
-                            <div className="glass p-6 rounded-2xl border-l-4 border-purple-500 relative">
-                                <div className="flex justify-between items-center mb-4">
-                                    <h3 className="text-xs font-bold text-purple-400 uppercase tracking-widest flex items-center gap-2"><Icons.Zap /> {t.copy_viral}</h3>
-                                    <button onClick={handleCopyText} className="text-[10px] font-bold text-gray-400 hover:text-white flex items-center gap-1 uppercase border border-white/20 px-2 py-1 rounded transition-colors">
-                                        <Icons.Copy /> {t.copy_clipboard}
-                                    </button>
-                                </div>
-                                <div className="copy-area custom-scroll">
-                                    {generatedCopy}
-                                </div>
-                            </div>
-
-                            {/* MÚSICA SUGERIDA */}
-                            <div className="glass p-6 rounded-2xl border-l-4 border-green-500">
-                                <h3 className="text-xs font-bold text-green-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                    <Icons.Music /> {t.trends}
-                                </h3>
-                                <div className="space-y-3">
-                                    {suggestedMusic.map((track, i) => (
-                                        <div key={i} className="bg-white/5 p-3 rounded-lg border border-white/10 flex justify-between items-center">
-                                            <p className="text-xs font-bold text-white">{track.title} <span className="text-gray-500">- {track.artist}</span></p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className="flex gap-4 mt-auto">
-                                <button onClick={handleNewGeneration} className="w-full py-4 border border-white/20 rounded-xl text-xs font-bold uppercase hover:bg-white hover:text-black transition-colors">{t.new_btn}</button>
-                            </div>
+                            <div className="bg-black/40 backdrop-blur-md p-4 rounded-xl border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.1)] w-full animate-pulse-fast flex flex-col justify-center"><div className="flex items-center justify-between mb-2 px-2"><div className="flex items-center gap-2"><Icons.Zap /><span className="text-xs font-bold text-cyan-400 uppercase tracking-widest">{t.viral_score}</span></div><div className="text-2xl font-black font-tech text-white">9.8<span className="text-sm text-gray-500">/10</span></div></div><div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden mb-2"><div className="h-full bg-gradient-to-r from-cyan-400 to-blue-600 w-[98%]"></div></div><p className="text-[10px] text-gray-400 text-center">{t.viral_desc}</p></div>
+                            <div className="glass p-6 rounded-2xl border-l-4 border-blue-500"><h3 className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2"><Icons.Clock /> {t.schedule}</h3><div className="grid grid-cols-3 gap-2">{BEST_TIMES.map((bt, i) => (<div key={i} className="bg-white/5 p-3 rounded-lg text-center border border-white/5 hover:bg-white/10 transition-colors"><div className="flex justify-center mb-2 text-gray-300 scale-75">{bt.icon}</div><div className="text-lg font-black font-tech">{bt.time}</div><div className="text-[10px] text-gray-500 uppercase">{bt.day}</div></div>))}</div></div>
+                            <div className="glass p-6 rounded-2xl border-l-4 border-purple-500 relative"><div className="flex justify-between items-center mb-4"><h3 className="text-xs font-bold text-purple-400 uppercase tracking-widest flex items-center gap-2"><Icons.Zap /> {t.copy_viral}</h3><button onClick={handleCopyText} className="text-[10px] font-bold text-gray-400 hover:text-white flex items-center gap-1 uppercase border border-white/20 px-2 py-1 rounded transition-colors"><Icons.Copy /> {t.copy_clipboard}</button></div><div className="copy-area custom-scroll">{generatedCopy}</div></div>
+                            <div className="glass p-6 rounded-2xl border-l-4 border-green-500"><h3 className="text-xs font-bold text-green-400 uppercase tracking-widest mb-4 flex items-center gap-2"><Icons.Music /> {t.trends}</h3><div className="space-y-3">{REAL_MUSIC_IDS.map((track, i) => (<div key={i} className="bg-white/5 p-3 rounded-lg border border-white/10 flex justify-between items-center"><p className="text-xs font-bold text-white">{track.title} <span className="text-gray-500">- {track.id}</span></p></div>))}</div></div>
+                            <div className="flex gap-4 mt-auto"><button onClick={handleNewGeneration} className="w-full py-4 border border-white/20 rounded-xl text-xs font-bold uppercase hover:bg-white hover:text-black transition-colors">{t.new_btn}</button></div>
                         </div>
                     </div>
                     <div className="floating-credit">{t.credit_text}</div>
-
-                    {/* MODAL DEL EDITOR */}
-                    {isEditing && (
-                        <DesignEditor 
-                            image={resultImage} 
-                            logo={formData.logo} 
-                            initialText={designState} 
-                            onSave={saveDesign} 
-                            onClose={() => setIsEditing(false)} 
-                            tLang={t}
-                        />
-                    )}
+                    {isEditing && <DesignEditor image={resultImage} logo={formData.logo} initialText={designState} onSave={saveDesign} onClose={() => setIsEditing(false)} tLang={t} />}
                 </div>
             );
 
