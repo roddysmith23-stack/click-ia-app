@@ -747,7 +747,7 @@
                         await new Promise(r => setTimeout(r, 600)); 
                     }
 
-                    // 2. CONSTRUCCIÓN DEL PROMPT MADRE
+                    // 2. CONSTRUCCIÓN DEL PROMPT MADRE (MODIFICADO CON TOKEN STRICT STRUCTURE)
                     const promptSystem = `
             ### ROL Y OBJETIVO PRINCIPAL ###
             Eres un EQUIPO DE ÉLITE MUNDIAL en Marketing Digital. Tu objetivo es transformar datos crudos en una CAMPAÑA DE MARKETING VISUAL Y TEXTUAL DE IMPACTO MASIVO.
@@ -769,7 +769,7 @@
             ### INSTRUCCIONES DE OUTPUT (JSON ESTRICTO) ###
             Devuelve SOLO un objeto JSON (sin markdown, sin \`\`\`) con estas 4 claves:
 
-            1. "prompt_imagen_comercial": Escribe un prompt técnico EXTREMADAMENTE DETALLADO (en inglés para mejor calidad de imagen) para generar una imagen 8K, hiperrealista, estilo cine. Instruye cómo integrar el producto y el logo.
+            1. "prompt_imagen_comercial": Genera un string de SOLO PALABRAS CLAVE en Inglés, separadas por comas. NO uses frases. Sigue esta estructura estricta: [SUJETO PRINCIPAL DEL PRODUCTO] + [ESTILO VISUAL ELEGIDO] + [TIPO DE ILUMINACIÓN] + "8k, award winning photography, macro lens, hyper-detailed, unreal engine 5 render, commercial lighting, white balance perfect". Ejemplo: "Juicy gourmet burger, melting cheese, steam rising, cinematic lighting, cyberpunk colors, 8k, macro shot, hyper-realistic".
             2. "copy_viral": Texto persuasivo para redes, con emojis, hashtags y el link de WhatsApp formateado (https://wa.me/...).
             3. "viral_score": Un número (ej: 9.8) del potencial de viralidad.
             4. "cronograma_ia": Array con 3 sugerencias de horario optimizadas para la ciudad del usuario.
