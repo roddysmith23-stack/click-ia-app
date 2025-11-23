@@ -2,13 +2,17 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CLICK IA - The Future of Marketing</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FUENTES -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=Chakra+Petch:wght@400;600;700&family=Oswald:wght@500&family=Playfair+Display:wght@600&family=Montserrat:wght@700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- LIBRERÍAS CORE -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- FABRIC.JS PARA EL NANO-STUDIO (MOTOR DE CAPAS) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     
     <style>
         /* --- ESTÉTICA FINAL --- */
@@ -25,42 +29,17 @@
             background: rgba(15, 15, 20, 0.85); backdrop-filter: blur(20px); 
             border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
         }
-        .glass-panel {
-            background: rgba(10, 10, 12, 0.98); 
-            border: 1px solid rgba(255,255,255,0.1);
-        }
         .glass-card { 
             background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); 
             transition: all 0.3s ease; cursor: pointer; overflow: hidden; position: relative; border-radius: 16px;
         }
-        .glass-card:hover { 
-            border-color: #06b6d4; transform: translateY(-5px); 
-            box-shadow: 0 10px 40px rgba(6, 182, 212, 0.2);
-        }
-        .glass-card.selected {
-            border-color: #06b6d4; background: rgba(6, 182, 212, 0.15);
-            box-shadow: 0 0 0 2px #06b6d4; transform: scale(1.02);
-        }
+        .glass-card:hover { border-color: #06b6d4; transform: translateY(-5px); box-shadow: 0 10px 40px rgba(6, 182, 212, 0.2); }
+        .glass-card.selected { border-color: #06b6d4; background: rgba(6, 182, 212, 0.15); box-shadow: 0 0 0 2px #06b6d4; transform: scale(1.02); }
         
         .card-label {
             position: absolute; bottom: 0; left: 0; width: 100%;
             background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.6), transparent); 
-            padding: 20px 10px 10px 10px; text-align: center;
-            font-family: 'Chakra Petch'; text-transform: uppercase;
-        }
-
-        .scan-line {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, transparent, rgba(6, 182, 212, 0.3), #06b6d4, rgba(6, 182, 212, 0.3), transparent);
-            background-size: 100% 20%;
-            background-repeat: no-repeat;
-            animation: scan 2.5s linear infinite;
-            pointer-events: none;
-            z-index: 20;
-        }
-        @keyframes scan {
-            0% { background-position: 0% -20%; }
-            100% { background-position: 0% 120%; }
+            padding: 20px 10px 10px 10px; text-align: center; font-family: 'Chakra Petch'; text-transform: uppercase;
         }
 
         .tech-btn {
@@ -73,7 +52,7 @@
         .editor-btn {
             background: #1a1a1a; color: white; font-weight: 600; font-family: 'Chakra Petch';
             border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;
-            transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 10px;
         }
         .editor-btn:hover { border-color: #06b6d4; background: rgba(6, 182, 212, 0.1); }
 
@@ -86,90 +65,27 @@
 
         .glass-input {
             background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white; font-family: 'Chakra Petch';
-            padding: 12px; width: 100%; border-radius: 8px;
+            color: white; font-family: 'Chakra Petch'; padding: 12px; width: 100%; border-radius: 8px;
         }
         .glass-input:focus { outline: none; border-color: #06b6d4; background: rgba(255, 255, 255, 0.15); }
 
-        .comparison-container { position: relative; width: 100%; height: 300px; border-radius: 16px; overflow: hidden; cursor: ew-resize; border: 1px solid rgba(255,255,255,0.2); }
-        .comparison-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-        .comparison-handle { position: absolute; top: 0; bottom: 0; width: 2px; background: white; z-index: 10; display: flex; align-items: center; justify-content: center; }
-        .handle-circle { width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: black; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-
-        .format-container { transition: all 0.5s ease-in-out; overflow: hidden; position: relative; margin: 0 auto; border-radius: 16px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
-        .aspect-square { aspect-ratio: 1/1; max-width: 450px; }
-        .aspect-story { aspect-ratio: 9/16; max-width: 300px; }
-        .aspect-video { aspect-ratio: 16/9; max-width: 100%; }
-
-        .editable-text {
-            position: absolute; cursor: text; text-align: center; width: 90%; left: 5%;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.9); transition: all 0.2s;
-            border: 1px solid transparent; background: transparent; font-family: 'Chakra Petch';
-        }
-        .editable-text:hover { border-color: rgba(255,255,255,0.3); background: rgba(0,0,0,0.2); }
-        .editable-text:focus { outline: none; border-color: #06b6d4; background: rgba(0,0,0,0.5); }
-
-        .color-check { width: 40px; height: 40px; border-radius: 10px; cursor: pointer; border: 2px solid rgba(255,255,255,0.1); transition: transform 0.2s; position: relative;}
-        .color-check.selected { border-color: white; transform: scale(1.15); box-shadow: 0 0 15px rgba(255,255,255,0.3); }
-        .color-check.selected::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: black; font-weight: bold; font-size: 12px; filter: drop-shadow(0 0 2px white); }
-
-        .social-btn {
-            display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px;
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px; color: #ccc; font-size: 0.75rem; font-weight: bold; letter-spacing: 0.1em;
-            transition: all 0.2s; cursor: pointer;
-        }
-        .social-btn:hover { background: rgba(255,255,255,0.1); color: white; }
-        .social-btn.connected { background: rgba(6, 182, 212, 0.2); border-color: #06b6d4; color: #06b6d4; }
-
-        .embedded-credit { 
-            text-align: center; font-size: 9px; text-transform: uppercase; letter-spacing: 0.2em; 
-            color: rgba(255,255,255,0.3); font-family: 'Chakra Petch'; 
-            margin-top: 20px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); width: 100%;
-        }
-        
-        .floating-credit {
-            position: fixed; bottom: 30px; left: 0; width: 100%;
-            text-align: center; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; 
-            color: rgba(255,255,255,0.4); font-family: 'Chakra Petch'; 
-            z-index: 50; pointer-events: none; padding: 0 20px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-        }
-
-        .mute-btn { position: fixed; bottom: 20px; right: 20px; z-index: 60; background: rgba(0,0,0,0.8); border: 1px solid #06b6d4; color: #06b6d4; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        
+        /* Utilidades */
         .clip-path-slanted { clip-path: polygon(10% 0, 100% 0, 100% 80%, 90% 100%, 0 100%, 0 20%); }
-        
-        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #06b6d4; cursor: pointer; margin-top: -6px; }
-        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: rgba(255,255,255,0.2); border-radius: 2px; }
-        
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
-
-        .copy-area {
-            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px; padding: 15px; font-family: 'Inter', sans-serif;
-            font-size: 14px; color: #e5e7eb; white-space: pre-wrap; max-height: 200px; overflow-y: auto;
-        }
-        .copy-area:focus { outline: none; border-color: #06b6d4; }
-
-        .yt-embed-container {
-            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin-bottom: 10px;
-        }
-        .yt-embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         
-        .auth-form-container { width: 100%; text-align: left; margin-bottom: 20px; }
-        .auth-label { display: block; font-size: 10px; font-weight: bold; color: #06b6d4; margin-bottom: 6px; letter-spacing: 0.1em; text-transform: uppercase; }
-        
-        .cloud-item { cursor: pointer; transition: all 0.2s; }
-        .cloud-item:hover { background: rgba(255,255,255,0.1); border-color: #06b6d4; }
-
-        /* Animation for fade-in */
         .fade-enter { animation: fadeIn 0.5s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .color-check { width: 40px; height: 40px; border-radius: 10px; cursor: pointer; border: 2px solid rgba(255,255,255,0.1); transition: transform 0.2s; position: relative;}
+        .color-check.selected { border-color: white; transform: scale(1.15); box-shadow: 0 0 15px rgba(255,255,255,0.3); }
+        
+        /* Estilos específicos para el canvas container */
+        .canvas-wrapper {
+            width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;
+            background-image: radial-gradient(#333 1px, transparent 1px); background-size: 20px 20px;
+        }
     </style>
 </head>
 <body>
@@ -188,13 +104,13 @@
     <script type="text/babel">
         const { useState, useEffect, useRef, useCallback } = React;
 
-        // --- CONSTANTES Y DATOS ---
+        // --- CONSTANTES ---
         const MAGIC_RESULT_IMAGE_DEFAULT = "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2865"; 
         const UGLY_BURGER_IMAGE = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=2799"; 
         const CREATOR_IMAGE = "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop"; 
         const INITIAL_CREDITS = 3;
 
-        // --- ICONOS SVG ---
+        // --- ICONOS ---
         const Icons = {
             Logo: () => <svg width="32" height="32" viewBox="0 0 100 100" fill="none"><path d="M50 10L90 80C90 80 70 70 50 70C30 70 10 80 10 80L50 10Z" fill="white"/></svg>,
             Google: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"/></svg>,
@@ -297,7 +213,7 @@
                 creator_mission: "Nuestra misión es romper las barreras de entrada. CLICK IA nació para cambiar el mundo, empoderando a cada emprendedor con la tecnología que antes solo tenían los gigantes.",
                 download: "DESCARGAR IMAGEN", copy_clipboard: "COPIAR TEXTO",
                 cloud_welcome: "BIENVENIDO A TU NUBE", cloud_desc: "Aquí guardamos todas tus campañas.",
-                edit_design: "🛠️ ABRIR ESTUDIO DE DISEÑO", editor_title: "NANO-STUDIO", save_design: "GUARDAR DISEÑO", close_editor: "CERRAR",
+                edit_design: "🛠️ ABRIR NANO-STUDIO", editor_title: "NANO-STUDIO", save_design: "GUARDAR DISEÑO", close_editor: "CERRAR",
                 edit_text_1: "Texto Principal", edit_text_2: "Subtítulo", edit_size: "Tamaño Logo",
                 default_promo: "Por tiempo limitado",
                 copy_headline: "¿Listo para el siguiente nivel?", copy_body_1: "No es solo", copy_body_2: "Es una experiencia.", 
@@ -335,7 +251,7 @@
                 creator_title: "MEET THE CREATOR", creator_role: "CO-FOUNDER & CSIO", creator_bio: "Strategic visionary mastering AI and algorithms. Roddy Smith isn't just predicting the future of marketing, he is building it.", creator_mission: "Our mission is to shatter entry barriers. CLICK IA was born to change the world, empowering every entrepreneur with tech once reserved for giants.",
                 download: "DOWNLOAD IMAGE", copy_clipboard: "COPY TEXT",
                 cloud_welcome: "WELCOME TO YOUR CLOUD", cloud_desc: "All your campaigns are safe here.",
-                edit_design: "🛠️ OPEN DESIGN STUDIO", editor_title: "NANO-STUDIO", save_design: "SAVE DESIGN", close_editor: "CLOSE",
+                edit_design: "🛠️ OPEN NANO-STUDIO", editor_title: "NANO-STUDIO", save_design: "SAVE DESIGN", close_editor: "CLOSE",
                 edit_text_1: "Main Text", edit_text_2: "Subtitle", edit_size: "Logo Size",
                 default_promo: "Limited time only",
                 copy_headline: "Ready for the next level?", copy_body_1: "It's not just", copy_body_2: "It's an experience.", 
@@ -406,12 +322,12 @@
                 schedule: "Calendrier IA", copy_viral: "Copy Viral", star_text: "TEXTE STAR ★",
                 trends: "Tendances Détectées", publish: "PUBLIER MAINTENANT", new_btn: "NOUVEAU", ready: "PRÊT",
                 credits: "CRÉDITS", color_n: "NEUTRES", color_nu: "NUDE", color_p: "PRIMAIRES", color_s: "SECONDAIRES", color_t: "TERTIAIRES", color_q: "QUATERNAIRES",
-                loading_steps: ["RECHERCHE WEB...", "ANALYSE TENDANCES...", "STRUCTURATION STRATÉGIE...", "GÉNÉRATION IMAGE 8K...", "REDACTANDO COPY VIRAL..."],
+                loading_steps: ["RECHERCHE WEB...", "ANALYSE TENDANCES...", "STRUCTURATION STRATÉGIE...", "GÉNÉRATION IMAGE 8K...", "RÉDACTION COPY VIRAL..."],
                 credit_text: '"La créativité, c\'est l\'intelligence qui s\'amuse." - Albert Einstein',
                 creator_title: "RENCONTREZ LE CRÉATEUR", creator_role: "CO-FONDATEUR & CSIO", creator_bio: "Visionnaire stratégique maîtrisant l'IA et les algorithmes. Roddy Smith ne se contente pas de prédire l'avenir du marketing, il le construit.", creator_mission: "Notre mission est de briser les barrières. CLICK IA est né pour changer le monde, en donnant à chaque entrepreneur la technologie autrefois réservée aux géants.",
                 download: "TÉLÉCHARGER IMAGE", copy_clipboard: "COPIER TEXTE",
                 cloud_welcome: "BIENVENUE SUR VOTRE CLOUD", cloud_desc: "Toutes vos campagnes sont ici.",
-                edit_design: "🛠️ OUVRIR STUDIO DE DESIGN", editor_title: "NANO-STUDIO", save_design: "SAUVEGARDER", close_editor: "FERMER",
+                edit_design: "🛠️ OUVRIR NANO-STUDIO", editor_title: "NANO-STUDIO", save_design: "SAUVEGARDER", close_editor: "FERMER",
                 edit_text_1: "Texte Principal", edit_text_2: "Sous-titre", edit_size: "Taille Logo",
                 default_promo: "Durée limitée",
                 copy_headline: "Prêt pour le niveau supérieur ?", copy_body_1: "Ce n'est pas juste", copy_body_2: "C'est une expérience.", 
@@ -485,157 +401,223 @@
             </div>
         );
 
-        const DesignEditor = ({ image, logo, initialText, onSave, onClose, tLang }) => {
-            const canvasRef = useRef(null);
-            const [elements, setElements] = useState([]);
-            const [selectedId, setSelectedId] = useState(null);
-            const [dragging, setDragging] = useState(false);
-            const [loading, setLoading] = useState(true);
-
-            useEffect(() => {
-                if (!image) return;
-                const img = new Image();
-                img.crossOrigin = "anonymous";
-                img.src = image;
-                img.onload = () => {
-                    setLoading(false);
-                    if(canvasRef.current) {
-                        const ctx = canvasRef.current.getContext('2d');
-                        const ratio = img.height / img.width;
-                        canvasRef.current.width = 800;
-                        canvasRef.current.height = 800 * ratio;
-                        drawCanvas();
-                    }
-                };
-                if(elements.length === 0) {
-                    setElements([
-                         { id: 1, type: 'text', content: initialText.top, x: 50, y: 100, size: 60, color: initialText.colorTop, font: 'Chakra Petch' },
-                         { id: 2, type: 'text', content: initialText.bottom, x: 50, y: 700, size: 40, color: initialText.colorBot, font: 'Chakra Petch' }
-                    ]);
-                }
-            }, [image]);
-
-            const drawCanvas = useCallback(() => {
-                const canvas = canvasRef.current;
-                if (!canvas) return;
-                const ctx = canvas.getContext('2d');
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                const bg = new Image();
-                bg.crossOrigin = "anonymous";
-                bg.src = image;
-                if (bg.complete) ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
-
-                elements.forEach(el => {
-                    if (el.type === 'text') {
-                        ctx.font = `bold ${el.size}px "${el.font}"`;
-                        ctx.fillStyle = el.color;
-                        ctx.fillText(el.content, el.x, el.y);
-                        if (el.id === selectedId) {
-                            ctx.strokeStyle = '#06b6d4'; ctx.lineWidth = 2;
-                            ctx.strokeRect(el.x - 5, el.y - el.size, ctx.measureText(el.content).width + 10, el.size + 10);
-                        }
-                    } else if (el.type === 'image') {
-                        const img = new Image();
-                        img.src = el.content;
-                        if (img.complete) ctx.drawImage(img, el.x, el.y, el.size, el.size);
-                        if (el.id === selectedId) {
-                            ctx.strokeStyle = '#06b6d4'; ctx.lineWidth = 2;
-                            ctx.strokeRect(el.x, el.y, el.size, el.size);
-                        }
-                    }
-                });
-            }, [image, elements, selectedId]);
-
-            useEffect(() => { if (!loading) drawCanvas(); }, [drawCanvas, loading, elements]);
-
-            const addText = () => setElements([...elements, { id: Date.now(), type: 'text', content: 'NUEVO TEXTO', x: 100, y: 300, size: 50, color: '#FFFFFF', font: 'Chakra Petch' }]);
-            const handleImageUpload = (e) => {
-                const file = e.target.files[0];
-                if(file) {
-                    const reader = new FileReader();
-                    reader.onload = (f) => {
-                        const img = new Image();
-                        img.onload = () => setElements([...elements, { id: Date.now(), type: 'image', content: f.target.result, x: 200, y: 200, size: 200 }]);
-                        img.src = f.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
-            };
-            const handleMouseDown = (e) => {
-                const rect = canvasRef.current.getBoundingClientRect();
-                const scaleX = canvasRef.current.width / rect.width;
-                const scaleY = canvasRef.current.height / rect.height;
-                const x = (e.clientX - rect.left) * scaleX;
-                const y = (e.clientY - rect.top) * scaleY;
-                const clicked = elements.slice().reverse().find(el => {
-                    if(el.type === 'text') return Math.abs(el.x - x) < 150 && Math.abs(el.y - y) < 50; 
-                    return Math.abs(el.x - x) < el.size && Math.abs(el.y - y) < el.size;
-                });
-                if (clicked) { setSelectedId(clicked.id); setDragging(true); } else { setSelectedId(null); }
-            };
-            const handleMouseMove = (e) => {
-                if (dragging && selectedId) {
-                    const rect = canvasRef.current.getBoundingClientRect();
-                    const scaleX = canvasRef.current.width / rect.width;
-                    const scaleY = canvasRef.current.height / rect.height;
-                    const x = (e.clientX - rect.left) * scaleX;
-                    const y = (e.clientY - rect.top) * scaleY;
-                    setElements(prev => prev.map(el => el.id === selectedId ? { ...el, x, y } : el));
-                }
-            };
-            const updateSelected = (key, value) => setElements(prev => prev.map(el => el.id === selectedId ? { ...el, [key]: value } : el));
-            const deleteSelected = () => { setElements(prev => prev.filter(el => el.id !== selectedId)); setSelectedId(null); };
+        // --- NANO-STUDIO 2.0 (FABRIC.JS REWRITE) ---
+        const FabricEditor = ({ image, logo, initialText, onSave, onClose, tLang }) => {
+            const canvasEl = useRef(null);
+            const [fabricCanvas, setFabricCanvas] = useState(null);
+            const [selectedObj, setSelectedObj] = useState(null);
             
-            const download = () => {
+            // Inicializar Canvas
+            useEffect(() => {
+                const canvas = new fabric.Canvas(canvasEl.current, {
+                    width: 1080,
+                    height: 1080,
+                    backgroundColor: '#000000',
+                    preserveObjectStacking: true
+                });
+                
+                setFabricCanvas(canvas);
+
+                // Event Listener para selección
+                canvas.on('selection:created', (e) => setSelectedObj(e.selected[0]));
+                canvas.on('selection:updated', (e) => setSelectedObj(e.selected[0]));
+                canvas.on('selection:cleared', () => setSelectedObj(null));
+
+                // Cargar Imagen de Fondo (IA)
+                fabric.Image.fromURL(image, (img) => {
+                    img.set({
+                        selectable: false,
+                        evented: false,
+                        originX: 'center',
+                        originY: 'center',
+                        left: canvas.width / 2,
+                        top: canvas.height / 2
+                    });
+                    // Escalar imagen para cubrir canvas (Cover)
+                    const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+                    img.scale(scale);
+                    canvas.add(img);
+                    canvas.sendToBack(img);
+                    
+                    // Añadir Logo Inicialmente (si existe)
+                    if (logo) {
+                        addLogoToCanvas(canvas, logo);
+                    }
+
+                    // Añadir Texto Inicial
+                    const textObj = new fabric.IText(initialText.top || "TU MARCA", {
+                        left: 540, top: 100,
+                        fontFamily: 'Chakra Petch',
+                        fill: '#ffffff',
+                        fontSize: 80,
+                        originX: 'center',
+                        fontWeight: 'bold',
+                        shadow: 'rgba(0,0,0,0.8) 5px 5px 10px'
+                    });
+                    canvas.add(textObj);
+                }, { crossOrigin: 'anonymous' });
+
+                return () => {
+                    canvas.dispose();
+                }
+            }, []);
+
+            // --- FUNCIÓN MAGIA: QUITAR FONDO BLANCO (Pixel Manipulation) ---
+            const removeWhiteBackground = (imgObj) => {
+                // Crear un canvas temporal
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCanvas.width = imgObj.width;
+                tempCanvas.height = imgObj.height;
+                tempCtx.drawImage(imgObj.getElement(), 0, 0);
+                
+                const imgData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+                const data = imgData.data;
+                
+                // Algoritmo simple de umbral de luminosidad
+                for(let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+                    // Si es muy claro/blanco, alfa = 0
+                    if(r > 200 && g > 200 && b > 200) {
+                        data[i + 3] = 0; 
+                    }
+                }
+                
+                tempCtx.putImageData(imgData, 0, 0);
+                
+                // Reemplazar imagen en Fabric
+                const newImg = new fabric.Image(tempCanvas);
+                newImg.set({
+                    left: imgObj.left,
+                    top: imgObj.top,
+                    scaleX: imgObj.scaleX,
+                    scaleY: imgObj.scaleY
+                });
+                
+                fabricCanvas.remove(imgObj);
+                fabricCanvas.add(newImg);
+                fabricCanvas.setActiveObject(newImg);
+                fabricCanvas.renderAll();
+            };
+
+            const addLogoToCanvas = (canvas, logoUrl) => {
+                fabric.Image.fromURL(logoUrl, (img) => {
+                    img.scaleToWidth(200);
+                    img.set({
+                        left: 540,
+                        top: 540,
+                        originX: 'center',
+                        originY: 'center'
+                    });
+                    canvas.add(img);
+                    canvas.setActiveObject(img);
+                }, { crossOrigin: 'anonymous' });
+            };
+
+            const handleAddText = () => {
+                if(!fabricCanvas) return;
+                const text = new fabric.IText('NUEVO TEXTO', {
+                    left: 540, top: 540,
+                    fontFamily: 'Chakra Petch',
+                    fill: '#06b6d4',
+                    fontSize: 60,
+                    originX: 'center'
+                });
+                fabricCanvas.add(text);
+                fabricCanvas.setActiveObject(text);
+            };
+
+            const handleRemoveBg = () => {
+                if (!fabricCanvas || !selectedObj || selectedObj.type === 'i-text') return alert("Selecciona una imagen/logo primero.");
+                removeWhiteBackground(selectedObj);
+            };
+
+            const deleteSelected = () => {
+                if (!fabricCanvas || !selectedObj) return;
+                fabricCanvas.remove(selectedObj);
+                fabricCanvas.discardActiveObject();
+                fabricCanvas.renderAll();
+                setSelectedObj(null);
+            };
+
+            const updateColor = (color) => {
+                if (!selectedObj || !selectedObj.set) return;
+                selectedObj.set('fill', color);
+                fabricCanvas.renderAll();
+            };
+
+            const downloadHD = () => {
+                if (!fabricCanvas) return;
+                // Multiplicador para HD (2x = 2160x2160)
+                const dataURL = fabricCanvas.toDataURL({
+                    format: 'png',
+                    quality: 1,
+                    multiplier: 2 
+                });
                 const link = document.createElement('a');
-                link.download = `CLICK_IA_MASTERPIECE_${Date.now()}.jpg`;
-                link.href = canvasRef.current.toDataURL('image/jpeg', 0.95);
+                link.download = `CLICK_IA_HD_${Date.now()}.png`;
+                link.href = dataURL;
                 link.click();
             };
 
             return (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 fade-enter">
                     <div className="w-full max-w-7xl h-[90vh] flex border border-gray-800 rounded-xl overflow-hidden bg-[#050505]">
-                        <div className="w-72 bg-[#111] border-r border-gray-800 p-6 flex flex-col gap-6">
-                             <h3 className="font-tech text-cyan-400 text-2xl mb-2">{tLang.editor_title}</h3>
+                        
+                        {/* SIDEBAR CONTROLS */}
+                        <div className="w-72 bg-[#111] border-r border-gray-800 p-6 flex flex-col gap-4 overflow-y-auto">
+                             <h3 className="font-tech text-cyan-400 text-xl mb-2 tracking-widest">{tLang.editor_title}</h3>
+                             
                              <div className="grid grid-cols-2 gap-2">
-                                <button onClick={addText} className="editor-btn text-xs flex-col py-3"><Icons.Text /> TEXTO</button>
-                                <label className="editor-btn text-xs flex-col py-3 cursor-pointer"><Icons.Image /> IMAGEN <input type="file" hidden onChange={handleImageUpload} /></label>
+                                <button onClick={handleAddText} className="editor-btn text-xs flex-col py-3"><Icons.Text /> + TEXTO</button>
+                                <button onClick={handleRemoveBg} className="editor-btn text-xs flex-col py-3 text-yellow-400 border-yellow-400/20 hover:bg-yellow-400/10"><Icons.Zap /> NO BG</button>
                              </div>
-                             {selectedId ? (
-                                 <div className="space-y-4 animate-pulse-fast bg-white/5 p-4 rounded-lg">
-                                     <p className="text-[10px] font-bold text-gray-400 uppercase">EDITANDO</p>
-                                     {elements.find(e => e.id === selectedId)?.type === 'text' && (
+
+                             <div className="h-px bg-white/10 my-2"></div>
+
+                             {selectedObj ? (
+                                 <div className="space-y-4 animate-pulse-fast bg-white/5 p-4 rounded-lg border border-white/10">
+                                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">PROPIEDADES</p>
+                                     
+                                     {selectedObj.type === 'i-text' && (
                                          <>
-                                            <input className="glass-input text-xs" value={elements.find(e => e.id === selectedId).content} onChange={e => updateSelected('content', e.target.value)} />
                                             <div className="flex gap-2">
-                                                <input type="color" className="h-8 w-8 bg-transparent cursor-pointer" onChange={e => updateSelected('color', e.target.value)} />
-                                                <input type="range" className="flex-1" min="10" max="200" value={elements.find(e => e.id === selectedId).size} onChange={e => updateSelected('size', e.target.value)} />
+                                                <input type="color" className="h-8 w-8 bg-transparent cursor-pointer rounded overflow-hidden" onChange={(e) => updateColor(e.target.value)} />
+                                                <span className="text-xs text-gray-400 self-center">Color Texto</span>
                                             </div>
-                                            <select className="glass-input text-xs" onChange={e => updateSelected('font', e.target.value)}>
+                                            <select className="glass-input text-xs" onChange={(e) => { selectedObj.set('fontFamily', e.target.value); fabricCanvas.renderAll(); }}>
                                                 <option value="Chakra Petch">Tech (Chakra)</option>
                                                 <option value="Inter">Modern (Inter)</option>
                                                 <option value="Oswald">Impact (Oswald)</option>
                                                 <option value="Playfair Display">Luxury (Serif)</option>
-                                                <option value="Montserrat">Clean (Montserrat)</option>
-                                                <option value="Roboto Mono">Code (Mono)</option>
                                             </select>
                                          </>
                                      )}
-                                     {elements.find(e => e.id === selectedId)?.type === 'image' && (
-                                         <input type="range" min="50" max="800" value={elements.find(e => e.id === selectedId).size} onChange={e => updateSelected('size', e.target.value)} />
-                                     )}
-                                     <button onClick={deleteSelected} className="w-full py-2 bg-red-900/30 text-red-400 rounded text-xs flex items-center justify-center gap-2 hover:bg-red-900/50"><Icons.Trash /> ELIMINAR</button>
+                                     
+                                     <div className="flex flex-col gap-1">
+                                        <label className="text-[9px] text-gray-500">OPACIDAD</label>
+                                        <input type="range" min="0" max="1" step="0.1" defaultValue={selectedObj.opacity} onChange={(e) => { selectedObj.set('opacity', parseFloat(e.target.value)); fabricCanvas.renderAll(); }} />
+                                     </div>
+
+                                     <button onClick={deleteSelected} className="w-full py-2 bg-red-900/30 text-red-400 rounded text-xs flex items-center justify-center gap-2 hover:bg-red-900/50 border border-red-900/50"><Icons.Trash /> ELIMINAR</button>
                                  </div>
-                             ) : <div className="text-center py-10 text-gray-600 text-xs">Selecciona un elemento para editar.</div>}
-                             <div className="mt-auto flex flex-col gap-2">
-                                <button onClick={download} className="tech-btn bg-cyan-500 text-black border-none w-full flex justify-center gap-2"><Icons.Download /> DESCARGAR HD</button>
-                                <button onClick={onClose} className="w-full py-3 border border-gray-700 rounded text-xs hover:bg-white/5">{tLang.close_editor}</button>
+                             ) : <div className="text-center py-10 text-gray-600 text-xs italic">Toca un elemento en el canvas para editarlo.</div>}
+                             
+                             <div className="mt-auto flex flex-col gap-3">
+                                <button onClick={downloadHD} className="tech-btn bg-cyan-500 text-black border-none w-full flex justify-center gap-2 text-xs py-4"><Icons.Download /> DESCARGAR 4K</button>
+                                <button onClick={onClose} className="w-full py-3 border border-gray-700 rounded text-xs hover:bg-white/5 text-gray-400 uppercase tracking-widest">{tLang.close_editor}</button>
                              </div>
                         </div>
-                        <div className="flex-1 bg-[#080808] canvas-container flex items-center justify-center relative overflow-hidden p-10">
-                             {loading ? <div className="text-cyan-500 animate-pulse font-tech text-xl">CARGANDO ESTUDIO...</div> : <canvas ref={canvasRef} className="bg-white shadow-2xl cursor-move max-w-full max-h-full border border-gray-700" onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={() => setDragging(false)} onMouseLeave={() => setDragging(false)} />}
+
+                        {/* CANVAS AREA */}
+                        <div className="flex-1 bg-[#080808] canvas-wrapper relative overflow-hidden p-4">
+                             <div className="relative shadow-2xl border border-gray-700" style={{width: 'fit-content', height: 'fit-content'}}>
+                                 {/* El canvas de Fabric se monta aqui */}
+                                 <canvas ref={canvasEl} /> 
+                             </div>
+                             <div className="absolute bottom-4 right-4 text-[10px] text-gray-500 font-mono pointer-events-none">CANVAS: 1080x1080px</div>
                         </div>
                     </div>
                 </div>
@@ -668,7 +650,7 @@
             const [userCloud, setUserCloud] = useState([]);
             const [isEditing, setIsEditing] = useState(false);
 
-            // --- ESTADO ACTUALIZADO (Con Ciudad y País) ---
+            // --- ESTADO ---
             const initialForm = { 
                 image: null, 
                 logo: null, 
@@ -676,8 +658,8 @@
                 target: '', 
                 company: '', 
                 whatsapp: '',
-                city: '',      // NUEVO
-                country: '',   // NUEVO
+                city: '',
+                country: '',
                 product: { name: '', price: '', promo: '' }, 
                 textOnImage: '', 
                 style: '', 
@@ -719,25 +701,22 @@
             const handleDownloadImage = () => { fetch(resultImage).then(response => response.blob()).then(blob => { const url = window.URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = `CLICK_IA_${Date.now()}.jpg`; document.body.appendChild(link); link.click(); document.body.removeChild(link); window.URL.revokeObjectURL(url); }).catch(e => { window.open(resultImage, '_blank'); }); };
             const saveDesign = (newState) => { setDesignState(newState); setIsEditing(false); playSound('success'); };
             
-            // --- GENERADOR DE IMAGEN (HOTFIX: TRIM & ENCODE) ---
+            // --- GENERADOR DE IMAGEN ---
             const generateImageURL = (prompt) => { 
                 if (!prompt) return MAGIC_RESULT_IMAGE_DEFAULT;
-                // Limpieza crítica: quitar saltos de línea y espacios extra
                 const cleanPrompt = prompt.replace(/(\r\n|\n|\r)/gm, " ").trim();
-                // Codificación para URL (Vital para manejar comas y caracteres especiales)
                 const encodedPrompt = encodeURIComponent(cleanPrompt); 
                 return `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1080&height=1080&nologo=true&seed=${Math.floor(Math.random() * 10000)}`; 
             };
             
-            // --- LLAMADA A GEMINI ---
+            // --- GEMINI API ---
             const callGeminiAPI = async (prompt) => { if (!apiKey) return null; try { const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) }); const data = await response.json(); return data.candidates?.[0]?.content?.parts?.[0]?.text; } catch (error) { console.error("Gemini Error:", error); return null; } };
             
-            // --- FALLBACK COPY ---
             const generateDynamicCopy = () => { const product = formData.product.name || "Producto"; const promo = formData.product.promo || t.default_promo; const contact = formData.whatsapp || "5939999999"; const company = formData.company || "Tu Empresa"; let copy = ""; if (lang === 'ES') { copy = `🚀 **¡${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${promo}\n📍 Disponible en: ${company}\n\n👇 **¡No esperes más!** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; } else { copy = `🚀 **${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${promo}\n📍 Available at: ${company}\n\n👇 **Don't wait!** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; } return copy; };
             
             const restoreCampaign = (item) => { setResultImage(item.image); setGeneratedCopy(item.copy); setFormData(prev => ({...prev, logo: item.logo || null })); setView('result'); };
 
-            // --- NUEVO MOTOR DE INTELIGENCIA ARTIFICIAL (DEBUG & HOTFIX) ---
+            // --- MOTOR IA V2.0 (NO LOGO IN PROMPT) ---
             const runEngine = async () => {
                 if(!formData.style) return alert("Elige un estilo");
                 if(credits <= 0) return alert("¡Te has quedado sin créditos! Por favor recarga para continuar.");
@@ -753,10 +732,10 @@
                         await new Promise(r => setTimeout(r, 600)); 
                     }
 
-                    // 2. CONSTRUCCIÓN DEL PROMPT MADRE (MODIFICADO CON TOKEN STRICT STRUCTURE & JSON)
+                    // PROMPT MADRE REFINADO PARA CAPAS
                     const promptSystem = `
             ### ROL ###
-            Eres un GENERADOR DE JSON PARA API. NO escribas introducciones. NO uses Markdown. Tu salida será parseada directamente por código.
+            Eres un GENERADOR DE JSON PARA API. NO escribas introducciones. NO uses Markdown.
 
             ### INPUT DATA ###
             - Empresa: ${formData.company || "Empresa"}
@@ -770,7 +749,7 @@
             ### OUTPUT STRICT JSON ###
             Devuelve un JSON crudo con estas claves:
             {
-              "prompt_imagen_comercial": "STRING. SOLO palabras clave en Inglés separadas por comas. MÁXIMO 30 palabras. Estructura: [MAIN SUBJECT], [ACTION], [ENVIRONMENT], [LIGHTING], [STYLE KEYWORDS]. Ejemplo: 'Delicious burger, melting cheese, steam, dark background, neon lights, cyberpunk style, 8k render, unreal engine 5'.",
+              "prompt_imagen_comercial": "STRING. SOLO palabras clave en Inglés separadas por comas. MÁXIMO 30 palabras. Estructura: [MAIN SUBJECT], [ACTION], [ENVIRONMENT], [LIGHTING], [STYLE KEYWORDS]. IMPORTANTE: DO NOT INCLUDE TEXT, LOGOS, OR WATERMARKS. GENERATE ONLY THE SCENE. Ejemplo: 'Delicious burger on wooden table, steam rising, dark background, neon lights, cyberpunk style, 8k render, unreal engine 5, clean composition'.",
               "copy_viral": "Texto para redes sociales en español con emojis y hashtags.",
               "viral_score": "Número decimal (ej: 9.5)",
               "cronograma_ia": ["Hora 1", "Hora 2", "Hora 3"]
@@ -784,7 +763,6 @@
                         const rawResponse = await callGeminiAPI(promptSystem);
                         
                         if(rawResponse) {
-                            // LIMPIEZA AGRESIVA DE JSON
                             let cleanJson = rawResponse.replace(/```json/g, '').replace(/```/g, '');
                             const firstBrace = cleanJson.indexOf('{');
                             const lastBrace = cleanJson.lastIndexOf('}');
@@ -794,30 +772,23 @@
 
                             try { 
                                 aiData = JSON.parse(cleanJson); 
-                                // DEBUG
-                                console.log("--- DEBUG START ---");
-                                console.log("PROMPT CRUDO DE GEMINI:", aiData.prompt_imagen_comercial);
-                                console.log("COPY GENERADO:", aiData.copy_viral);
-                                console.log("--- DEBUG END ---");
                             } catch (e) { 
                                 console.error("Error Parseando JSON:", e, "Raw:", rawResponse); 
                             }
                         }
                     }
 
-                    setLoadingText("RENDERIZANDO IMAGEN 8K...");
+                    setLoadingText("RENDERIZANDO ESCENARIO 3D...");
                     setProgress(85);
 
-                    // 4. GENERACIÓN DE IMAGEN
                     const imagePrompt = (aiData && aiData.prompt_imagen_comercial) 
                         ? aiData.prompt_imagen_comercial 
-                        : `${formData.product.name}, ${formData.style}, ${formData.light}, professional photography, 8k, commercial render`;
+                        : `${formData.product.name}, ${formData.style}, ${formData.light}, professional photography, 8k, commercial render, no text, no logo`;
                         
                     const newImageURL = generateImageURL(imagePrompt);
 
                     await new Promise(r => setTimeout(r, 1500));
 
-                    // 5. ACTUALIZAR ESTADO FINAL
                     const finalCopy = aiData ? aiData.copy_viral : generateDynamicCopy();
                     
                     setResultImage(newImageURL); 
@@ -846,27 +817,7 @@
             if (view === 'upload') return <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative"><HeaderInternal /><div className="w-full max-w-4xl glass p-12 rounded-3xl text-center border border-white/10 mt-20"><div className="absolute top-8 left-8 cursor-pointer text-gray-500 hover:text-white" onClick={() => setView('landing')}><Icons.ChevronLeft /></div><h2 className="text-3xl font-bold font-tech mb-8 uppercase">{t.upload_title}</h2><div className="grid md:grid-cols-2 gap-8 mb-10"><div onClick={() => fileInputProduct.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.image ? 'border-cyan-500 bg-cyan-900/10' : 'border-white/20 hover:border-cyan-500'}`}>{formData.image ? (<><img src={formData.image} className="w-full h-full object-contain p-4" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Upload /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_prod}</span></>}<input type="file" ref={fileInputProduct} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'image')} /></div><div onClick={() => fileInputLogo.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.logo ? 'border-purple-500 bg-purple-900/10' : 'border-white/20 hover:border-purple-500'}`}>{formData.logo ? (<><img src={formData.logo} className="w-full h-full object-contain p-8" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Zap /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_logo}</span></>}<input type="file" ref={fileInputLogo} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'logo')} /></div></div><button onClick={() => { if(!formData.image) return alert("Sube producto"); playSound('click'); changeView('q1'); }} className={`tech-btn w-full py-5 text-xl uppercase tracking-widest ${!formData.image && 'opacity-50 cursor-not-allowed'}`}>{t.next}</button><div className="embedded-credit">{t.credit_text}</div></div></div>;
             if (view === 'q1') return <QuestionScreen title={t.q1_title} color="text-cyan-400" nextView="q2" prevView="upload" onNext={() => changeView('q2')} onPrev={() => changeView('upload')} credits={credits} setView={setView} tLang={t}><input className="quiz-input" placeholder={t.q1_ph} autoFocus value={formData.target} onChange={e => setFormData({...formData, target: e.target.value})} /></QuestionScreen>;
             if (view === 'q2') return <QuestionScreen title={t.q2_title} color="text-purple-400" nextView="q3" prevView="q1" onNext={() => changeView('q3')} onPrev={() => changeView('q1')} credits={credits} setView={setView} tLang={t}><div className="space-y-4"><input className="quiz-input" placeholder={t.q2_p1} value={formData.product.name} onChange={e => updateProduct('name', e.target.value)} /><div className="grid grid-cols-2 gap-4"><input className="quiz-input" placeholder={t.q2_p2} value={formData.product.price} onChange={e => updateProduct('price', e.target.value)} /><input className="quiz-input" placeholder={t.q2_p3} value={formData.product.promo} onChange={e => updateProduct('promo', e.target.value)} /></div></div></QuestionScreen>;
-            
-            // --- Q3 MODIFICADA: CON INPUTS DE CIUDAD Y PAIS ---
-            if (view === 'q3') return (
-                <QuestionScreen title={t.q3_title} color="text-green-400" nextView="q4" prevView="q2" onNext={() => changeView('q4')} onPrev={() => changeView('q2')} credits={credits} setView={setView} tLang={t}>
-                    <div className="space-y-4">
-                        <input className="quiz-input" placeholder={t.q3_p1} value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} />
-                        
-                        {/* NUEVOS CAMPOS DE UBICACIÓN */}
-                        <div className="grid grid-cols-2 gap-4">
-                            <input className="quiz-input" placeholder="Ciudad (Ej: Quito)" value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})} />
-                            <input className="quiz-input" placeholder="País (Ej: Ecuador)" value={formData.country} onChange={e => setFormData({...formData, country: e.target.value})} />
-                        </div>
-
-                        <div className="relative">
-                            <input className="quiz-input pl-10" placeholder={t.q3_p2} value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} />
-                            <div className="absolute left-2 top-4 text-green-500 font-bold">WA</div>
-                        </div>
-                    </div>
-                </QuestionScreen>
-            );
-
+            if (view === 'q3') return <QuestionScreen title={t.q3_title} color="text-green-400" nextView="q4" prevView="q2" onNext={() => changeView('q4')} onPrev={() => changeView('q2')} credits={credits} setView={setView} tLang={t}><div className="space-y-4"><input className="quiz-input" placeholder={t.q3_p1} value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} /><div className="grid grid-cols-2 gap-4"><input className="quiz-input" placeholder="Ciudad (Ej: Quito)" value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})} /><input className="quiz-input" placeholder="País (Ej: Ecuador)" value={formData.country} onChange={e => setFormData({...formData, country: e.target.value})} /></div><div className="relative"><input className="quiz-input pl-10" placeholder={t.q3_p2} value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} /><div className="absolute left-2 top-4 text-green-500 font-bold">WA</div></div></div></QuestionScreen>;
             if (view === 'q4') return <QuestionScreen title={t.q4_title} color="text-yellow-400" nextView="q5" prevView="q3" onNext={() => changeView('q5')} onPrev={() => changeView('q3')} credits={credits} setView={setView} tLang={t}><div className="space-y-6"><input className="quiz-input" placeholder={t.q4_ph1} value={formData.inspiration} onChange={e => setFormData({...formData, inspiration: e.target.value})} /><div onClick={() => fileInputInspiration.current.click()} className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all text-center relative h-48 flex items-center justify-center overflow-hidden ${formData.inspirationImg ? 'border-yellow-400' : 'border-white/20 hover:border-yellow-400'}`}>{formData.inspirationImg ? (<><img src={formData.inspirationImg} className="w-full h-full object-cover absolute top-0 left-0 opacity-60" /><div className={`scan-line opacity-100`}></div><div className="relative z-10 bg-black/50 px-4 py-2 rounded-full text-xs font-bold text-yellow-400 border border-yellow-400 uppercase">{t.q4_change}</div></>) : (<div className="text-gray-500 text-xs uppercase">{t.q4_upload}</div>)}<input type="file" ref={fileInputInspiration} className="hidden" onChange={(e) => handleUpload(e, 'inspirationImg')} /></div></div></QuestionScreen>;
             if (view === 'q5') return <QuestionScreen title={t.q5_title} color="text-red-400" nextView="style" prevView="q4" onNext={() => changeView('style')} onPrev={() => changeView('q4')} credits={credits} setView={setView} tLang={t}><div className="h-64 overflow-y-auto pr-2 custom-scroll">{Object.entries(COLOR_GROUPS).map(([group, colors]) => (<div key={group} className="mb-6"><p className="text-[10px] font-bold text-gray-500 uppercase mb-3 tracking-widest text-left">{group === "NEUTROS" ? t.color_n : group === "NUDE" ? t.color_nu : group === "PRIMARIOS" ? t.color_p : group === "SECUNDARIOS" ? t.color_s : group === "TERCIARIOS" ? t.color_t : t.color_q}</p><div className="flex flex-wrap gap-3">{colors.map(c => (<div key={c} onClick={() => toggleColor(c)} className={`color-check ${formData.colors.includes(c) ? 'selected' : ''}`} style={{backgroundColor: c}}></div>))}</div></div>))}</div></QuestionScreen>;
             if (view === 'style') return <div className="min-h-screen p-6 fade-enter flex flex-col relative"><HeaderInternal /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => setView('q5')} className="p-2 rounded-full bg-white/10 hover:bg-white/20"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech">{t.style_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto w-full">{STYLES_DATA.map(s => (<div key={s.id} onClick={() => {playSound('click'); setFormData({...formData, style: t[`s_${s.id}`]}); changeView('light')}} className="glass-card rounded-xl h-64 group cursor-pointer"><img src={s.img} className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" /><div className="card-label">{t[`s_${s.id}`]}</div></div>))}</div><div className="mt-8 w-full max-w-7xl mx-auto"><div className="floating-credit">{t.credit_text}</div></div></div>;
@@ -897,7 +848,7 @@
                         </div>
                     </div>
                     <div className="floating-credit">{t.credit_text}</div>
-                    {isEditing && <DesignEditor image={resultImage} logo={formData.logo} initialText={designState} onSave={saveDesign} onClose={() => setIsEditing(false)} tLang={t} />}
+                    {isEditing && <FabricEditor image={resultImage} logo={formData.logo} initialText={designState} onSave={saveDesign} onClose={() => setIsEditing(false)} tLang={t} />}
                 </div>
             );
 
