@@ -15,21 +15,17 @@
     
     <style>
         /* --- MAG.IA CORE STYLES --- */
-        body { margin: 0; overflow-x: hidden; font-family: 'Inter', sans-serif; background: #000; color: white; transition: background 1s ease; }
+        body { margin: 0; overflow-x: hidden; font-family: 'Inter', sans-serif; background: #000; color: white; transition: none; }
         h1, h2, h3, .font-tech { font-family: 'Chakra Petch', sans-serif; }
 
-        /* FONDO LÍQUIDO DINÁMICO */
+        /* FONDO UNIFICADO (Azul/Morado Profundo) */
         .liquid-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background-image: linear-gradient(-45deg, #020617, #1e1b4b, #312e81, #000000); /* Fixed deep gradient */
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
-            transition: background-image 2s ease-in-out;
+            transition: none;
         }
-
-        /* Temas de Tiempo */
-        .theme-morning { background-image: linear-gradient(-45deg, #0ea5e9, #22d3ee, #e0f2fe, #0284c7); }
-        .theme-sunset { background-image: linear-gradient(-45deg, #f59e0b, #db2777, #7c3aed, #ea580c); }
-        .theme-night { background-image: linear-gradient(-45deg, #020617, #1e1b4b, #312e81, #000000); }
 
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
@@ -37,36 +33,56 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* GLASSMORPHISM AVANZADO */
+        /* GLASSMORPHISM AVANZADO - Consistent Cyan Glow */
         .glass {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            /* Added Cyan Glow */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 30px rgba(6, 182, 212, 0.3); 
             border-radius: 24px;
         }
         
-        /* Sol Dinámico */
-        .sun-icon { transition: all 1s ease; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
-        .sun-morning { color: #fcd34d; filter: drop-shadow(0 0 20px #fcd34d); }
-        .sun-sunset { color: #fb923c; filter: drop-shadow(0 0 20px #ea580c); }
-        .sun-night { color: #60a5fa; filter: drop-shadow(0 0 15px #2563eb); }
+        /* Sol Dinámico - UNIFIED CYAN GLOW */
+        .sun-icon { 
+            transition: all 1s ease; 
+            color: #06b6d4; /* Cyan Color */
+            filter: drop-shadow(0 0 15px #06b6d4); /* Unified Cyan Glow */
+        }
 
-        /* Avatar Adaptativo */
+        /* Avatar Adaptativo - UNIFIED */
         .avatar-wrapper { position: relative; overflow: hidden; border-radius: 999px; transition: all 0.5s ease; }
-        .avatar-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; mix-blend-mode: overlay; opacity: 0.4; transition: background 2s ease; pointer-events: none; }
-        .overlay-morning { background: linear-gradient(to bottom, transparent, #38bdf8); }
-        .overlay-sunset { background: linear-gradient(to bottom, transparent, #f97316); opacity: 0.6; }
-        .overlay-night { background: linear-gradient(to bottom, #1e3a8a, #4c1d95); opacity: 0.7; }
+        .avatar-overlay { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; mix-blend-mode: overlay; 
+            opacity: 0.7; transition: none; pointer-events: none; 
+            background: linear-gradient(to bottom, #1e3a8a, #4c1d95); /* Fixed Dark Overlay */
+        }
 
         /* UI Elements */
         .tech-btn { background: rgba(255,255,255,0.9); color: black; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 12px; padding: 16px 32px; transition: all 0.3s; cursor: pointer; border: 1px solid white; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
         .tech-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 0 40px rgba(255, 255, 255, 0.5); }
         
-        .glass-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; cursor: pointer; overflow: hidden; position: relative; border-radius: 20px; }
-        .glass-card:hover { border-color: rgba(255,255,255,0.4); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        .glass-card.selected { border-color: #fff; background: rgba(255,255,255,0.15); box-shadow: 0 0 0 1px #fff; transform: scale(1.02); }
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            transition: all 0.3s ease; 
+            cursor: pointer; 
+            overflow: hidden; 
+            position: relative; 
+            border-radius: 20px; 
+        }
+        .glass-card:hover { 
+            border-color: rgba(6, 182, 212, 0.6); 
+            transform: translateY(-5px); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(6, 182, 212, 0.4); 
+        }
+        .glass-card.selected { 
+            border-color: #06b6d4; 
+            background: rgba(6, 182, 212, 0.1); 
+            box-shadow: 0 0 0 1px #06b6d4; 
+            transform: scale(1.02); 
+        }
         
         .card-label { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); padding: 20px 10px 15px 10px; text-align: center; font-family: 'Chakra Petch'; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; }
 
@@ -74,11 +90,11 @@
         .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent); background-size: 100% 30%; animation: scan 3s linear infinite; pointer-events: none; z-index: 20; opacity: 0.3; }
         @keyframes scan { 0% { background-position: 0% -30%; } 100% { background-position: 0% 130%; } }
 
-        /* Inputs */
-        .quiz-input { background: transparent; border: none; border-bottom: 2px solid rgba(255,255,255,0.3); width: 100%; padding: 20px; font-size: 1.5rem; color: white; text-align: center; font-family: 'Chakra Petch'; transition: all 0.3s; }
-        .quiz-input:focus { outline: none; border-color: #fff; background: rgba(255,255,255,0.05); }
+        /* Inputs - Cyan focused */
+        .quiz-input { background: transparent; border: none; border-bottom: 2px solid rgba(6, 182, 212, 0.5); width: 100%; padding: 20px; font-size: 1.5rem; color: white; text-align: center; font-family: 'Chakra Petch'; transition: all 0.3s; }
+        .quiz-input:focus { outline: none; border-color: #06b6d4; background: rgba(6, 182, 212, 0.05); }
         .glass-input { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-family: 'Chakra Petch'; padding: 14px; width: 100%; border-radius: 12px; backdrop-filter: blur(5px); }
-        .glass-input:focus { outline: none; border-color: #fff; background: rgba(255, 255, 255, 0.2); }
+        .glass-input:focus { outline: none; border-color: #06b6d4; background: rgba(255, 255, 255, 0.2); }
 
         /* Frase CEO */
         .floating-credit { 
@@ -104,9 +120,9 @@
         }
         .gold-btn:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(251, 191, 36, 0.6); }
 
-        /* Nano Studio Fixes */
+        /* Nano Studio Fixes - Consistent dark aesthetic */
         .editor-btn { background: rgba(0,0,0,0.6); color: white; border: 1px solid rgba(255,255,255,0.2); }
-        .editor-btn:hover { background: rgba(255,255,255,0.1); border-color: white; }
+        .editor-btn:hover { background: rgba(255,255,255,0.1); border-color: #06b6d4; }
     </style>
 </head>
 <body>
@@ -119,35 +135,22 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // --- HOOK DEL TIEMPO (CEREBRO DINÁMICO) ---
-        const useTimeTheme = () => {
-            const [timeState, setTimeState] = useState('morning'); // morning, sunset, night
-            
-            useEffect(() => {
-                const checkTime = () => {
-                    const hour = new Date().getHours();
-                    if (hour >= 6 && hour < 17) setTimeState('morning');
-                    else if (hour >= 17 && hour < 20) setTimeState('sunset');
-                    else setTimeState('night');
-                };
-                checkTime();
-                const interval = setInterval(checkTime, 60000); // Check every minute
-                return () => clearInterval(interval);
-            }, []);
-            return timeState;
-        };
+        // --- HOOK DEL TIEMPO (CEREBRO DINÁMICO) - FIXED TO DARK THEME ---
+        const useTimeTheme = () => 'night'; 
 
         // --- CONSTANTES ---
-        const MAGIC_RESULT_IMAGE_DEFAULT = "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2865"; 
-        const UGLY_BURGER_IMAGE = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=2799"; 
+        // Nike Jordan 1s grises y negras (Amateur photo placeholder)
+        const UGLY_BURGER_IMAGE = "https://images.unsplash.com/photo-1615566372991-b3b32c66810a?q=80&w=1800"; 
+        // Nike Jordan 1s grises y negras (Professional photo placeholder)
+        const MAGIC_RESULT_IMAGE_DEFAULT = "https://images.unsplash.com/photo-1628108502319-e85d9472314d?q=80&w=2800"; 
         const CREATOR_IMAGE = "./roddy-ceo.jpg"; 
         const INITIAL_CREDITS = 3;
 
         // --- ICONOS ---
         const Icons = {
-            // NUEVO SOL MAG.IA
-            SunLogo: ({ theme }) => (
-                <svg className={`sun-icon sun-${theme} w-16 h-16 md:w-20 md:h-20 mb-2`} viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            // NUEVO SOL MAG.IA - Removed theme prop usage
+            SunLogo: () => (
+                <svg className={`sun-icon w-16 h-16 md:w-20 md:h-20 mb-2`} viewBox="0 0 24 24" fill="currentColor" stroke="none">
                     <circle cx="12" cy="12" r="6" />
                     <g stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                         <line x1="12" y1="1" x2="12" y2="4" />
@@ -328,17 +331,22 @@
                     particles.forEach((p, i) => {
                         p.x += p.vx; p.y += p.vy;
                         if(p.x < 0 || p.x > width) p.vx *= -1; if(p.y < 0 || p.y > height) p.vy *= -1;
-                        ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
+                        ctx.fillStyle = '#06b6d4'; /* Cyan particles */
+                        ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
                         particles.slice(i+1).forEach(p2 => {
                             let d = Math.hypot(p.x-p2.x, p.y-p2.y);
-                            if(d < 70) { ctx.beginPath(); ctx.strokeStyle = `rgba(255, 255, 255, ${0.2 * (1 - d/70)})`; ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); }
+                            if(d < 70) { 
+                                ctx.beginPath(); 
+                                ctx.strokeStyle = `rgba(6, 182, 212, ${0.4 * (1 - d/70)})`; /* Cyan lines */
+                                ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); 
+                            }
                         });
                     });
                     requestAnimationFrame(animate);
                 };
                 animate();
             }, []);
-            return <canvas ref={canvasRef} className="w-40 h-40 mx-auto mb-6 rounded-full bg-white/5 border border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.1)] backdrop-blur-md" />;
+            return <canvas ref={canvasRef} className="w-40 h-40 mx-auto mb-6 rounded-full bg-white/5 border border-white/20 shadow-[0_0_40px_rgba(6,182,212,0.2)] backdrop-blur-md" />;
         };
 
         const ComparisonSlider = ({ beforeImage, afterImage, tLang }) => {
@@ -355,8 +363,8 @@
             return (
                 <div className="relative w-full h-full overflow-hidden cursor-ew-resize select-none rounded-xl border border-white/20 shadow-2xl bg-black" ref={containerRef} onMouseMove={handleMove} onTouchMove={handleMove}>
                     <img src={afterImage} alt="After" className="absolute top-0 left-0 w-full h-full object-cover" />
-                    <div className="absolute top-0 left-0 h-full overflow-hidden border-r-2 border-white" style={{ width: `${sliderPos}%` }}><img src={beforeImage} alt="Before" className="absolute top-0 left-0 h-full max-w-none object-cover" style={{ width: containerRef.current ? containerRef.current.offsetWidth : '100%' }} /></div>
-                    <div className="absolute top-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center text-black shadow-lg transform -translate-y-1/2 -translate-x-1/2 pointer-events-none" style={{ left: `${sliderPos}%` }}><Icons.Sliders /></div>
+                    <div className="absolute top-0 left-0 h-full overflow-hidden border-r-2 border-[#06b6d4]" style={{ width: `${sliderPos}%` }}><img src={beforeImage} alt="Before" className="absolute top-0 left-0 h-full max-w-none object-cover" style={{ width: containerRef.current ? containerRef.current.offsetWidth : '100%' }} /></div>
+                    <div className="absolute top-1/2 w-10 h-10 bg-[#06b6d4] rounded-full flex items-center justify-center text-black shadow-lg transform -translate-y-1/2 -translate-x-1/2 pointer-events-none" style={{ left: `${sliderPos}%` }}><Icons.Sliders /></div>
                     <div className="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded uppercase shadow-md">{tLang.before}</div>
                     <div className="absolute bottom-4 right-4 bg-green-500 text-black text-xs font-bold px-2 py-1 rounded uppercase shadow-md">{tLang.after}</div>
                 </div>
@@ -367,7 +375,7 @@
             <div className={`relative p-6 md:p-8 rounded-2xl flex flex-col gap-6 transition-transform duration-300 hover:scale-105 ${recommended ? 'glass border-white shadow-[0_0_40px_rgba(255,255,255,0.2)] transform scale-105 z-10' : 'glass opacity-90 hover:opacity-100'}`}>
                 {recommended && <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-white text-black font-black text-[10px] uppercase tracking-widest py-1 px-4 clip-path-slanted animate-pulse">{tLang.rec}</div>}
                 <div><h3 className="text-gray-300 font-bold uppercase tracking-widest text-xs mb-2 font-tech">{title}</h3><div className="flex items-baseline gap-1 justify-center md:justify-start"><span className="text-5xl font-black text-white font-tech">${price}</span>{strike && <span className="text-sm text-red-400 line-through font-bold">${strike}</span>}</div><p className="text-xs text-gray-400 mt-2 font-mono uppercase">{sub}</p></div>
-                <ul className="space-y-3 flex-1 my-6">{features.map((f, i) => (<li key={i} className="flex items-start gap-3 text-xs text-gray-200 font-tech"><div className={`mt-0.5 ${recommended ? 'text-white' : 'text-gray-500'}`}><Icons.Check /></div><span>{f}</span></li>))}</ul>
+                <ul className="space-y-3 flex-1 my-6">{features.map((f, i) => (<li key={i} className="flex items-start gap-3 text-xs text-gray-200 font-tech"><div className={`mt-0.5 ${recommended ? 'text-[#06b6d4]' : 'text-gray-500'}`}><Icons.Check /></div><span>{f}</span></li>))}</ul>
                 <button onClick={onSelect} className={`w-full py-4 font-black uppercase tracking-widest text-xs transition-all ${recommended ? 'tech-btn' : 'border border-white/20 hover:bg-white/10 rounded-xl'}`}>{recommended ? tLang.buy : tLang.sel}</button>
             </div>
         );
@@ -448,7 +456,8 @@
             return (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 fade-enter backdrop-blur-md">
                     <div className="w-[95%] h-[90%] flex border border-white/10 rounded-2xl overflow-hidden bg-black/80 shadow-2xl">
-                        <div className="w-80 bg-white/5 border-r border-white/10 p-6 flex flex-col gap-6 overflow-y-auto backdrop-blur-sm">
+                        {/* Nano-Studio Sidebar - Applied glass aesthetic */}
+                        <div className="w-80 glass border-r-0 p-6 flex flex-col gap-6 overflow-y-auto custom-scroll">
                              <h3 className="font-tech text-white text-2xl mb-2">{tLang.editor_title}</h3>
                              <div className="flex gap-2 mb-2"><button onClick={undo} className="editor-btn flex-1 py-2 text-xs rounded-lg" title="Deshacer"><Icons.Undo /> UNDO</button><button onClick={redo} className="editor-btn flex-1 py-2 text-xs rounded-lg" title="Rehacer"><Icons.Redo /> REDO</button></div>
                              <button onClick={duplicate} className="editor-btn w-full py-3 text-xs flex gap-2 justify-center mb-2 rounded-lg" title="Duplicar"><Icons.Copy /> DUPLICAR</button>
@@ -458,13 +467,13 @@
                                      <p className="text-[10px] font-bold text-gray-400 uppercase">EDITANDO: {selectedObj.type}</p>
                                      {selectedObj.type === 'i-text' && (
                                          <>
-                                            <div className="flex gap-2"><input type="color" className="h-8 w-8 bg-transparent cursor-pointer rounded" onChange={e => updateSelected('fill', e.target.value)} /><input type="range" className="flex-1 accent-white" min="10" max="200" value={selectedObj.fontSize} onChange={e => updateSelected('fontSize', parseInt(e.target.value))} /></div>
+                                            <div className="flex gap-2"><input type="color" className="h-8 w-8 bg-transparent cursor-pointer rounded" onChange={e => updateSelected('fill', e.target.value)} /><input type="range" className="flex-1 accent-[#06b6d4]" min="10" max="200" value={selectedObj.fontSize} onChange={e => updateSelected('fontSize', parseInt(e.target.value))} /></div>
                                             <select className="glass-input text-xs" onChange={e => updateSelected('fontFamily', e.target.value)} value={selectedObj.fontFamily}>
                                                 <option value="Chakra Petch">Tech (Chakra)</option><option value="Inter">Modern (Inter)</option><option value="Oswald">Impact (Oswald)</option><option value="Playfair Display">Luxury (Serif)</option><option value="Montserrat">Clean (Montserrat)</option><option value="Roboto Mono">Code (Mono)</option><option value="Bebas Neue">Bebas (Condensed)</option><option value="Roboto Slab">Slab (Geometric)</option>
                                             </select>
                                          </>
                                      )}
-                                     <div className="flex gap-2 items-center"><span className="text-xs text-gray-500">Opacidad</span><input type="range" className="accent-white" min="0" max="1" step="0.1" value={selectedObj.opacity} onChange={e => updateSelected('opacity', parseFloat(e.target.value))} /></div>
+                                     <div className="flex gap-2 items-center"><span className="text-xs text-gray-500">Opacidad</span><input type="range" className="accent-[#06b6d4]" min="0" max="1" step="0.1" value={selectedObj.opacity} onChange={e => updateSelected('opacity', parseFloat(e.target.value))} /></div>
                                      {selectedObj.type === 'image' && (<button onClick={() => updateSelected('globalCompositeOperation', selectedObj.globalCompositeOperation === 'multiply' ? 'source-over' : 'multiply')} className={`w-full py-2 border rounded text-xs ${selectedObj.globalCompositeOperation === 'multiply' ? 'bg-white/20 border-white text-white' : 'border-gray-600 text-gray-400'}`}>{selectedObj.globalCompositeOperation === 'multiply' ? 'MODO: MULTIPLY (ON)' : 'MODO: NORMAL'}</button>)}
                                      <button onClick={deleteSelected} className="w-full py-2 bg-red-900/50 text-red-200 rounded text-xs flex items-center justify-center gap-2 hover:bg-red-900/70"><Icons.Trash /> ELIMINAR</button>
                                  </div>
@@ -502,10 +511,10 @@
                     </button>
                 </div>
 
-                {/* LOGO CENTRAL MAG.IA */}
+                {/* LOGO CENTRAL MAG.IA - Removed dynamic theme prop */}
                 <div className="pointer-events-auto flex flex-col items-center cursor-pointer group mt-2" onClick={() => setView('landing')}>
-                    <Icons.SunLogo theme={theme} />
-                    <span className="text-3xl font-black font-tech tracking-tighter text-white drop-shadow-[0_2px_10px_rgba(255,255,255,0.3)]">MAG.IA</span>
+                    <Icons.SunLogo />
+                    <span className="text-3xl font-black font-tech tracking-tighter text-white drop-shadow-[0_2px_10px_rgba(6, 182, 212, 0.5)]">MAG.IA</span>
                     <div className="flex items-center gap-1 text-[8px] text-white/70 font-bold uppercase tracking-[0.1em] mt-1">
                         <Icons.Google /> {t.powered}
                     </div>
@@ -526,7 +535,7 @@
             const [user, setUser] = useState(null); 
             const [userCloud, setUserCloud] = useState([]);
             const [isEditing, setIsEditing] = useState(false);
-            const timeTheme = useTimeTheme(); // MAG.IA Time Engine
+            const timeTheme = useTimeTheme(); // Fixed to 'night'
 
             const initialForm = { image: null, logo: null, inspirationImg: null, target: '', company: '', whatsapp: '', product: { name: '', price: '', promo: '' }, textOnImage: '', style: '', light: '', colors: [], googleData: false, inspiration: '', connected: { fb: false, ig: false, tk: false }, format: 'post' };
             const [formData, setFormData] = useState(initialForm);
@@ -638,14 +647,15 @@
                     <div className="z-10 max-w-6xl w-full flex flex-col items-center mt-32">
                         {/* HEADER DINÁMICO */}
                         <div className="flex flex-col items-center justify-center gap-2 mb-10 animate-pulse-fast cursor-pointer select-none">
-                             <Icons.SunLogo theme={timeTheme} />
-                             <h1 className="text-6xl md:text-8xl font-black font-tech tracking-tighter text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.3)]">MAG.IA</h1>
+                             <Icons.SunLogo />
+                             <h1 className="text-6xl md:text-8xl font-black font-tech tracking-tighter text-white drop-shadow-[0_0_40px_rgba(6, 182, 212, 0.5)]">MAG.IA</h1>
                              <div className="inline-flex items-center gap-2 px-4 py-1 glass rounded-full text-white text-[10px] font-bold uppercase tracking-[0.2em]"><Icons.Google /> {t.powered}</div>
                         </div>
 
                         <h2 className="text-3xl md:text-5xl font-bold font-tech mb-8 leading-tight tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50">{t.hero_mk} <br/><span className="text-white">{t.hero_auto}</span></h2>
                         <div className="flex flex-wrap justify-center gap-4 mb-12 text-xs font-bold uppercase tracking-widest text-white/70">{t.bullets.map(b => (<div key={b} className="flex items-center gap-2 bg-white/5 px-3 py-1 rounded-full border border-white/10"><Icons.Check /> {b}</div>))}</div>
                         
+                        {/* Comparison Slider with updated images */}
                         <div className="w-full max-w-4xl h-96 mb-12 shadow-2xl rounded-2xl overflow-hidden border border-white/20 glass"><ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} /></div>
                         
                         <div className="flex flex-col items-center gap-4 mb-12">
@@ -658,7 +668,7 @@
                             <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all"></div>
                             <div className="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-white/20 shadow-2xl flex-shrink-0 overflow-hidden relative z-10 avatar-wrapper">
                                 <img src={CREATOR_IMAGE} className="w-full h-full object-cover" />
-                                <div className={`avatar-overlay overlay-${timeTheme}`}></div>
+                                <div className={`avatar-overlay`}></div>
                             </div>
                             <div className="flex-1 relative z-10">
                                 <div className="text-xs font-bold text-white/70 uppercase tracking-widest mb-2">{t.creator_title}</div>
@@ -668,6 +678,7 @@
                                 <p className="text-xs text-gray-400 leading-relaxed">{t.creator_mission}</p>
                             </div>
                         </div>
+                        {/* CEO Phrase Updated */}
                         <div className="floating-credit">{t.credit_text}</div>
                     </div>
                 </div>
@@ -676,9 +687,9 @@
             // Reutilizamos componentes con la nueva estética glass
             if (view === 'setup') return <div className="min-h-screen flex items-center justify-center p-6 z-10 relative"><div className="w-full max-w-md glass p-10 rounded-3xl text-center relative overflow-hidden"><button onClick={() => changeView('landing')} className="absolute top-4 right-4 text-white/50 hover:text-white"><Icons.X /></button><h2 className="text-3xl font-bold font-tech mb-2">{t.setup_title}</h2><p className="text-gray-300 text-sm mb-8">{t.setup_desc}</p>{user ? (<div className="text-center mb-6"><p className="text-white font-bold mb-4">¡Hola, {user.name}!</p><button onClick={() => changeView('upload')} className="tech-btn w-full mb-4">CREAR CAMPAÑA</button><div className="text-left mt-6"><h4 className="text-xs font-bold text-gray-400 mb-2">{t.cloud_welcome}</h4><div className="h-40 overflow-y-auto custom-scroll bg-black/20 rounded-lg p-2">{userCloud.length === 0 ? <p className="text-gray-500 text-xs">{t.cloud_desc}</p> : userCloud.map((item, i) => (<div key={i} onClick={() => restoreCampaign(item)} className="flex items-center gap-2 mb-2 p-2 bg-white/5 rounded border border-white/10 cursor-pointer hover:bg-white/10"><img src={item.image} className="w-10 h-10 rounded object-cover" /><div className="overflow-hidden"><p className="text-[10px] text-gray-300 truncate">{item.date}</p><p className="text-[9px] text-gray-500 truncate w-40">Camp #{i+1}</p></div></div>))}</div></div></div>) : (<div className="space-y-4"><div><label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 block">{t.lbl_email}</label><input className="glass-input" placeholder={t.ph_email} value={inputEmail} onChange={e => setInputEmail(e.target.value)} /></div><div><label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 block">{t.lbl_api}</label><div className="relative"><input className="glass-input pl-10" type="password" placeholder={t.ph_api} value={inputApiKey} onChange={e => setInputApiKey(e.target.value)} /><div className="absolute left-3 top-3.5 text-white"><Icons.Key /></div></div></div><button onClick={handleLogin} className="tech-btn w-full mt-4 flex items-center justify-center gap-2">{t.setup_btn} <Icons.Google /></button></div>)}</div></div>;
             
-            if (view === 'upload') return <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="w-full max-w-4xl glass p-12 rounded-3xl text-center border border-white/10 mt-20"><div className="absolute top-8 left-8 cursor-pointer text-gray-400 hover:text-white" onClick={() => setView('landing')}><Icons.ChevronLeft /></div><h2 className="text-3xl font-bold font-tech mb-8 uppercase text-white">{t.upload_title}</h2><div className="grid md:grid-cols-2 gap-8 mb-10"><div onClick={() => fileInputProduct.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.image ? 'border-white bg-white/10' : 'border-white/20 hover:border-white'}`}>{formData.image ? (<><img src={formData.image} className="w-full h-full object-contain p-4" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Upload /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_prod}</span></>}<input type="file" ref={fileInputProduct} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'image')} /></div><div onClick={() => fileInputLogo.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.logo ? 'border-white bg-white/10' : 'border-white/20 hover:border-white'}`}>{formData.logo ? (<><img src={formData.logo} className="w-full h-full object-contain p-8" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Zap /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_logo}</span></>}<input type="file" ref={fileInputLogo} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'logo')} /></div></div><button onClick={() => { if(!formData.image) return alert("Sube producto"); playSound('click'); changeView('q1'); }} className={`tech-btn w-full py-5 text-xl uppercase tracking-widest ${!formData.image && 'opacity-50 cursor-not-allowed'}`}>{t.next}</button></div><div className="floating-credit">{t.credit_text}</div></div>;
+            if (view === 'upload') return <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="w-full max-w-4xl glass p-12 rounded-3xl text-center border border-white/10 mt-20"><div className="absolute top-8 left-8 cursor-pointer text-gray-400 hover:text-white" onClick={() => setView('landing')}><Icons.ChevronLeft /></div><h2 className="text-3xl font-bold font-tech mb-8 uppercase text-white">{t.upload_title}</h2><div className="grid md:grid-cols-2 gap-8 mb-10"><div onClick={() => fileInputProduct.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.image ? 'border-[#06b6d4] bg-[#06b6d4]/10' : 'border-white/20 hover:border-[#06b6d4]'}`}>{formData.image ? (<><img src={formData.image} className="w-full h-full object-contain p-4" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Upload /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_prod}</span></>}<input type="file" ref={fileInputProduct} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'image')} /></div><div onClick={() => fileInputLogo.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.logo ? 'border-[#06b6d4] bg-[#06b6d4]/10' : 'border-white/20 hover:border-[#06b6d4]'}`}>{formData.logo ? (<><img src={formData.logo} className="w-full h-full object-contain p-8" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Zap /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_logo}</span></>}<input type="file" ref={fileInputLogo} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'logo')} /></div></div><button onClick={() => { if(!formData.image) return alert("Sube producto"); playSound('click'); changeView('q1'); }} className={`tech-btn w-full py-5 text-xl uppercase tracking-widest ${!formData.image && 'opacity-50 cursor-not-allowed'}`}>{t.next}</button></div><div className="floating-credit">{t.credit_text}</div></div>;
 
-            if (view === 'processing') return <div className="min-h-screen flex flex-col items-center justify-center p-8 fade-enter relative overflow-hidden z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex flex-col items-center justify-center gap-6 w-full max-w-2xl z-10 mt-32"><AdBanner /><NeuralBrain /><div className="flex flex-col items-center gap-4 w-full"><h2 className="text-3xl md:text-4xl font-black font-tech text-white tracking-[0.2em] text-center animate-pulse uppercase drop-shadow-[0_0_25px_rgba(255,255,255,0.5)]">{loadingText}</h2><div className="flex flex-col items-center gap-2"><p className="text-white font-mono text-xs tracking-[0.3em] font-bold">{t.processing}</p><p className="text-white font-black font-mono text-xl">{Math.round(progress)}%</p></div></div><div className="w-full max-w-md h-1 bg-white/20 rounded-full overflow-hidden border border-white/10"><div className="h-full bg-white shadow-[0_0_20px_white]" style={{ width: `${progress}%`, transition: 'width 0.2s ease' }}></div></div></div><div className="floating-credit">{t.credit_text}</div></div>;
+            if (view === 'processing') return <div className="min-h-screen flex flex-col items-center justify-center p-8 fade-enter relative overflow-hidden z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex flex-col items-center justify-center gap-6 w-full max-w-2xl z-10 mt-32"><AdBanner /><NeuralBrain /><div className="flex flex-col items-center gap-4 w-full"><h2 className="text-3xl md:text-4xl font-black font-tech text-white tracking-[0.2em] text-center animate-pulse uppercase drop-shadow-[0_0_25px_rgba(255,255,255,0.5)]">{loadingText}</h2><div className="flex flex-col items-center gap-2"><p className="text-white font-mono text-xs tracking-[0.3em] font-bold">{t.processing}</p><p className="text-white font-black font-mono text-xl">{Math.round(progress)}%</p></div></div><div className="w-full max-w-md h-1 bg-white/20 rounded-full overflow-hidden border border-white/10"><div className="h-full bg-[#06b6d4] shadow-[0_0_20px_#06b6d4]" style={{ width: `${progress}%`, transition: 'width 0.2s ease' }}></div></div></div><div className="floating-credit">{t.credit_text}</div></div>;
 
             if (view === 'result') return (
                 <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative z-10">
@@ -686,6 +697,7 @@
                     <h2 className="text-5xl font-black font-tech text-white mt-24 mb-8 tracking-widest text-center">{t.result_title}</h2>
                     <div className="w-full max-w-7xl grid md:grid-cols-2 gap-10 glass p-8 rounded-3xl border border-white/20">
                         <div className="space-y-4 relative">
+                            {/* Comparison slider with glass aesthetic */}
                             <div className="relative group rounded-2xl overflow-hidden border border-white/20 shadow-2xl mx-auto transition-all duration-500 h-[500px]">
                                 <ComparisonSlider beforeImage={formData.image || UGLY_BURGER_IMAGE} afterImage={resultImage} tLang={t} />
                             </div>
@@ -695,8 +707,8 @@
                             </div>
                         </div>
                         <div className="flex flex-col space-y-6">
-                            <div className="bg-white/5 backdrop-blur-md p-4 rounded-xl border border-white/20 w-full animate-pulse-fast"><div className="flex items-center justify-between mb-2 px-2"><div className="flex items-center gap-2"><Icons.Zap /><span className="text-xs font-bold text-white uppercase tracking-widest">{t.viral_score}</span></div><div className="text-2xl font-black font-tech text-white">9.8</div></div><div className="w-full h-3 bg-gray-700 rounded-full overflow-hidden mb-2"><div className="h-full bg-white w-[98%] shadow-[0_0_10px_white]"></div></div><p className="text-[10px] text-gray-400 text-center">{t.viral_desc}</p></div>
-                            <div className="glass p-6 rounded-2xl border-l-4 border-white"><div className="flex justify-between items-center mb-4"><h3 className="text-xs font-bold text-white uppercase tracking-widest flex items-center gap-2"><Icons.Zap /> {t.copy_viral}</h3><button onClick={handleCopyText} className="text-[10px] font-bold text-gray-400 hover:text-white flex items-center gap-1 uppercase border border-white/20 px-2 py-1 rounded transition-colors"><Icons.Copy /> {t.copy_clipboard}</button></div><div className="copy-area custom-scroll h-40 overflow-y-auto text-sm text-gray-300 font-mono">{generatedCopy}</div></div>
+                            <div className="bg-white/5 backdrop-blur-md p-4 rounded-xl border border-white/20 w-full animate-pulse-fast"><div className="flex items-center justify-between mb-2 px-2"><div className="flex items-center gap-2 text-[#06b6d4]"><Icons.Zap /><span className="text-xs font-bold text-white uppercase tracking-widest">{t.viral_score}</span></div><div className="text-2xl font-black font-tech text-white">9.8</div></div><div className="w-full h-3 bg-gray-700 rounded-full overflow-hidden mb-2"><div className="h-full bg-[#06b6d4] w-[98%] shadow-[0_0_10px_#06b6d4]"></div></div><p className="text-[10px] text-gray-400 text-center">{t.viral_desc}</p></div>
+                            <div className="glass p-6 rounded-2xl border-l-4 border-[#06b6d4]"><div className="flex justify-between items-center mb-4"><h3 className="text-xs font-bold text-white uppercase tracking-widest flex items-center gap-2 text-[#06b6d4]"><Icons.Zap /> {t.copy_viral}</h3><button onClick={handleCopyText} className="text-[10px] font-bold text-gray-400 hover:text-white flex items-center gap-1 uppercase border border-white/20 px-2 py-1 rounded transition-colors"><Icons.Copy /> {t.copy_clipboard}</button></div><div className="copy-area custom-scroll h-40 overflow-y-auto text-sm text-gray-300 font-mono">{generatedCopy}</div></div>
                             <div className="flex gap-4 mt-auto"><button onClick={handleNewGeneration} className="w-full py-4 border border-white/20 rounded-xl text-xs font-bold uppercase hover:bg-white hover:text-black transition-colors">{t.new_btn}</button></div>
                         </div>
                     </div>
@@ -709,12 +721,12 @@
             if (view === 'q1') return <QuestionScreen title={t.q1_title} nextView="q2" prevView="upload" onNext={() => changeView('q2')} onPrev={() => changeView('upload')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><input className="quiz-input" placeholder={t.q1_ph} autoFocus value={formData.target} onChange={e => setFormData({...formData, target: e.target.value})} /></QuestionScreen>;
             if (view === 'q2') return <QuestionScreen title={t.q2_title} nextView="q3" prevView="q1" onNext={() => changeView('q3')} onPrev={() => changeView('q1')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-4"><input className="quiz-input" placeholder={t.q2_p1} value={formData.product.name} onChange={e => updateProduct('name', e.target.value)} /><div className="grid grid-cols-2 gap-4"><input className="quiz-input" placeholder={t.q2_p2} value={formData.product.price} onChange={e => updateProduct('price', e.target.value)} /><input className="quiz-input" placeholder={t.q2_p3} value={formData.product.promo} onChange={e => updateProduct('promo', e.target.value)} /></div></div></QuestionScreen>;
             if (view === 'q3') return <QuestionScreen title={t.q3_title} nextView="q4" prevView="q2" onNext={() => changeView('q4')} onPrev={() => changeView('q2')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-4"><input className="quiz-input" placeholder={t.q3_p1} value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} /><div className="relative"><input className="quiz-input pl-10" placeholder={t.q3_p2} value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} /><div className="absolute left-2 top-4 text-white font-bold">WA</div></div></div></QuestionScreen>;
-            if (view === 'q4') return <QuestionScreen title={t.q4_title} nextView="q5" prevView="q3" onNext={() => changeView('q5')} onPrev={() => changeView('q3')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-6"><input className="quiz-input" placeholder={t.q4_ph1} value={formData.inspiration} onChange={e => setFormData({...formData, inspiration: e.target.value})} /><div onClick={() => fileInputInspiration.current.click()} className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all text-center relative h-48 flex items-center justify-center overflow-hidden ${formData.inspirationImg ? 'border-white' : 'border-white/20 hover:border-white'}`}>{formData.inspirationImg ? (<><img src={formData.inspirationImg} className="w-full h-full object-cover absolute top-0 left-0 opacity-60" /><div className={`scan-line opacity-100`}></div><div className="relative z-10 bg-black/50 px-4 py-2 rounded-full text-xs font-bold text-white border border-white uppercase">{t.q4_change}</div></>) : (<div className="text-gray-500 text-xs uppercase">{t.q4_upload}</div>)}<input type="file" ref={fileInputInspiration} className="hidden" onChange={(e) => handleUpload(e, 'inspirationImg')} /></div></div></QuestionScreen>;
-            if (view === 'q5') return <QuestionScreen title={t.q5_title} nextView="style" prevView="q4" onNext={() => changeView('style')} onPrev={() => changeView('q4')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="h-64 overflow-y-auto pr-2 custom-scroll">{Object.entries(COLOR_GROUPS).map(([group, colors]) => (<div key={group} className="mb-6"><p className="text-[10px] font-bold text-gray-500 uppercase mb-3 tracking-widest text-left">{group === "NEUTROS" ? t.color_n : group === "NUDE" ? t.color_nu : group === "PRIMARIOS" ? t.color_p : group === "SECUNDARIOS" ? t.color_s : group === "TERCIARIOS" ? t.color_t : t.color_q}</p><div className="flex flex-wrap gap-3">{colors.map(c => (<div key={c} onClick={() => toggleColor(c)} className={`w-10 h-10 rounded-lg cursor-pointer border-2 border-white/10 transition-transform ${formData.colors.includes(c) ? 'scale-110 border-white shadow-[0_0_15px_white]' : ''}`} style={{backgroundColor: c}}></div>))}</div></div>))}</div></QuestionScreen>;
+            if (view === 'q4') return <QuestionScreen title={t.q4_title} nextView="q5" prevView="q3" onNext={() => changeView('q5')} onPrev={() => changeView('q3')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-6"><input className="quiz-input" placeholder={t.q4_ph1} value={formData.inspiration} onChange={e => setFormData({...formData, inspiration: e.target.value})} /><div onClick={() => fileInputInspiration.current.click()} className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all text-center relative h-48 flex items-center justify-center overflow-hidden ${formData.inspirationImg ? 'border-[#06b6d4]' : 'border-white/20 hover:border-[#06b6d4]'}`}>{formData.inspirationImg ? (<><img src={formData.inspirationImg} className="w-full h-full object-cover absolute top-0 left-0 opacity-60" /><div className={`scan-line opacity-100`}></div><div className="relative z-10 bg-black/50 px-4 py-2 rounded-full text-xs font-bold text-white border border-white uppercase">{t.q4_change}</div></>) : (<div className="text-gray-500 text-xs uppercase">{t.q4_upload}</div>)}<input type="file" ref={fileInputInspiration} className="hidden" onChange={(e) => handleUpload(e, 'inspirationImg')} /></div></div></QuestionScreen>;
+            if (view === 'q5') return <QuestionScreen title={t.q5_title} nextView="style" prevView="q4" onNext={() => changeView('style')} onPrev={() => changeView('q4')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="h-64 overflow-y-auto pr-2 custom-scroll">{Object.entries(COLOR_GROUPS).map(([group, colors]) => (<div key={group} className="mb-6"><p className="text-[10px] font-bold text-gray-500 uppercase mb-3 tracking-widest text-left">{group === "NEUTROS" ? t.color_n : group === "NUDE" ? t.color_nu : group === "PRIMARIOS" ? t.color_p : group === "SECUNDARIOS" ? t.color_s : group === "TERCIARIOS" ? t.color_t : t.color_q}</p><div className="flex flex-wrap gap-3">{colors.map(c => (<div key={c} onClick={() => toggleColor(c)} className={`w-10 h-10 rounded-lg cursor-pointer border-2 border-white/10 transition-transform ${formData.colors.includes(c) ? 'scale-110 border-[#06b6d4] shadow-[0_0_15px_#06b6d4]' : ''}`} style={{backgroundColor: c}}></div>))}</div></div>))}</div></QuestionScreen>;
 
             // Vistas estilo y luz actualizadas a glass
             if (view === 'style') return <div className="min-h-screen p-6 fade-enter flex flex-col relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => setView('q5')} className="p-2 rounded-full bg-white/10 hover:bg-white/20"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech text-white">{t.style_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto w-full">{STYLES_DATA.map(s => (<div key={s.id} onClick={() => {playSound('click'); setFormData({...formData, style: t[`s_${s.id}`]}); changeView('light')}} className="glass-card rounded-xl h-64 group cursor-pointer"><img src={s.img} className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" /><div className="card-label text-white">{t[`s_${s.id}`]}</div></div>))}</div><div className="floating-credit">{t.credit_text}</div></div>;
-            if (view === 'light') return <div className="min-h-screen p-6 fade-enter flex flex-col relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => changeView('style')} className="p-2 rounded-full bg-white/10 hover:bg-white/20"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech text-white">{t.light_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-7xl mx-auto w-full mb-12">{LIGHTING_DATA.map(l => (<div key={l.id} onClick={() => {playSound('click'); setFormData({...formData, light: t[`l_${l.id}`]}); }} className={`glass-card rounded-xl h-64 group cursor-pointer ${formData.light === t[`l_${l.id}`] ? 'selected' : ''}`}><img src={l.img} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all" /><div className="card-label text-white">{t[`l_${l.id}`]} <br/><span className="text-[9px] text-gray-400 font-normal">{t[`l_${l.id}_desc`]}</span></div></div>))}</div><div onClick={() => {playSound('click'); setFormData(prev => ({...prev, googleData: !prev.googleData}));}} className={`glass p-6 rounded-2xl flex justify-between items-center border transition-all cursor-pointer mb-8 max-w-2xl mx-auto w-full ${formData.googleData ? 'border-blue-400 bg-blue-900/20' : 'border-white/10 hover:border-white/50'}`}><div className="flex items-center gap-4"><div className="bg-white/10 p-3 rounded-full text-white"><Icons.Google /></div><div><h3 className="font-bold text-white">{t.google_data}</h3><p className="text-xs text-gray-400">{t.google_desc}</p></div></div><div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${formData.googleData ? 'bg-blue-500 border-blue-500' : 'border-gray-500'}`}>{formData.googleData && <Icons.Check />}</div></div><div className="max-w-7xl mx-auto w-full text-center"><button onClick={runEngine} className="tech-btn px-20 py-6 text-2xl rounded-2xl shadow-[0_0_50px_rgba(255,255,255,0.2)]">{t.gen_btn}</button></div><div className="floating-credit">{t.credit_text}</div></div>;
+            if (view === 'light') return <div className="min-h-screen p-6 fade-enter flex flex-col relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => changeView('style')} className="p-2 rounded-full bg-white/10 hover:bg-white/20"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech text-white">{t.light_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-7xl mx-auto w-full mb-12">{LIGHTING_DATA.map(l => (<div key={l.id} onClick={() => {playSound('click'); setFormData({...formData, light: t[`l_${l.id}`]}); }} className={`glass-card rounded-xl h-64 group cursor-pointer ${formData.light === t[`l_${l.id}`] ? 'selected' : ''}`}><img src={l.img} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all" /><div className="card-label text-white">{t[`l_${l.id}`]} <br/><span className="text-[9px] text-gray-400 font-normal">{t[`l_${l.id}_desc`]}</span></div></div>))}</div><div onClick={() => {playSound('click'); setFormData(prev => ({...prev, googleData: !prev.googleData}));}} className={`glass p-6 rounded-2xl flex justify-between items-center border transition-all cursor-pointer mb-8 max-w-2xl mx-auto w-full ${formData.googleData ? 'border-[#06b6d4] bg-[#06b6d4]/20' : 'border-white/10 hover:border-white/50'}`}><div className="flex items-center gap-4"><div className="bg-white/10 p-3 rounded-full text-white"><Icons.Google /></div><div><h3 className="font-bold text-white">{t.google_data}</h3><p className="text-xs text-gray-400">{t.google_desc}</p></div></div><div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${formData.googleData ? 'bg-[#06b6d4] border-[#06b6d4]' : 'border-gray-500'}`}>{formData.googleData && <Icons.Check />}</div></div><div className="max-w-7xl mx-auto w-full text-center"><button onClick={runEngine} className="tech-btn px-20 py-6 text-2xl rounded-2xl shadow-[0_0_50px_rgba(255,255,255,0.2)]">{t.gen_btn}</button></div><div className="floating-credit">{t.credit_text}</div></div>;
 
             if (view === 'pricing') return <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter"><button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all text-xl font-bold"><Icons.X /></button><h2 className="text-5xl font-black font-tech text-center mb-10 text-white">{t.plans}</h2><div className="grid md:grid-cols-3 gap-8 w-full max-w-6xl pb-10 items-center"><PricingCard title={t.p_names[0]} price="99" features={t.f_1} onSelect={() => {}} sub={t.p_subs[0]} tLang={t} /><PricingCard title={t.p_names[1]} price="297" strike="1200" recommended={true} features={t.f_2} onSelect={() => {}} sub={t.p_subs[1]} tLang={t} /><PricingCard title={t.p_names[2]} price="997" features={t.f_3} onSelect={() => {}} sub={t.p_subs[2]} tLang={t} /></div><div className="floating-credit">{t.credit_text}</div></div>;
             if (view === 'faq') return <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter"><button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all text-xl font-bold"><Icons.X /></button><h2 className="text-5xl font-black font-tech text-center mb-16 text-white">{t.faq_title}</h2><div className="max-w-3xl w-full space-y-6"> {[{q: t.q1, a: t.a1}, {q: t.q2, a: t.a2}, {q: t.q3, a: t.a3}].map((item, i) => (<details key={i} className="glass p-6 rounded-xl border border-white/10 group cursor-pointer open:bg-white/5"><summary className="font-bold text-lg flex justify-between items-center outline-none list-none uppercase font-tech text-white">{item.q} <span className="text-white transition-transform group-open:rotate-180"><Icons.ChevronDown /></span></summary><p className="text-gray-300 text-sm mt-4 leading-relaxed pl-4 border-l-2 border-white/50">{item.a}</p></details>))} </div><div className="floating-credit">{t.credit_text}</div></div>;
