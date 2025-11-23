@@ -4,135 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CLICK IA - The Future of Marketing</title>
-    <!-- ESTILOS Y FUENTES (HACKER / CYBERPUNK) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=Chakra+Petch:wght@400;600;700&family=Oswald:wght@500&family=Playfair+Display:wght@600&family=Montserrat:wght@700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     
-    <!-- MOTOR REACT -->
+    <!-- REACT & BABEL -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <!-- NUEVO MOTOR GRÁFICO (FABRIC.JS) PARA NANO-STUDIO -->
+    <!-- FABRIC.JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     
     <style>
-        /* --- ESTÉTICA FINAL CYBERPUNK --- */
         body { background-color: #050505; color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         h1, h2, h3, .font-tech { font-family: 'Chakra Petch', sans-serif; }
-        
-        #bg-video {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; z-index: -1; opacity: 0.2;
-            filter: contrast(1.2) brightness(0.5) hue-rotate(190deg) grayscale(0.5);
-        }
-
-        .glass { 
-            background: rgba(15, 15, 20, 0.85); backdrop-filter: blur(20px); 
-            border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
-        }
-        .glass-panel {
-            background: rgba(10, 10, 12, 0.98); 
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .glass-card { 
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); 
-            transition: all 0.3s ease; cursor: pointer; overflow: hidden; position: relative; border-radius: 16px;
-        }
-        .glass-card:hover { 
-            border-color: #06b6d4; transform: translateY(-5px); 
-            box-shadow: 0 10px 40px rgba(6, 182, 212, 0.2);
-        }
-        .glass-card.selected {
-            border-color: #06b6d4; background: rgba(6, 182, 212, 0.15);
-            box-shadow: 0 0 0 2px #06b6d4; transform: scale(1.02);
-        }
-        
-        .card-label {
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.6), transparent); 
-            padding: 20px 10px 10px 10px; text-align: center;
-            font-family: 'Chakra Petch'; text-transform: uppercase;
-        }
-
-        .scan-line {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, transparent, rgba(6, 182, 212, 0.3), #06b6d4, rgba(6, 182, 212, 0.3), transparent);
-            background-size: 100% 20%;
-            background-repeat: no-repeat;
-            animation: scan 2.5s linear infinite;
-            pointer-events: none;
-            z-index: 20;
-        }
-        @keyframes scan {
-            0% { background-position: 0% -20%; }
-            100% { background-position: 0% 120%; }
-        }
-
-        .tech-btn {
-            background: white; color: black; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em;
-            border-radius: 4px; padding: 14px 32px; transition: all 0.2s; cursor: pointer;
-            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
-        }
+        #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.2; filter: contrast(1.2) brightness(0.5) hue-rotate(190deg) grayscale(0.5); }
+        .glass { background: rgba(15, 15, 20, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .glass-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; cursor: pointer; overflow: hidden; position: relative; border-radius: 16px; }
+        .glass-card:hover { border-color: #06b6d4; transform: translateY(-5px); box-shadow: 0 10px 40px rgba(6, 182, 212, 0.2); }
+        .glass-card.selected { border-color: #06b6d4; background: rgba(6, 182, 212, 0.15); box-shadow: 0 0 0 2px #06b6d4; transform: scale(1.02); }
+        .card-label { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.6), transparent); padding: 20px 10px 10px 10px; text-align: center; font-family: 'Chakra Petch'; text-transform: uppercase; }
+        .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(6, 182, 212, 0.3), #06b6d4, rgba(6, 182, 212, 0.3), transparent); background-size: 100% 20%; background-repeat: no-repeat; animation: scan 2.5s linear infinite; pointer-events: none; z-index: 20; }
+        @keyframes scan { 0% { background-position: 0% -20%; } 100% { background-position: 0% 120%; } }
+        .tech-btn { background: white; color: black; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 4px; padding: 14px 32px; transition: all 0.2s; cursor: pointer; clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%); }
         .tech-btn:hover { transform: translateY(-2px); box-shadow: 0 0 25px rgba(255, 255, 255, 0.3); }
-        
-        .editor-btn {
-            background: #1a1a1a; color: white; font-weight: 600; font-family: 'Chakra Petch';
-            border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;
-            transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
+        .editor-btn { background: #1a1a1a; color: white; font-weight: 600; font-family: 'Chakra Petch'; border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 8px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .editor-btn:hover { border-color: #06b6d4; background: rgba(6, 182, 212, 0.1); }
-
-        .quiz-input {
-            background: transparent; border: none; border-bottom: 2px solid rgba(255,255,255,0.2);
-            width: 100%; padding: 20px; font-size: 1.5rem; color: white; text-align: center;
-            font-family: 'Chakra Petch'; transition: all 0.3s;
-        }
+        .quiz-input { background: transparent; border: none; border-bottom: 2px solid rgba(255,255,255,0.2); width: 100%; padding: 20px; font-size: 1.5rem; color: white; text-align: center; font-family: 'Chakra Petch'; transition: all 0.3s; }
         .quiz-input:focus { outline: none; border-color: #06b6d4; background: rgba(6, 182, 212, 0.05); }
-
-        .glass-input {
-            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white; font-family: 'Chakra Petch';
-            padding: 12px; width: 100%; border-radius: 8px;
-        }
+        .glass-input { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-family: 'Chakra Petch'; padding: 12px; width: 100%; border-radius: 8px; }
         .glass-input:focus { outline: none; border-color: #06b6d4; background: rgba(255, 255, 255, 0.15); }
-
-        .comparison-container { position: relative; width: 100%; height: 300px; border-radius: 16px; overflow: hidden; cursor: ew-resize; border: 1px solid rgba(255,255,255,0.2); }
-        
         .color-check { width: 40px; height: 40px; border-radius: 10px; cursor: pointer; border: 2px solid rgba(255,255,255,0.1); transition: transform 0.2s; position: relative;}
         .color-check.selected { border-color: white; transform: scale(1.15); box-shadow: 0 0 15px rgba(255,255,255,0.3); }
         .color-check.selected::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: black; font-weight: bold; font-size: 12px; filter: drop-shadow(0 0 2px white); }
-
-        .embedded-credit { 
-            text-align: center; font-size: 9px; text-transform: uppercase; letter-spacing: 0.2em; 
-            color: rgba(255,255,255,0.3); font-family: 'Chakra Petch'; 
-            margin-top: 20px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); width: 100%;
-        }
-        
-        .floating-credit {
-            position: fixed; bottom: 30px; left: 0; width: 100%;
-            text-align: center; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; 
-            color: rgba(255,255,255,0.4); font-family: 'Chakra Petch'; 
-            z-index: 50; pointer-events: none; padding: 0 20px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-        }
-
+        .floating-credit { position: fixed; bottom: 30px; left: 0; width: 100%; text-align: center; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(255,255,255,0.4); font-family: 'Chakra Petch'; z-index: 50; pointer-events: none; padding: 0 20px; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
         .mute-btn { position: fixed; bottom: 20px; right: 20px; z-index: 60; background: rgba(0,0,0,0.8); border: 1px solid #06b6d4; color: #06b6d4; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .clip-path-slanted { clip-path: polygon(10% 0, 100% 0, 100% 80%, 90% 100%, 0 100%, 0 20%); }
-        
-        .copy-area {
-            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px; padding: 15px; font-family: 'Inter', sans-serif;
-            font-size: 14px; color: #e5e7eb; white-space: pre-wrap; max-height: 200px; overflow-y: auto;
-        }
+        .copy-area { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 15px; font-family: 'Inter', sans-serif; font-size: 14px; color: #e5e7eb; white-space: pre-wrap; max-height: 200px; overflow-y: auto; }
         .copy-area:focus { outline: none; border-color: #06b6d4; }
-        
-        .cloud-item { cursor: pointer; transition: all 0.2s; }
-        .cloud-item:hover { background: rgba(255,255,255,0.1); border-color: #06b6d4; }
         .fade-enter { animation: fadeIn 0.5s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Estilo para el contenedor del Canvas Fabric */
         .canvas-container { margin: 0 auto; }
     </style>
 </head>
@@ -153,12 +64,10 @@
         // --- CONSTANTES ---
         const MAGIC_RESULT_IMAGE_DEFAULT = "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2865"; 
         const UGLY_BURGER_IMAGE = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=2799"; 
-        
-        // --- CEO UPDATE ---
         const CREATOR_IMAGE = "./roddy-ceo.jpg"; 
         const INITIAL_CREDITS = 3;
 
-        // --- ICONOS SVG ---
+        // --- ICONOS ---
         const Icons = {
             Logo: () => <svg width="32" height="32" viewBox="0 0 100 100" fill="none"><path d="M50 10L90 80C90 80 70 70 50 70C30 70 10 80 10 80L50 10Z" fill="white"/></svg>,
             Google: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"/></svg>,
@@ -180,16 +89,20 @@
             Music: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>,
             X: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
             ChevronDown: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>,
-            Sliders: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+            Sliders: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>,
+            Instagram: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>,
+            Tiktok: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>,
+            Facebook: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
         };
 
+        // --- DATOS ---
         const STYLES_DATA = [
-            { id: 'realistic', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400', music: 'Lofi Chill' },
-            { id: 'cinematic', img: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=400', music: 'Epic Orchestral' }, 
-            { id: 'luxury', img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400', music: 'Jazz Lounge' },
-            { id: 'neon', img: 'https://images.unsplash.com/photo-1555212697-194d092e3b8f?q=80&w=400', music: 'Synthwave' },
-            { id: '3d', img: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=400', music: 'Happy Pop' },
-            { id: 'cyber', img: 'https://images.unsplash.com/photo-1515630278258-407f66498911?q=80&w=400', music: 'Dark Techno' }
+            { id: 'realistic', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400' },
+            { id: 'cinematic', img: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=400' }, 
+            { id: 'luxury', img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400' },
+            { id: 'neon', img: 'https://images.unsplash.com/photo-1555212697-194d092e3b8f?q=80&w=400' },
+            { id: '3d', img: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=400' },
+            { id: 'cyber', img: 'https://images.unsplash.com/photo-1515630278258-407f66498911?q=80&w=400' }
         ];
 
         const LIGHTING_DATA = [
@@ -208,11 +121,9 @@
             "CUATERNARIOS": ["#800000", "#808000", "#008080", "#000080"]
         };
 
-        // --- SISTEMA DE TRADUCCIÓN ROBUSTO ---
         const TRANSLATIONS = {
             ES: {
-                enter: "INGRESAR", prices: "VER PRECIOS", faq: "PREGUNTAS",
-                powered: "Powered by Gemini",
+                enter: "INGRESAR", prices: "VER PRECIOS", faq: "PREGUNTAS", powered: "Powered by Gemini",
                 hero_mk: "EL FUTURO DEL MARKETING", hero_auto: "PARA EMPRESAS.",
                 bullets: ['Última Tecnología', 'Velocidad Luz', 'Neuromarketing', 'Ahorro Total', 'Experto en Ventas'],
                 cta_trial: "RECIBE UNA PRUEBA GRATIS", cta_posts: "GENERA 50 POST AL MES",
@@ -240,19 +151,14 @@
                 edit_design: "🛠️ ABRIR NANO-STUDIO", editor_title: "NANO-STUDIO 2.0", save_design: "GUARDAR DISEÑO", close_editor: "CERRAR",
                 edit_text_1: "Texto Principal", edit_text_2: "Subtítulo", edit_size: "Tamaño Logo",
                 default_promo: "Por tiempo limitado",
-                copy_headline: "¿Listo para el siguiente nivel?", copy_body_1: "No es solo", copy_body_2: "Es una experiencia.", 
-                copy_offer: "Oferta exclusiva:", copy_cta: "📲 Haz tu pedido aquí:",
+                copy_headline: "¿Listo para el siguiente nivel?", copy_body_1: "No es solo", copy_body_2: "Es una experiencia.", copy_offer: "Oferta exclusiva:", copy_cta: "📲 Haz tu pedido aquí:",
                 plans: "PLANES", p_names: ["PRINCIPIANTE", "EMPRESA", "AGENCIA"], p_subs: ["MENSUAL", "PAGO ÚNICO 1 AÑO", "PAGO ÚNICO"], rec: "RECOMENDADO", buy: "COMPRAR AHORA", sel: "SELECCIONAR", f_1: ["1 Mes de Servicio", "4K High Definition", "50 Post Mensuales"], f_2: ["1 AÑO de Servicio", "8K High Definition", "100 Post Mensuales", "Soporte VIP"], f_3: ["1 Mes de Servicio", "8K High Definition", "Ilimitado", "Marca Blanca"], faq_title: "PREGUNTAS FRECUENTES", q1: "¿QUÉ ES MARKETING?", a1: "El Marketing no es vender. Es que te elijan.", q2: "¿PARA QUE SIRVE LA APP?", a2: "Click IA clona el cerebro de los mejores publicistas.", q3: "¿QUÉ GANO CON LA APP?", a3: "Ganas tiempo y calidad mundial.", before: "Antes", after: "Después",
                 s_realistic: 'Fotorealismo', s_cinematic: 'Cinemático', s_luxury: 'Lujo Minimal', s_neon: 'Neon Pop', s_3d: '3D Pixar', s_cyber: 'Cyberpunk',
-                l_studio: 'Luz de Estudio', l_studio_desc: 'Frontal Suave',
-                l_neon: 'Neón', l_neon_desc: 'Lateral Color',
-                l_golden: 'Hora Dorada', l_golden_desc: 'Trasera Solar',
-                l_dramatic: 'Cinemático', l_dramatic_desc: 'Contraste Alto',
+                l_studio: 'Luz de Estudio', l_studio_desc: 'Frontal Suave', l_neon: 'Neón', l_neon_desc: 'Lateral Color', l_golden: 'Hora Dorada', l_golden_desc: 'Trasera Solar', l_dramatic: 'Cinemático', l_dramatic_desc: 'Contraste Alto',
                 txt_top: 'TU MARCA', txt_bot: 'OFERTA LIMITADA'
             },
             EN: {
-                enter: "ENTER", prices: "PRICING", faq: "FAQ",
-                powered: "Powered by Gemini",
+                enter: "ENTER", prices: "PRICING", faq: "FAQ", powered: "Powered by Gemini",
                 hero_mk: "THE FUTURE OF MARKETING", hero_auto: "FOR BUSINESSES.",
                 bullets: ['Latest Tech', 'Light Speed', 'Neuromarketing', 'Total Savings', 'Sales Expert'],
                 cta_trial: "GET FREE TRIAL", cta_posts: "GENERATE 50 POSTS/MO",
@@ -280,19 +186,14 @@
                 edit_design: "🛠️ OPEN NANO-STUDIO", editor_title: "NANO-STUDIO 2.0", save_design: "SAVE DESIGN", close_editor: "CLOSE",
                 edit_text_1: "Main Text", edit_text_2: "Subtitle", edit_size: "Logo Size",
                 default_promo: "Limited time only",
-                copy_headline: "Ready for the next level?", copy_body_1: "It's not just", copy_body_2: "It's an experience.", 
-                copy_offer: "Exclusive offer:", copy_cta: "📲 Order here:",
+                copy_headline: "Ready for the next level?", copy_body_1: "It's not just", copy_body_2: "It's an experience.", copy_offer: "Exclusive offer:", copy_cta: "📲 Order here:",
                 plans: "PLANS", p_names: ["BEGINNER", "BUSINESS", "AGENCY"], p_subs: ["MONTHLY", "ONE TIME 1 YEAR", "ONE TIME"], rec: "RECOMMENDED", buy: "BUY NOW", sel: "SELECT", f_1: ["1 Month Service", "4K High Definition", "50 Posts Monthly"], f_2: ["1 YEAR Service", "8K High Definition", "100 Posts Monthly", "VIP Support"], f_3: ["1 Month Service", "8K High Definition", "Unlimited", "White Label"], faq_title: "FREQUENT QUESTIONS", q1: "WHAT IS MARKETING?", a1: "Marketing is not selling. It's being chosen.", q2: "WHAT IS THE APP FOR?", a2: "Click IA clones the brains of top advertisers.", q3: "WHAT DO I GET?", a3: "You gain time and world-class quality.", before: "Before", after: "After",
                 s_realistic: 'Photorealism', s_cinematic: 'Cinematic', s_luxury: 'Minimal Luxury', s_neon: 'Neon Pop', s_3d: '3D Pixar', s_cyber: 'Cyberpunk',
-                l_studio: 'Studio Light', l_studio_desc: 'Soft Frontal',
-                l_neon: 'Neon', l_neon_desc: 'Side Color',
-                l_golden: 'Golden Hour', l_golden_desc: 'Back Sun',
-                l_dramatic: 'Cinematic', l_dramatic_desc: 'High Contrast',
+                l_studio: 'Studio Light', l_studio_desc: 'Soft Frontal', l_neon: 'Neon', l_neon_desc: 'Side Color', l_golden: 'Golden Hour', l_golden_desc: 'Back Sun', l_dramatic: 'Cinematic', l_dramatic_desc: 'High Contrast',
                 txt_top: 'YOUR BRAND', txt_bot: 'LIMITED OFFER'
             },
             FR: {
-                enter: "ENTRER", prices: "TARIFS", faq: "FAQ",
-                powered: "Powered by Gemini",
+                enter: "ENTRER", prices: "TARIFS", faq: "FAQ", powered: "Powered by Gemini",
                 hero_mk: "L'AVENIR DU MARKETING", hero_auto: "POUR LES ENTREPRISES.",
                 bullets: ['Dernière Tech', 'Vitesse Lumière', 'Neuromarketing', 'Économies Totales', 'Expert Vente'],
                 cta_trial: "ESSAI GRATUIT", cta_posts: "GÉNÉREZ 50 POSTS/MOIS",
@@ -320,19 +221,14 @@
                 edit_design: "🛠️ OUVRIR NANO-STUDIO", editor_title: "NANO-STUDIO 2.0", save_design: "SAUVEGARDER", close_editor: "FERMER",
                 edit_text_1: "Texte Principal", edit_text_2: "Sous-titre", edit_size: "Taille Logo",
                 default_promo: "Durée limitée",
-                copy_headline: "Prêt pour le niveau supérieur ?", copy_body_1: "Ce n'est pas juste", copy_body_2: "C'est une expérience.", 
-                copy_offer: "Offre exclusive :", copy_cta: "📲 Commandez ici :",
+                copy_headline: "Prêt pour le niveau supérieur ?", copy_body_1: "Ce n'est pas juste", copy_body_2: "C'est une expérience.", copy_offer: "Offre exclusive :", copy_cta: "📲 Commandez ici :",
                 plans: "PLANS", p_names: ["DÉBUTANT", "ENTREPRISE", "AGENCE"], p_subs: ["MENSUEL", "PAIEMENT UNIQUE", "PAIEMENT UNIQUE"], rec: "RECOMMANDÉ", buy: "ACHETER", sel: "SÉLECTIONNER", f_1: ["1 Mois Service", "4K", "50 Posts"], f_2: ["1 An", "8K", "100 Posts", "VIP"], f_3: ["1 Mois", "8K", "Illimité", "Marque Blanche"], faq_title: "QUESTIONS", q1: "MARKETING ?", a1: "Le marketing n'est pas vendre.", q2: "POURQUOI L'APP ?", a2: "Click IA clone les meilleurs cerveaux.", q3: "QU'EST-CE QUE JE GAGNE ?", a3: "Du temps et de la qualité.", before: "Avant", after: "Après",
                 s_realistic: 'Photoréalisme', s_cinematic: 'Cinématique', s_luxury: 'Luxe Minimal', s_neon: 'Néon Pop', s_3d: '3D Pixar', s_cyber: 'Cyberpunk',
-                l_studio: 'Lumière Studio', l_studio_desc: 'Frontale Douce',
-                l_neon: 'Néon', l_neon_desc: 'Couleur Latérale',
-                l_golden: 'Heure Dorée', l_golden_desc: 'Soleil Arrière',
-                l_dramatic: 'Cinématique', l_dramatic_desc: 'Contraste Élevé',
+                l_studio: 'Lumière Studio', l_studio_desc: 'Frontale Douce', l_neon: 'Néon', l_neon_desc: 'Couleur Latérale', l_golden: 'Heure Dorée', l_golden_desc: 'Soleil Arrière', l_dramatic: 'Cinématique', l_dramatic_desc: 'Contraste Élevé',
                 txt_top: 'VOTRE MARQUE', txt_bot: 'OFFRE LIMITÉE'
             },
             ZH: { 
-                enter: "登录", prices: "价格", faq: "常见问题",
-                powered: "Powered by Gemini",
+                enter: "登录", prices: "价格", faq: "常见问题", powered: "Powered by Gemini",
                 hero_mk: "营销的未来", hero_auto: "面向企业.",
                 bullets: ['最新技术', '光速', '神经营销', '完全节省', '销售专家'],
                 cta_trial: "获得免费试用", cta_posts: "每月生成50个帖子",
@@ -360,14 +256,10 @@
                 edit_design: "🛠️ 打开 NANO-STUDIO", editor_title: "NANO-STUDIO 2.0", save_design: "保存设计", close_editor: "关闭",
                 edit_text_1: "主要文本", edit_text_2: "副标题", edit_size: "标志尺寸",
                 default_promo: "限时优惠",
-                copy_headline: "准备好进入下一个层级了吗？", copy_body_1: "这不仅仅是", copy_body_2: "这是一种体验。", 
-                copy_offer: "独家优惠：", copy_cta: "📲 在此下单：",
+                copy_headline: "准备好进入下一个层级了吗？", copy_body_1: "这不仅仅是", copy_body_2: "这是一种体验。", copy_offer: "独家优惠：", copy_cta: "📲 在此下单：",
                 plans: "计划", p_names: ["初学者", "企业", "代理机构"], p_subs: ["月刊", "一次性 1 年", "一次性付款"], rec: "推荐", buy: "立即购买", sel: "选择", f_1: ["1个月服务", "4K高清", "每月50个帖子"], f_2: ["1年服务", "8K高清", "每月100个帖子", "VIP支持"], f_3: ["1个月服务", "8K高清", "无限", "白标"], faq_title: "常见问题", q1: "什么是营销？", a1: "营销不是销售...", q2: "该应用程序有什么用？", a2: "Click IA 克隆大脑...", q3: "我能得到什么？", a3: "你赢得了时间...", before: "前", after: "后",
                 s_realistic: '写实主义', s_cinematic: '电影感', s_luxury: '极简奢华', s_neon: '霓虹流行', s_3d: '3D皮克斯', s_cyber: '赛博朋克',
-                l_studio: '摄影棚光', l_studio_desc: '柔和正面',
-                l_neon: '霓虹', l_neon_desc: '侧面色彩',
-                l_golden: '黄金时刻', l_golden_desc: '逆光',
-                l_dramatic: '电影感', l_dramatic_desc: '高对比度',
+                l_studio: '摄影棚光', l_studio_desc: '柔和正面', l_neon: '霓虹', l_neon_desc: '侧面色彩', l_golden: '黄金时刻', l_golden_desc: '逆光', l_dramatic: '电影感', l_dramatic_desc: '高对比度',
                 txt_top: '您的品牌', txt_bot: '限时优惠'
             }
         };
@@ -378,7 +270,7 @@
             const canvasRef = useRef(null);
             useEffect(() => {
                 const canvas = canvasRef.current;
-                if (!canvas) return; // Safety check
+                if (!canvas) return;
                 const ctx = canvas.getContext('2d');
                 let width = canvas.width = 300; let height = canvas.height = 300;
                 let particles = [];
@@ -445,68 +337,38 @@
                 const initCanvas = () => {
                     const canvasElement = canvasRef.current;
                     // --- SEGURIDAD FABRIC: CHECK DOM & RACE CONDITION ---
-                    if (!canvasElement) {
-                        // Si aún no existe, no hacemos nada (React podría estar desmontando)
-                        return;
-                    }
+                    if (!canvasElement) return;
 
                     // Destruir instancia previa si existe (limpieza)
                     if (fabricCanvasRef.current) {
-                        try {
-                            fabricCanvasRef.current.dispose();
-                        } catch(e) {}
+                        try { fabricCanvasRef.current.dispose(); } catch(e) {}
                         fabricCanvasRef.current = null;
                     }
 
                     try {
-                        // Crear nueva instancia
-                        const canvas = new fabric.Canvas(canvasElement, {
-                            width: 800,
-                            height: 800, 
-                            backgroundColor: '#000000',
-                        });
+                        const canvas = new fabric.Canvas(canvasElement, { width: 800, height: 800, backgroundColor: '#000000' });
                         fabricCanvasRef.current = canvas;
 
-                        // Eventos de selección
                         canvas.on('selection:created', (e) => setSelectedObj(e.selected[0]));
                         canvas.on('selection:updated', (e) => setSelectedObj(e.selected[0]));
                         canvas.on('selection:cleared', () => setSelectedObj(null));
 
-                        // Cargar imagen de fondo
                         if (image) {
                             fabric.Image.fromURL(image, (img) => {
-                                if(!img || !fabricCanvasRef.current) return; // Check ref existence
+                                if(!img || !fabricCanvasRef.current) return; 
                                 const maxWidth = 800;
                                 const scale = maxWidth / img.width;
-                                
                                 canvas.setWidth(img.width * scale);
                                 canvas.setHeight(img.height * scale);
-                                
-                                img.set({
-                                    originX: 'left',
-                                    originY: 'top',
-                                    scaleX: scale,
-                                    scaleY: scale,
-                                    selectable: false,
-                                    evented: false
-                                });
+                                img.set({ originX: 'left', originY: 'top', scaleX: scale, scaleY: scale, selectable: false, evented: false });
                                 canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
-                                
-                                // Añadir textos iniciales
                                 addTextToCanvas(canvas, initialText.top || "YOUR BRAND", 50, 50, initialText.colorTop || "#FFF");
                                 addTextToCanvas(canvas, initialText.bottom || "OFFER", 50, canvas.height - 100, initialText.colorBot || "#00FFFF");
-                                
-                                // Añadir logo si existe (CON TRUCO MULTIPLY)
                                 if(logo) {
                                     fabric.Image.fromURL(logo, (logoImg) => {
                                         if(logoImg && fabricCanvasRef.current) {
                                             logoImg.scaleToWidth(150);
-                                            logoImg.set({
-                                                left: canvas.width / 2 - 75,
-                                                top: canvas.height / 2 - 75,
-                                                // EL TRUCO: Multiplicar para borrar blancos
-                                                globalCompositeOperation: 'multiply' 
-                                            });
+                                            logoImg.set({ left: canvas.width / 2 - 75, top: canvas.height / 2 - 75, globalCompositeOperation: 'multiply' });
                                             canvas.add(logoImg);
                                             canvas.setActiveObject(logoImg);
                                         }
@@ -519,42 +381,25 @@
                     }
                 };
 
-                // --- TIMEOUT DE SEGURIDAD (300ms) ---
-                // Esperamos a que React termine de pintar el DOM
                 timer = setTimeout(initCanvas, 300);
 
-                // --- CLEANUP FUNCTION (CRITICO PARA EVITAR CRASH) ---
                 return () => {
-                    clearTimeout(timer); // Cancelar init si el usuario cierra rápido
+                    clearTimeout(timer);
                     if (fabricCanvasRef.current) {
-                        try {
-                            fabricCanvasRef.current.dispose();
-                        } catch (e) {
-                            console.warn("Error disposing canvas", e);
-                        }
+                        try { fabricCanvasRef.current.dispose(); } catch (e) {}
                         fabricCanvasRef.current = null;
                     }
                 };
-            }, [image]); // Solo reiniciar si cambia la imagen base
+            }, [image]); 
 
             const addTextToCanvas = (canvas, text, x, y, color) => {
                 if(!canvas) return;
-                const t = new fabric.IText(text, {
-                    left: x,
-                    top: y,
-                    fontFamily: 'Chakra Petch',
-                    fill: color,
-                    fontSize: 40,
-                    fontWeight: 'bold',
-                    shadow: 'rgba(0,0,0,0.8) 2px 2px 5px'
-                });
+                const t = new fabric.IText(text, { left: x, top: y, fontFamily: 'Chakra Petch', fill: color, fontSize: 40, fontWeight: 'bold', shadow: 'rgba(0,0,0,0.8) 2px 2px 5px' });
                 canvas.add(t);
                 canvas.setActiveObject(t);
             };
 
-            const addNewText = () => {
-                if(fabricCanvasRef.current) addTextToCanvas(fabricCanvasRef.current, "TEXTO NUEVO", 100, 100, "#FFFFFF");
-            };
+            const addNewText = () => { if(fabricCanvasRef.current) addTextToCanvas(fabricCanvasRef.current, "TEXTO NUEVO", 100, 100, "#FFFFFF"); };
 
             const handleImageUpload = (e) => {
                 const file = e.target.files[0];
@@ -562,42 +407,21 @@
                     const reader = new FileReader();
                     reader.onload = (f) => {
                         fabric.Image.fromURL(f.target.result, (img) => {
-                            img.scaleToWidth(200);
-                            img.set({ left: 100, top: 100 });
-                            fabricCanvasRef.current.add(img);
-                            fabricCanvasRef.current.setActiveObject(img);
+                            img.scaleToWidth(200); img.set({ left: 100, top: 100 });
+                            fabricCanvasRef.current.add(img); fabricCanvasRef.current.setActiveObject(img);
                         });
                     };
                     reader.readAsDataURL(file);
                 }
             };
 
-            const updateSelected = (prop, value) => {
-                if(fabricCanvasRef.current && selectedObj) {
-                    selectedObj.set(prop, value);
-                    fabricCanvasRef.current.requestRenderAll();
-                }
-            };
-
-            const deleteSelected = () => {
-                if(fabricCanvasRef.current && selectedObj) {
-                    fabricCanvasRef.current.remove(selectedObj);
-                    setSelectedObj(null);
-                }
-            };
+            const updateSelected = (prop, value) => { if(fabricCanvasRef.current && selectedObj) { selectedObj.set(prop, value); fabricCanvasRef.current.requestRenderAll(); } };
+            const deleteSelected = () => { if(fabricCanvasRef.current && selectedObj) { fabricCanvasRef.current.remove(selectedObj); setSelectedObj(null); } };
 
             const download = () => {
                 if(fabricCanvasRef.current) {
-                    // Restaurar pixel ratio para alta calidad
-                    const dataURL = fabricCanvasRef.current.toDataURL({
-                        format: 'jpeg',
-                        quality: 0.9,
-                        multiplier: 2 // Exportar a doble resolución (HD)
-                    });
-                    const link = document.createElement('a');
-                    link.download = `CLICK_IA_NANO_${Date.now()}.jpg`;
-                    link.href = dataURL;
-                    link.click();
+                    const dataURL = fabricCanvasRef.current.toDataURL({ format: 'jpeg', quality: 0.9, multiplier: 2 });
+                    const link = document.createElement('a'); link.download = `CLICK_IA_NANO_${Date.now()}.jpg`; link.href = dataURL; link.click();
                 }
             };
 
@@ -637,7 +461,6 @@
                                         <input type="range" min="0" max="1" step="0.1" value={selectedObj.opacity} onChange={e => updateSelected('opacity', parseFloat(e.target.value))} />
                                      </div>
 
-                                     {/* CONTROL DE MEZCLA PARA LOGOS (MULTIPLY TRICK) */}
                                      {selectedObj.type === 'image' && (
                                          <button 
                                             onClick={() => updateSelected('globalCompositeOperation', selectedObj.globalCompositeOperation === 'multiply' ? 'source-over' : 'multiply')} 
@@ -657,7 +480,6 @@
                              </div>
                         </div>
                         <div className="flex-1 bg-[#080808] canvas-container flex items-center justify-center relative overflow-hidden p-10">
-                            {/* EL CANVAS REAL */}
                              <canvas ref={canvasRef} />
                         </div>
                     </div>
@@ -707,11 +529,9 @@
             const fileInputLogo = useRef(null);
             const fileInputInspiration = useRef(null);
             
-            // --- SEGURIDAD DE IDIOMA ---
             const t = TRANSLATIONS[lang] || TRANSLATIONS['ES'];
 
             useEffect(() => { 
-                // Actualizar textos por defecto al cambiar idioma
                 const top = t.txt_top || "TU MARCA";
                 const bot = t.txt_bot || "OFERTA";
                 setTextOverlay({ top: top, bottom: bot }); 
@@ -740,52 +560,24 @@
                 try {
                     if(!formData.style) return alert("Elige un estilo");
                     if(credits <= 0) return alert("¡Te has quedado sin créditos! Por favor recarga para continuar.");
-                    
-                    playSound('process'); 
-                    setView('processing');
-                    
+                    playSound('process'); setView('processing');
                     const promptBase = formData.product.name || "luxury product";
-                    // Asegurar que colors existe
                     const colorsStr = formData.colors ? formData.colors.join(", ") : "";
                     const magicPrompt = `Hyper-ultra-realistic 8k commercial photography of ${promptBase}, ${formData.style} aesthetic, ${formData.light}, perfect composition, golden ratio, product centered, vivid colors ${colorsStr}, highly detailed texture, 8k render, unreal engine 5 style, cinematic lighting, volumetric fog, professional advertising, award winning photography`;
-                    
                     const newImageURL = generateImageURL(magicPrompt);
                     let finalCopy = "";
                     let copyPromise = null;
-                    
                     if (apiKey) { 
                         const textPrompt = `Act as a world-class marketing expert. Write a short viral social media caption for ${promptBase}. Promo: ${formData.product.promo}. Company: ${formData.company}. Language: ${lang}. Include 5 trending hashtags.`; 
                         copyPromise = callGeminiAPI(textPrompt); 
                     }
-                    
                     const steps = t.loading_steps || ["Processing..."];
-                    for(let i=0; i<steps.length; i++) { 
-                        setLoadingText(steps[i]); 
-                        setProgress(((i+1)/steps.length)*100); 
-                        await new Promise(r => setTimeout(r, 800)); 
-                    }
-                    
-                    // --- GUARDIA DE DATOS DE LA API ---
-                    // Si la promesa falla o devuelve null, usamos el generador dinámico local
-                    if (copyPromise) { 
-                        const res = await copyPromise; 
-                        finalCopy = res || generateDynamicCopy(); 
-                    } else { 
-                        finalCopy = generateDynamicCopy(); 
-                    }
-                    
-                    setResultImage(newImageURL); 
-                    setGeneratedCopy(finalCopy); 
-                    setCredits(prev => prev - 1);
-                    
+                    for(let i=0; i<steps.length; i++) { setLoadingText(steps[i]); setProgress(((i+1)/steps.length)*100); await new Promise(r => setTimeout(r, 800)); }
+                    if (copyPromise) { const res = await copyPromise; finalCopy = res || generateDynamicCopy(); } else { finalCopy = generateDynamicCopy(); }
+                    setResultImage(newImageURL); setGeneratedCopy(finalCopy); setCredits(prev => prev - 1);
                     const newItem = { id: Date.now(), image: newImageURL, copy: finalCopy, logo: formData.logo, date: new Date().toLocaleDateString() };
-                    const updatedCloud = [newItem, ...userCloud]; 
-                    setUserCloud(updatedCloud); 
-                    localStorage.setItem('clickia_cloud', JSON.stringify(updatedCloud));
-                    
-                    playSound('success'); 
-                    setView('result');
-
+                    const updatedCloud = [newItem, ...userCloud]; setUserCloud(updatedCloud); localStorage.setItem('clickia_cloud', JSON.stringify(updatedCloud));
+                    playSound('success'); setView('result');
                 } catch (e) {
                     console.error("FATAL ERROR IN ENGINE:", e);
                     alert("Lo sentimos, ha ocurrido un error inesperado generando la campaña. Por favor intenta de nuevo.");
@@ -831,7 +623,6 @@
                     </div>
                     <div className="floating-credit">{t.credit_text}</div>
                     
-                    {/* INTEGRACIÓN DEL NUEVO EDITOR */}
                     {isEditing && <DesignEditor image={resultImage} logo={formData.logo} initialText={designState} onSave={() => setIsEditing(false)} onClose={() => setIsEditing(false)} tLang={t} />}
                 </div>
             );
