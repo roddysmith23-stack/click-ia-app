@@ -177,7 +177,6 @@
         <source src="https://cdn.pixabay.com/video/2020/12/18/59791-494669276_large.mp4" type="video/mp4">
     </video>
 
-    <!-- AUDIO SYSTEM -->
     <audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/05/17/audio_1832016087.mp3"></audio>
     <audio id="sfx-click" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a7346b.mp3"></audio>
     <audio id="sfx-process" src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_c2b3b469b7.mp3"></audio>
@@ -330,7 +329,7 @@
                 schedule: "AI Schedule", copy_viral: "Viral Copy", star_text: "STAR TEXT ★",
                 trends: "Detected Trends", publish: "PUBLISH NOW", new_btn: "NEW", ready: "READY",
                 credits: "CREDITS", color_n: "NEUTRALS", color_nu: "NUDE", color_p: "PRIMARY", color_s: "SECONDARY", color_t: "TERTIARY", color_q: "QUATERNARY",
-                loading_steps: ["SEARCHING WEB...", "ANALYZING TRENDS...", "STRUCTURING STRATEGY...", "GENERATING 8K IMAGE...", "WRITING VIRAL COPY..."],
+                loading_steps: ["SEARCHING WEB...", "ANALIZANDO TENDENCIAS...", "ESTRUCTURANDO ESTRATEGIA...", "GENERANDO IMAGEN 8K...", "REDACTANDO COPY VIRAL..."],
                 credit_text: '"Creativity is intelligence having fun." - Albert Einstein',
                 creator_title: "MEET THE CREATOR", creator_role: "CO-FOUNDER & CSIO", creator_bio: "Strategic visionary mastering AI and algorithms. Roddy Smith isn't just predicting the future of marketing, he is building it.", creator_mission: "Our mission is to shatter entry barriers. CLICK IA was born to change the world, empowering every entrepreneur with tech once reserved for giants.",
                 download: "DOWNLOAD IMAGE", copy_clipboard: "COPY TEXT",
@@ -668,7 +667,27 @@
             const [userCloud, setUserCloud] = useState([]);
             const [isEditing, setIsEditing] = useState(false);
 
-            const initialForm = { image: null, logo: null, inspirationImg: null, target: '', company: '', whatsapp: '', product: { name: '', price: '', promo: '' }, textOnImage: '', style: '', light: '', colors: [], googleData: false, inspiration: '', connected: { fb: false, ig: false, tk: false }, format: 'post' };
+            // --- ESTADO ACTUALIZADO (Con Ciudad y País) ---
+            const initialForm = { 
+                image: null, 
+                logo: null, 
+                inspirationImg: null, 
+                target: '', 
+                company: '', 
+                whatsapp: '',
+                city: '',      // NUEVO
+                country: '',   // NUEVO
+                product: { name: '', price: '', promo: '' }, 
+                textOnImage: '', 
+                style: '', 
+                light: '', 
+                colors: [], 
+                googleData: false, 
+                inspiration: '', 
+                connected: { fb: false, ig: false, tk: false }, 
+                format: 'post' 
+            };
+
             const [formData, setFormData] = useState(initialForm);
             const [loadingText, setLoadingText] = useState('');
             const [progress, setProgress] = useState(0);
@@ -698,29 +717,106 @@
             const handleCopyText = () => { navigator.clipboard.writeText(generatedCopy); alert("Copy copiado!"); };
             const handleDownloadImage = () => { fetch(resultImage).then(response => response.blob()).then(blob => { const url = window.URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = `CLICK_IA_${Date.now()}.jpg`; document.body.appendChild(link); link.click(); document.body.removeChild(link); window.URL.revokeObjectURL(url); }).catch(e => { window.open(resultImage, '_blank'); }); };
             const saveDesign = (newState) => { setDesignState(newState); setIsEditing(false); playSound('success'); };
+            
+            // --- GENERADOR DE IMAGEN (Conectado a Pollinations.ai) ---
             const generateImageURL = (prompt) => { const encodedPrompt = encodeURIComponent(prompt); return `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1080&height=1080&nologo=true&seed=${Math.floor(Math.random() * 10000)}`; };
+            
+            // --- LLAMADA A GEMINI ---
             const callGeminiAPI = async (prompt) => { if (!apiKey) return null; try { const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) }); const data = await response.json(); return data.candidates?.[0]?.content?.parts?.[0]?.text; } catch (error) { console.error("Gemini Error:", error); return null; } };
+            
+            // --- FALLBACK COPY ---
             const generateDynamicCopy = () => { const product = formData.product.name || "Producto"; const promo = formData.product.promo || t.default_promo; const contact = formData.whatsapp || "5939999999"; const company = formData.company || "Tu Empresa"; let copy = ""; if (lang === 'ES') { copy = `🚀 **¡${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${promo}\n📍 Disponible en: ${company}\n\n👇 **¡No esperes más!** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; } else { copy = `🚀 **${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${promo}\n📍 Available at: ${company}\n\n👇 **Don't wait!** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; } return copy; };
             
             const restoreCampaign = (item) => { setResultImage(item.image); setGeneratedCopy(item.copy); setFormData(prev => ({...prev, logo: item.logo || null })); setView('result'); };
 
+            // --- NUEVO MOTOR DE INTELIGENCIA ARTIFICIAL (OPTIMIZADO) ---
             const runEngine = async () => {
                 if(!formData.style) return alert("Elige un estilo");
                 if(credits <= 0) return alert("¡Te has quedado sin créditos! Por favor recarga para continuar.");
-                playSound('process'); setView('processing');
-                const promptBase = formData.product.name || "luxury product";
-                const magicPrompt = `Hyper-ultra-realistic 8k commercial photography of ${promptBase}, ${formData.style} aesthetic, ${formData.light}, perfect composition, golden ratio, product centered, vivid colors ${formData.colors.join(", ")}, highly detailed texture, 8k render, unreal engine 5 style, cinematic lighting, volumetric fog, professional advertising, award winning photography`;
-                const newImageURL = generateImageURL(magicPrompt);
-                let finalCopy = "";
-                let copyPromise = null;
-                if (apiKey) { const textPrompt = `Act as a world-class marketing expert. Write a short viral social media caption for ${promptBase}. Promo: ${formData.product.promo}. Company: ${formData.company}. Language: ${lang}. Include 5 trending hashtags.`; copyPromise = callGeminiAPI(textPrompt); }
-                const steps = t.loading_steps;
-                for(let i=0; i<steps.length; i++) { setLoadingText(steps[i]); setProgress(((i+1)/steps.length)*100); await new Promise(r => setTimeout(r, 800)); }
-                if (copyPromise) { const res = await copyPromise; finalCopy = res || generateDynamicCopy(); } else { finalCopy = generateDynamicCopy(); }
-                setResultImage(newImageURL); setGeneratedCopy(finalCopy); setCredits(prev => prev - 1);
-                const newItem = { id: Date.now(), image: newImageURL, copy: finalCopy, logo: formData.logo, date: new Date().toLocaleDateString() };
-                const updatedCloud = [newItem, ...userCloud]; setUserCloud(updatedCloud); localStorage.setItem('clickia_cloud', JSON.stringify(updatedCloud));
-                playSound('success'); setView('result');
+                
+                // 1. Iniciar UI
+                playSound('process'); 
+                setView('processing');
+
+                try {
+                    // Simulación rápida de carga
+                    const steps = t.loading_steps;
+                    for(let i=0; i<3; i++) { 
+                        setLoadingText(steps[i]); 
+                        setProgress(((i+1)/steps.length)*50); 
+                        await new Promise(r => setTimeout(r, 600)); 
+                    }
+
+                    // 2. CONSTRUCCIÓN DEL PROMPT MADRE
+                    const promptSystem = `
+            ### ROL Y OBJETIVO PRINCIPAL ###
+            Eres un EQUIPO DE ÉLITE MUNDIAL en Marketing Digital. Tu objetivo es transformar datos crudos en una CAMPAÑA DE MARKETING VISUAL Y TEXTUAL DE IMPACTO MASIVO.
+
+            ### DATOS DE ENTRADA ###
+            Usa estos datos que te da el usuario:
+            - Empresa: ${formData.company || "Empresa Genérica"}
+            - Producto: ${formData.product.name || "Producto Premium"}
+            - Precio: ${formData.product.price || "Consultar"}
+            - Promoción: ${formData.product.promo || "Oferta Limitada"}
+            - WhatsApp: ${formData.whatsapp || "N/A"}
+            - Ubicación: ${formData.city || "Ciudad Global"}, ${formData.country || "Mundo"}
+            - Target: ${formData.target || "Público General"}
+            - Inspiración: ${formData.inspiration || "Tendencias 2025"}
+            - Paleta Colores: ${formData.colors.join(", ") || "Colores Corporativos"}
+            - Estilo Visual: ${formData.style}
+            - Iluminación: ${formData.light}
+
+            ### INSTRUCCIONES DE OUTPUT (JSON ESTRICTO) ###
+            Devuelve SOLO un objeto JSON (sin markdown, sin \`\`\`) con estas 4 claves:
+
+            1. "prompt_imagen_comercial": Escribe un prompt técnico EXTREMADAMENTE DETALLADO (en inglés para mejor calidad de imagen) para generar una imagen 8K, hiperrealista, estilo cine. Instruye cómo integrar el producto y el logo.
+            2. "copy_viral": Texto persuasivo para redes, con emojis, hashtags y el link de WhatsApp formateado (https://wa.me/...).
+            3. "viral_score": Un número (ej: 9.8) del potencial de viralidad.
+            4. "cronograma_ia": Array con 3 sugerencias de horario optimizadas para la ciudad del usuario.
+                    `;
+
+                    setLoadingText("CONECTANDO NEURAL BRAIN...");
+                    
+                    // 3. LLAMADA A GEMINI API
+                    let aiData = null;
+                    if (apiKey) {
+                        const rawResponse = await callGeminiAPI(promptSystem);
+                        if(rawResponse) {
+                            // Limpieza de JSON
+                            const cleanJson = rawResponse.replace(/```json/g, '').replace(/```/g, '').trim();
+                            try { aiData = JSON.parse(cleanJson); } catch (e) { console.error("Error JSON", e); }
+                        }
+                    }
+
+                    setLoadingText("RENDERIZANDO IMAGEN 8K...");
+                    setProgress(85);
+
+                    // 4. GENERACIÓN DE IMAGEN
+                    const imagePrompt = aiData ? aiData.prompt_imagen_comercial : `${formData.product.name}, ${formData.style}, ${formData.light}, 8k commercial photography`;
+                    const newImageURL = generateImageURL(imagePrompt);
+
+                    await new Promise(r => setTimeout(r, 1000));
+
+                    // 5. ACTUALIZAR ESTADO FINAL
+                    const finalCopy = aiData ? aiData.copy_viral : generateDynamicCopy();
+                    
+                    setResultImage(newImageURL); 
+                    setGeneratedCopy(finalCopy); 
+                    setCredits(prev => prev - 1);
+                    
+                    const newItem = { id: Date.now(), image: newImageURL, copy: finalCopy, logo: formData.logo, date: new Date().toLocaleDateString() };
+                    const updatedCloud = [newItem, ...userCloud]; 
+                    setUserCloud(updatedCloud); 
+                    localStorage.setItem('clickia_cloud', JSON.stringify(updatedCloud));
+
+                    playSound('success'); 
+                    setView('result');
+
+                } catch (error) {
+                    console.error("Error crítico:", error);
+                    alert("Hubo un error. Verifica tu API Key.");
+                    setView('result');
+                }
             };
 
             const HeaderInternal = () => (<div className="absolute top-0 left-0 w-full p-6 flex justify-center items-center gap-6 z-50 pointer-events-none"><div className="pointer-events-auto"><button onClick={() => setView('pricing')} className="flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-md rounded-full border border-yellow-500/30 hover:border-yellow-400 hover:scale-105 transition-all shadow-lg group"><span className="text-yellow-400 group-hover:rotate-12 transition-transform"><Icons.Credit /></span><span className="text-xs font-bold font-tech text-white">{credits} {t.credits}</span><span className="w-4 h-4 bg-yellow-500 text-black rounded-full flex items-center justify-center text-[10px] font-bold">+</span></button></div><div className="pointer-events-auto flex items-center gap-2 cursor-pointer group" onClick={() => setView('landing')}><Icons.Logo /><span className="text-xl font-black font-tech tracking-tighter group-hover:text-cyan-400 transition-colors">CLICK.IA</span></div><div className="pointer-events-auto flex items-center gap-1 text-[8px] text-cyan-400 font-bold uppercase tracking-[0.2em] bg-cyan-900/20 px-3 py-2 rounded-full border border-cyan-500/20"><Icons.Google /> {t.powered}</div></div>);
@@ -730,7 +826,27 @@
             if (view === 'upload') return <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative"><HeaderInternal /><div className="w-full max-w-4xl glass p-12 rounded-3xl text-center border border-white/10 mt-20"><div className="absolute top-8 left-8 cursor-pointer text-gray-500 hover:text-white" onClick={() => setView('landing')}><Icons.ChevronLeft /></div><h2 className="text-3xl font-bold font-tech mb-8 uppercase">{t.upload_title}</h2><div className="grid md:grid-cols-2 gap-8 mb-10"><div onClick={() => fileInputProduct.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.image ? 'border-cyan-500 bg-cyan-900/10' : 'border-white/20 hover:border-cyan-500'}`}>{formData.image ? (<><img src={formData.image} className="w-full h-full object-contain p-4" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Upload /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_prod}</span></>}<input type="file" ref={fileInputProduct} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'image')} /></div><div onClick={() => fileInputLogo.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.logo ? 'border-purple-500 bg-purple-900/10' : 'border-white/20 hover:border-purple-500'}`}>{formData.logo ? (<><img src={formData.logo} className="w-full h-full object-contain p-8" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Zap /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_logo}</span></>}<input type="file" ref={fileInputLogo} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'logo')} /></div></div><button onClick={() => { if(!formData.image) return alert("Sube producto"); playSound('click'); changeView('q1'); }} className={`tech-btn w-full py-5 text-xl uppercase tracking-widest ${!formData.image && 'opacity-50 cursor-not-allowed'}`}>{t.next}</button><div className="embedded-credit">{t.credit_text}</div></div></div>;
             if (view === 'q1') return <QuestionScreen title={t.q1_title} color="text-cyan-400" nextView="q2" prevView="upload" onNext={() => changeView('q2')} onPrev={() => changeView('upload')} credits={credits} setView={setView} tLang={t}><input className="quiz-input" placeholder={t.q1_ph} autoFocus value={formData.target} onChange={e => setFormData({...formData, target: e.target.value})} /></QuestionScreen>;
             if (view === 'q2') return <QuestionScreen title={t.q2_title} color="text-purple-400" nextView="q3" prevView="q1" onNext={() => changeView('q3')} onPrev={() => changeView('q1')} credits={credits} setView={setView} tLang={t}><div className="space-y-4"><input className="quiz-input" placeholder={t.q2_p1} value={formData.product.name} onChange={e => updateProduct('name', e.target.value)} /><div className="grid grid-cols-2 gap-4"><input className="quiz-input" placeholder={t.q2_p2} value={formData.product.price} onChange={e => updateProduct('price', e.target.value)} /><input className="quiz-input" placeholder={t.q2_p3} value={formData.product.promo} onChange={e => updateProduct('promo', e.target.value)} /></div></div></QuestionScreen>;
-            if (view === 'q3') return <QuestionScreen title={t.q3_title} color="text-green-400" nextView="q4" prevView="q2" onNext={() => changeView('q4')} onPrev={() => changeView('q2')} credits={credits} setView={setView} tLang={t}><div className="space-y-4"><input className="quiz-input" placeholder={t.q3_p1} value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} /><div className="relative"><input className="quiz-input pl-10" placeholder={t.q3_p2} value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} /><div className="absolute left-2 top-4 text-green-500 font-bold">WA</div></div></div></QuestionScreen>;
+            
+            // --- Q3 MODIFICADA: CON INPUTS DE CIUDAD Y PAIS ---
+            if (view === 'q3') return (
+                <QuestionScreen title={t.q3_title} color="text-green-400" nextView="q4" prevView="q2" onNext={() => changeView('q4')} onPrev={() => changeView('q2')} credits={credits} setView={setView} tLang={t}>
+                    <div className="space-y-4">
+                        <input className="quiz-input" placeholder={t.q3_p1} value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} />
+                        
+                        {/* NUEVOS CAMPOS DE UBICACIÓN */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <input className="quiz-input" placeholder="Ciudad (Ej: Quito)" value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})} />
+                            <input className="quiz-input" placeholder="País (Ej: Ecuador)" value={formData.country} onChange={e => setFormData({...formData, country: e.target.value})} />
+                        </div>
+
+                        <div className="relative">
+                            <input className="quiz-input pl-10" placeholder={t.q3_p2} value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} />
+                            <div className="absolute left-2 top-4 text-green-500 font-bold">WA</div>
+                        </div>
+                    </div>
+                </QuestionScreen>
+            );
+
             if (view === 'q4') return <QuestionScreen title={t.q4_title} color="text-yellow-400" nextView="q5" prevView="q3" onNext={() => changeView('q5')} onPrev={() => changeView('q3')} credits={credits} setView={setView} tLang={t}><div className="space-y-6"><input className="quiz-input" placeholder={t.q4_ph1} value={formData.inspiration} onChange={e => setFormData({...formData, inspiration: e.target.value})} /><div onClick={() => fileInputInspiration.current.click()} className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all text-center relative h-48 flex items-center justify-center overflow-hidden ${formData.inspirationImg ? 'border-yellow-400' : 'border-white/20 hover:border-yellow-400'}`}>{formData.inspirationImg ? (<><img src={formData.inspirationImg} className="w-full h-full object-cover absolute top-0 left-0 opacity-60" /><div className={`scan-line opacity-100`}></div><div className="relative z-10 bg-black/50 px-4 py-2 rounded-full text-xs font-bold text-yellow-400 border border-yellow-400 uppercase">{t.q4_change}</div></>) : (<div className="text-gray-500 text-xs uppercase">{t.q4_upload}</div>)}<input type="file" ref={fileInputInspiration} className="hidden" onChange={(e) => handleUpload(e, 'inspirationImg')} /></div></div></QuestionScreen>;
             if (view === 'q5') return <QuestionScreen title={t.q5_title} color="text-red-400" nextView="style" prevView="q4" onNext={() => changeView('style')} onPrev={() => changeView('q4')} credits={credits} setView={setView} tLang={t}><div className="h-64 overflow-y-auto pr-2 custom-scroll">{Object.entries(COLOR_GROUPS).map(([group, colors]) => (<div key={group} className="mb-6"><p className="text-[10px] font-bold text-gray-500 uppercase mb-3 tracking-widest text-left">{group === "NEUTROS" ? t.color_n : group === "NUDE" ? t.color_nu : group === "PRIMARIOS" ? t.color_p : group === "SECUNDARIOS" ? t.color_s : group === "TERCIARIOS" ? t.color_t : t.color_q}</p><div className="flex flex-wrap gap-3">{colors.map(c => (<div key={c} onClick={() => toggleColor(c)} className={`color-check ${formData.colors.includes(c) ? 'selected' : ''}`} style={{backgroundColor: c}}></div>))}</div></div>))}</div></QuestionScreen>;
             if (view === 'style') return <div className="min-h-screen p-6 fade-enter flex flex-col relative"><HeaderInternal /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => setView('q5')} className="p-2 rounded-full bg-white/10 hover:bg-white/20"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech">{t.style_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto w-full">{STYLES_DATA.map(s => (<div key={s.id} onClick={() => {playSound('click'); setFormData({...formData, style: t[`s_${s.id}`]}); changeView('light')}} className="glass-card rounded-xl h-64 group cursor-pointer"><img src={s.img} className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" /><div className="card-label">{t[`s_${s.id}`]}</div></div>))}</div><div className="mt-8 w-full max-w-7xl mx-auto"><div className="floating-credit">{t.credit_text}</div></div></div>;
