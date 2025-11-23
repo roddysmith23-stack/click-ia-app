@@ -2,17 +2,16 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CLICK IA - Enterprise Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLICK IA - The Future of Marketing</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=Chakra+Petch:wght@400;600;700&family=Oswald:wght@500&family=Playfair+Display:wght@600&family=Montserrat:wght@700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     
     <style>
-        /* --- ESTÉTICA CYBERPUNK ORIGINAL --- */
+        /* --- ESTÉTICA FINAL --- */
         body { background-color: #050505; color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         h1, h2, h3, .font-tech { font-family: 'Chakra Petch', sans-serif; }
         
@@ -26,17 +25,42 @@
             background: rgba(15, 15, 20, 0.85); backdrop-filter: blur(20px); 
             border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
         }
+        .glass-panel {
+            background: rgba(10, 10, 12, 0.98); 
+            border: 1px solid rgba(255,255,255,0.1);
+        }
         .glass-card { 
             background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); 
             transition: all 0.3s ease; cursor: pointer; overflow: hidden; position: relative; border-radius: 16px;
         }
-        .glass-card:hover { border-color: #06b6d4; transform: translateY(-5px); box-shadow: 0 10px 40px rgba(6, 182, 212, 0.2); }
-        .glass-card.selected { border-color: #06b6d4; background: rgba(6, 182, 212, 0.15); box-shadow: 0 0 0 2px #06b6d4; transform: scale(1.02); }
+        .glass-card:hover { 
+            border-color: #06b6d4; transform: translateY(-5px); 
+            box-shadow: 0 10px 40px rgba(6, 182, 212, 0.2);
+        }
+        .glass-card.selected {
+            border-color: #06b6d4; background: rgba(6, 182, 212, 0.15);
+            box-shadow: 0 0 0 2px #06b6d4; transform: scale(1.02);
+        }
         
         .card-label {
             position: absolute; bottom: 0; left: 0; width: 100%;
             background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.6), transparent); 
-            padding: 20px 10px 10px 10px; text-align: center; font-family: 'Chakra Petch'; text-transform: uppercase;
+            padding: 20px 10px 10px 10px; text-align: center;
+            font-family: 'Chakra Petch'; text-transform: uppercase;
+        }
+
+        .scan-line {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(6, 182, 212, 0.3), #06b6d4, rgba(6, 182, 212, 0.3), transparent);
+            background-size: 100% 20%;
+            background-repeat: no-repeat;
+            animation: scan 2.5s linear infinite;
+            pointer-events: none;
+            z-index: 20;
+        }
+        @keyframes scan {
+            0% { background-position: 0% -20%; }
+            100% { background-position: 0% 120%; }
         }
 
         .tech-btn {
@@ -49,7 +73,7 @@
         .editor-btn {
             background: #1a1a1a; color: white; font-weight: 600; font-family: 'Chakra Petch';
             border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 8px;
-            transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 10px;
+            transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
         }
         .editor-btn:hover { border-color: #06b6d4; background: rgba(6, 182, 212, 0.1); }
 
@@ -62,38 +86,90 @@
 
         .glass-input {
             background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white; font-family: 'Chakra Petch'; padding: 12px; width: 100%; border-radius: 8px;
+            color: white; font-family: 'Chakra Petch';
+            padding: 12px; width: 100%; border-radius: 8px;
         }
         .glass-input:focus { outline: none; border-color: #06b6d4; background: rgba(255, 255, 255, 0.15); }
 
-        /* Utilidades */
-        .clip-path-slanted { clip-path: polygon(10% 0, 100% 0, 100% 80%, 90% 100%, 0 100%, 0 20%); }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        
-        .fade-enter { animation: fadeIn 0.5s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .comparison-container { position: relative; width: 100%; height: 300px; border-radius: 16px; overflow: hidden; cursor: ew-resize; border: 1px solid rgba(255,255,255,0.2); }
+        .comparison-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .comparison-handle { position: absolute; top: 0; bottom: 0; width: 2px; background: white; z-index: 10; display: flex; align-items: center; justify-content: center; }
+        .handle-circle { width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: black; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+
+        .format-container { transition: all 0.5s ease-in-out; overflow: hidden; position: relative; margin: 0 auto; border-radius: 16px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+        .aspect-square { aspect-ratio: 1/1; max-width: 450px; }
+        .aspect-story { aspect-ratio: 9/16; max-width: 300px; }
+        .aspect-video { aspect-ratio: 16/9; max-width: 100%; }
+
+        .editable-text {
+            position: absolute; cursor: text; text-align: center; width: 90%; left: 5%;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9); transition: all 0.2s;
+            border: 1px solid transparent; background: transparent; font-family: 'Chakra Petch';
+        }
+        .editable-text:hover { border-color: rgba(255,255,255,0.3); background: rgba(0,0,0,0.2); }
+        .editable-text:focus { outline: none; border-color: #06b6d4; background: rgba(0,0,0,0.5); }
 
         .color-check { width: 40px; height: 40px; border-radius: 10px; cursor: pointer; border: 2px solid rgba(255,255,255,0.1); transition: transform 0.2s; position: relative;}
         .color-check.selected { border-color: white; transform: scale(1.15); box-shadow: 0 0 15px rgba(255,255,255,0.3); }
-        
-        /* ESTILOS CEO */
-        .ceo-photo-style {
-            width: 100%; height: 100%; object-fit: cover;
-            filter: grayscale(100%) contrast(1.2);
-            transition: all 0.5s ease;
+        .color-check.selected::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: black; font-weight: bold; font-size: 12px; filter: drop-shadow(0 0 2px white); }
+
+        .social-btn {
+            display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px; color: #ccc; font-size: 0.75rem; font-weight: bold; letter-spacing: 0.1em;
+            transition: all 0.2s; cursor: pointer;
         }
-        .ceo-photo-wrapper:hover .ceo-photo-style {
-            filter: grayscale(0%) contrast(1);
-            transform: scale(1.05);
+        .social-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .social-btn.connected { background: rgba(6, 182, 212, 0.2); border-color: #06b6d4; color: #06b6d4; }
+
+        .embedded-credit { 
+            text-align: center; font-size: 9px; text-transform: uppercase; letter-spacing: 0.2em; 
+            color: rgba(255,255,255,0.3); font-family: 'Chakra Petch'; 
+            margin-top: 20px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); width: 100%;
+        }
+        
+        .floating-credit {
+            position: fixed; bottom: 30px; left: 0; width: 100%;
+            text-align: center; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; 
+            color: rgba(255,255,255,0.4); font-family: 'Chakra Petch'; 
+            z-index: 50; pointer-events: none; padding: 0 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
 
-        /* CANVAS WRAPPER PARA FABRIC.JS */
-        .canvas-wrapper {
-            width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;
-            background-image: radial-gradient(#333 1px, transparent 1px); background-size: 20px 20px;
+        .mute-btn { position: fixed; bottom: 20px; right: 20px; z-index: 60; background: rgba(0,0,0,0.8); border: 1px solid #06b6d4; color: #06b6d4; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        
+        .clip-path-slanted { clip-path: polygon(10% 0, 100% 0, 100% 80%, 90% 100%, 0 100%, 0 20%); }
+        
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #06b6d4; cursor: pointer; margin-top: -6px; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: rgba(255,255,255,0.2); border-radius: 2px; }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        .copy-area {
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; padding: 15px; font-family: 'Inter', sans-serif;
+            font-size: 14px; color: #e5e7eb; white-space: pre-wrap; max-height: 200px; overflow-y: auto;
         }
+        .copy-area:focus { outline: none; border-color: #06b6d4; }
+
+        .yt-embed-container {
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin-bottom: 10px;
+        }
+        .yt-embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        
+        .auth-form-container { width: 100%; text-align: left; margin-bottom: 20px; }
+        .auth-label { display: block; font-size: 10px; font-weight: bold; color: #06b6d4; margin-bottom: 6px; letter-spacing: 0.1em; text-transform: uppercase; }
+        
+        .cloud-item { cursor: pointer; transition: all 0.2s; }
+        .cloud-item:hover { background: rgba(255,255,255,0.1); border-color: #06b6d4; }
+
+        /* Animation for fade-in */
+        .fade-enter { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -101,6 +177,7 @@
         <source src="https://cdn.pixabay.com/video/2020/12/18/59791-494669276_large.mp4" type="video/mp4">
     </video>
 
+    <!-- AUDIO SYSTEM -->
     <audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/05/17/audio_1832016087.mp3"></audio>
     <audio id="sfx-click" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a7346b.mp3"></audio>
     <audio id="sfx-process" src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_c2b3b469b7.mp3"></audio>
@@ -111,12 +188,13 @@
     <script type="text/babel">
         const { useState, useEffect, useRef, useCallback } = React;
 
-        // --- CONSTANTES ---
+        // --- CONSTANTES Y DATOS ---
         const MAGIC_RESULT_IMAGE_DEFAULT = "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2865"; 
         const UGLY_BURGER_IMAGE = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=2799"; 
+        const CREATOR_IMAGE = "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop"; 
         const INITIAL_CREDITS = 3;
 
-        // --- ICONOS ---
+        // --- ICONOS SVG ---
         const Icons = {
             Logo: () => <svg width="32" height="32" viewBox="0 0 100 100" fill="none"><path d="M50 10L90 80C90 80 70 70 50 70C30 70 10 80 10 80L50 10Z" fill="white"/></svg>,
             Google: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"/></svg>,
@@ -219,7 +297,7 @@
                 creator_mission: "Nuestra misión es romper las barreras de entrada. CLICK IA nació para cambiar el mundo, empoderando a cada emprendedor con la tecnología que antes solo tenían los gigantes.",
                 download: "DESCARGAR IMAGEN", copy_clipboard: "COPIAR TEXTO",
                 cloud_welcome: "BIENVENIDO A TU NUBE", cloud_desc: "Aquí guardamos todas tus campañas.",
-                edit_design: "🛠️ ABRIR NANO-STUDIO", editor_title: "NANO-STUDIO", save_design: "GUARDAR DISEÑO", close_editor: "CERRAR",
+                edit_design: "🛠️ ABRIR ESTUDIO DE DISEÑO", editor_title: "NANO-STUDIO", save_design: "GUARDAR DISEÑO", close_editor: "CERRAR",
                 edit_text_1: "Texto Principal", edit_text_2: "Subtítulo", edit_size: "Tamaño Logo",
                 default_promo: "Por tiempo limitado",
                 copy_headline: "¿Listo para el siguiente nivel?", copy_body_1: "No es solo", copy_body_2: "Es una experiencia.", 
@@ -252,12 +330,12 @@
                 schedule: "AI Schedule", copy_viral: "Viral Copy", star_text: "STAR TEXT ★",
                 trends: "Detected Trends", publish: "PUBLISH NOW", new_btn: "NEW", ready: "READY",
                 credits: "CREDITS", color_n: "NEUTRALS", color_nu: "NUDE", color_p: "PRIMARY", color_s: "SECONDARY", color_t: "TERTIARY", color_q: "QUATERNARY",
-                loading_steps: ["SEARCHING WEB...", "ANALIZANDO TENDENCIAS...", "ESTRUCTURANDO ESTRATEGIA...", "GENERANDO IMAGEN 8K...", "REDACTANDO COPY VIRAL..."],
+                loading_steps: ["SEARCHING WEB...", "ANALYZING TRENDS...", "STRUCTURING STRATEGY...", "GENERATING 8K IMAGE...", "WRITING VIRAL COPY..."],
                 credit_text: '"Creativity is intelligence having fun." - Albert Einstein',
                 creator_title: "MEET THE CREATOR", creator_role: "CO-FOUNDER & CSIO", creator_bio: "Strategic visionary mastering AI and algorithms. Roddy Smith isn't just predicting the future of marketing, he is building it.", creator_mission: "Our mission is to shatter entry barriers. CLICK IA was born to change the world, empowering every entrepreneur with tech once reserved for giants.",
                 download: "DOWNLOAD IMAGE", copy_clipboard: "COPY TEXT",
                 cloud_welcome: "WELCOME TO YOUR CLOUD", cloud_desc: "All your campaigns are safe here.",
-                edit_design: "🛠️ OPEN NANO-STUDIO", editor_title: "NANO-STUDIO", save_design: "SAVE DESIGN", close_editor: "CLOSE",
+                edit_design: "🛠️ OPEN DESIGN STUDIO", editor_title: "NANO-STUDIO", save_design: "SAVE DESIGN", close_editor: "CLOSE",
                 edit_text_1: "Main Text", edit_text_2: "Subtitle", edit_size: "Logo Size",
                 default_promo: "Limited time only",
                 copy_headline: "Ready for the next level?", copy_body_1: "It's not just", copy_body_2: "It's an experience.", 
@@ -328,12 +406,12 @@
                 schedule: "Calendrier IA", copy_viral: "Copy Viral", star_text: "TEXTE STAR ★",
                 trends: "Tendances Détectées", publish: "PUBLIER MAINTENANT", new_btn: "NOUVEAU", ready: "PRÊT",
                 credits: "CRÉDITS", color_n: "NEUTRES", color_nu: "NUDE", color_p: "PRIMAIRES", color_s: "SECONDAIRES", color_t: "TERTIAIRES", color_q: "QUATERNAIRES",
-                loading_steps: ["RECHERCHE WEB...", "ANALYSE TENDANCES...", "STRUCTURATION STRATÉGIE...", "GÉNÉRATION IMAGE 8K...", "REDACTANDO COPY VIRAL..."],
+                loading_steps: ["RECHERCHE WEB...", "ANALYSE TENDANCES...", "STRUCTURATION STRATÉGIE...", "GÉNÉRATION IMAGE 8K...", "RÉDACTION COPY VIRAL..."],
                 credit_text: '"La créativité, c\'est l\'intelligence qui s\'amuse." - Albert Einstein',
                 creator_title: "RENCONTREZ LE CRÉATEUR", creator_role: "CO-FONDATEUR & CSIO", creator_bio: "Visionnaire stratégique maîtrisant l'IA et les algorithmes. Roddy Smith ne se contente pas de prédire l'avenir du marketing, il le construit.", creator_mission: "Notre mission est de briser les barrières. CLICK IA est né pour changer le monde, en donnant à chaque entrepreneur la technologie autrefois réservée aux géants.",
                 download: "TÉLÉCHARGER IMAGE", copy_clipboard: "COPIER TEXTE",
                 cloud_welcome: "BIENVENUE SUR VOTRE CLOUD", cloud_desc: "Toutes vos campagnes sont ici.",
-                edit_design: "🛠️ OUVRIR NANO-STUDIO", editor_title: "NANO-STUDIO", save_design: "SAUVEGARDER", close_editor: "FERMER",
+                edit_design: "🛠️ OUVRIR STUDIO DE DESIGN", editor_title: "NANO-STUDIO", save_design: "SAUVEGARDER", close_editor: "FERMER",
                 edit_text_1: "Texte Principal", edit_text_2: "Sous-titre", edit_size: "Taille Logo",
                 default_promo: "Durée limitée",
                 copy_headline: "Prêt pour le niveau supérieur ?", copy_body_1: "Ce n'est pas juste", copy_body_2: "C'est une expérience.", 
@@ -407,186 +485,157 @@
             </div>
         );
 
-        // --- NANO-STUDIO 2.0 (FABRIC.JS INTEGRADO CON CORRECCIÓN LOGO) ---
-        const FabricEditor = ({ image, logo, initialText, onSave, onClose, tLang }) => {
-            const canvasEl = useRef(null);
-            const [fabricCanvas, setFabricCanvas] = useState(null);
-            const [selectedObj, setSelectedObj] = useState(null);
-            
-            // Inicializar Canvas
+        const DesignEditor = ({ image, logo, initialText, onSave, onClose, tLang }) => {
+            const canvasRef = useRef(null);
+            const [elements, setElements] = useState([]);
+            const [selectedId, setSelectedId] = useState(null);
+            const [dragging, setDragging] = useState(false);
+            const [loading, setLoading] = useState(true);
+
             useEffect(() => {
-                const canvas = new fabric.Canvas(canvasEl.current, {
-                    width: 1080,
-                    height: 1080,
-                    backgroundColor: '#000000',
-                    preserveObjectStacking: true
-                });
-                
-                setFabricCanvas(canvas);
-
-                // Event Listener para selección
-                canvas.on('selection:created', (e) => setSelectedObj(e.selected[0]));
-                canvas.on('selection:updated', (e) => setSelectedObj(e.selected[0]));
-                canvas.on('selection:cleared', () => setSelectedObj(null));
-
-                // Cargar Imagen de Fondo (IA)
-                fabric.Image.fromURL(image, (img) => {
-                    img.set({
-                        selectable: false,
-                        evented: false,
-                        originX: 'center',
-                        originY: 'center',
-                        left: canvas.width / 2,
-                        top: canvas.height / 2
-                    });
-                    // Escalar imagen para cubrir canvas (Cover)
-                    const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
-                    img.scale(scale);
-                    canvas.add(img);
-                    canvas.sendToBack(img);
-                    
-                    // Añadir Logo Inicialmente (si existe) CON MULTIPLY
-                    if (logo) {
-                        addLogoToCanvas(canvas, logo);
+                if (!image) return;
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.src = image;
+                img.onload = () => {
+                    setLoading(false);
+                    if(canvasRef.current) {
+                        const ctx = canvasRef.current.getContext('2d');
+                        const ratio = img.height / img.width;
+                        canvasRef.current.width = 800;
+                        canvasRef.current.height = 800 * ratio;
+                        drawCanvas();
                     }
-
-                    // Añadir Texto Inicial
-                    const textObj = new fabric.IText(initialText.top || "TU MARCA", {
-                        left: 540, top: 100,
-                        fontFamily: 'Chakra Petch',
-                        fill: '#ffffff',
-                        fontSize: 80,
-                        originX: 'center',
-                        fontWeight: 'bold',
-                        shadow: 'rgba(0,0,0,0.8) 5px 5px 10px'
-                    });
-                    canvas.add(textObj);
-                }, { crossOrigin: 'anonymous' });
-
-                return () => {
-                    canvas.dispose();
+                };
+                if(elements.length === 0) {
+                    setElements([
+                         { id: 1, type: 'text', content: initialText.top, x: 50, y: 100, size: 60, color: initialText.colorTop, font: 'Chakra Petch' },
+                         { id: 2, type: 'text', content: initialText.bottom, x: 50, y: 700, size: 40, color: initialText.colorBot, font: 'Chakra Petch' }
+                    ]);
                 }
-            }, []);
+            }, [image]);
 
-            // --- FUNCIÓN TRUCO LOGO BLANCO (MULTIPLY BLEND MODE) ---
-            const addLogoToCanvas = (canvas, logoUrl) => {
-                fabric.Image.fromURL(logoUrl, (img) => {
-                    img.scaleToWidth(250);
-                    img.set({
-                        left: 540,
-                        top: 540,
-                        originX: 'center',
-                        originY: 'center',
-                        globalCompositeOperation: 'multiply' // EL TRUCO
-                    });
-                    canvas.add(img);
-                    canvas.setActiveObject(img);
-                }, { crossOrigin: 'anonymous' });
-            };
+            const drawCanvas = useCallback(() => {
+                const canvas = canvasRef.current;
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                const bg = new Image();
+                bg.crossOrigin = "anonymous";
+                bg.src = image;
+                if (bg.complete) ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
 
-            const handleAddText = () => {
-                if(!fabricCanvas) return;
-                const text = new fabric.IText('NUEVO TEXTO', {
-                    left: 540, top: 540,
-                    fontFamily: 'Chakra Petch',
-                    fill: '#06b6d4',
-                    fontSize: 60,
-                    originX: 'center'
+                elements.forEach(el => {
+                    if (el.type === 'text') {
+                        ctx.font = `bold ${el.size}px "${el.font}"`;
+                        ctx.fillStyle = el.color;
+                        ctx.fillText(el.content, el.x, el.y);
+                        if (el.id === selectedId) {
+                            ctx.strokeStyle = '#06b6d4'; ctx.lineWidth = 2;
+                            ctx.strokeRect(el.x - 5, el.y - el.size, ctx.measureText(el.content).width + 10, el.size + 10);
+                        }
+                    } else if (el.type === 'image') {
+                        const img = new Image();
+                        img.src = el.content;
+                        if (img.complete) ctx.drawImage(img, el.x, el.y, el.size, el.size);
+                        if (el.id === selectedId) {
+                            ctx.strokeStyle = '#06b6d4'; ctx.lineWidth = 2;
+                            ctx.strokeRect(el.x, el.y, el.size, el.size);
+                        }
+                    }
                 });
-                fabricCanvas.add(text);
-                fabricCanvas.setActiveObject(text);
-            };
+            }, [image, elements, selectedId]);
 
-            const deleteSelected = () => {
-                if (!fabricCanvas || !selectedObj) return;
-                fabricCanvas.remove(selectedObj);
-                fabricCanvas.discardActiveObject();
-                fabricCanvas.renderAll();
-                setSelectedObj(null);
-            };
+            useEffect(() => { if (!loading) drawCanvas(); }, [drawCanvas, loading, elements]);
 
-            const updateColor = (color) => {
-                if (!selectedObj || !selectedObj.set) return;
-                selectedObj.set('fill', color);
-                fabricCanvas.renderAll();
+            const addText = () => setElements([...elements, { id: Date.now(), type: 'text', content: 'NUEVO TEXTO', x: 100, y: 300, size: 50, color: '#FFFFFF', font: 'Chakra Petch' }]);
+            const handleImageUpload = (e) => {
+                const file = e.target.files[0];
+                if(file) {
+                    const reader = new FileReader();
+                    reader.onload = (f) => {
+                        const img = new Image();
+                        img.onload = () => setElements([...elements, { id: Date.now(), type: 'image', content: f.target.result, x: 200, y: 200, size: 200 }]);
+                        img.src = f.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
             };
-
-            const downloadHD = () => {
-                if (!fabricCanvas) return;
-                // Multiplicador para HD (4x = 4320x4320)
-                const dataURL = fabricCanvas.toDataURL({
-                    format: 'png',
-                    quality: 1,
-                    multiplier: 4 
+            const handleMouseDown = (e) => {
+                const rect = canvasRef.current.getBoundingClientRect();
+                const scaleX = canvasRef.current.width / rect.width;
+                const scaleY = canvasRef.current.height / rect.height;
+                const x = (e.clientX - rect.left) * scaleX;
+                const y = (e.clientY - rect.top) * scaleY;
+                const clicked = elements.slice().reverse().find(el => {
+                    if(el.type === 'text') return Math.abs(el.x - x) < 150 && Math.abs(el.y - y) < 50; 
+                    return Math.abs(el.x - x) < el.size && Math.abs(el.y - y) < el.size;
                 });
+                if (clicked) { setSelectedId(clicked.id); setDragging(true); } else { setSelectedId(null); }
+            };
+            const handleMouseMove = (e) => {
+                if (dragging && selectedId) {
+                    const rect = canvasRef.current.getBoundingClientRect();
+                    const scaleX = canvasRef.current.width / rect.width;
+                    const scaleY = canvasRef.current.height / rect.height;
+                    const x = (e.clientX - rect.left) * scaleX;
+                    const y = (e.clientY - rect.top) * scaleY;
+                    setElements(prev => prev.map(el => el.id === selectedId ? { ...el, x, y } : el));
+                }
+            };
+            const updateSelected = (key, value) => setElements(prev => prev.map(el => el.id === selectedId ? { ...el, [key]: value } : el));
+            const deleteSelected = () => { setElements(prev => prev.filter(el => el.id !== selectedId)); setSelectedId(null); };
+            
+            const download = () => {
                 const link = document.createElement('a');
-                link.download = `CLICK_IA_HD_${Date.now()}.png`;
-                link.href = dataURL;
+                link.download = `CLICK_IA_MASTERPIECE_${Date.now()}.jpg`;
+                link.href = canvasRef.current.toDataURL('image/jpeg', 0.95);
                 link.click();
             };
 
             return (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 fade-enter">
                     <div className="w-full max-w-7xl h-[90vh] flex border border-gray-800 rounded-xl overflow-hidden bg-[#050505]">
-                        
-                        {/* SIDEBAR CONTROLS */}
-                        <div className="w-72 bg-[#111] border-r border-gray-800 p-6 flex flex-col gap-4 overflow-y-auto">
-                             <h3 className="font-tech text-cyan-400 text-xl mb-2 tracking-widest">{tLang.editor_title}</h3>
-                             
+                        <div className="w-72 bg-[#111] border-r border-gray-800 p-6 flex flex-col gap-6">
+                             <h3 className="font-tech text-cyan-400 text-2xl mb-2">{tLang.editor_title}</h3>
                              <div className="grid grid-cols-2 gap-2">
-                                <button onClick={handleAddText} className="editor-btn text-xs flex-col py-3"><Icons.Text /> + TEXTO</button>
-                                <button onClick={() => logo && fabricCanvas && addLogoToCanvas(fabricCanvas, logo)} className="editor-btn text-xs flex-col py-3 text-purple-400 border-purple-400/20 hover:bg-purple-400/10"><Icons.Zap /> RESET LOGO</button>
+                                <button onClick={addText} className="editor-btn text-xs flex-col py-3"><Icons.Text /> TEXTO</button>
+                                <label className="editor-btn text-xs flex-col py-3 cursor-pointer"><Icons.Image /> IMAGEN <input type="file" hidden onChange={handleImageUpload} /></label>
                              </div>
-
-                             <div className="h-px bg-white/10 my-2"></div>
-
-                             {selectedObj ? (
-                                 <div className="space-y-4 animate-pulse-fast bg-white/5 p-4 rounded-lg border border-white/10">
-                                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">PROPIEDADES</p>
-                                     
-                                     {selectedObj.type === 'i-text' && (
+                             {selectedId ? (
+                                 <div className="space-y-4 animate-pulse-fast bg-white/5 p-4 rounded-lg">
+                                     <p className="text-[10px] font-bold text-gray-400 uppercase">EDITANDO</p>
+                                     {elements.find(e => e.id === selectedId)?.type === 'text' && (
                                          <>
+                                            <input className="glass-input text-xs" value={elements.find(e => e.id === selectedId).content} onChange={e => updateSelected('content', e.target.value)} />
                                             <div className="flex gap-2">
-                                                <input type="color" className="h-8 w-8 bg-transparent cursor-pointer rounded overflow-hidden" onChange={(e) => updateColor(e.target.value)} />
-                                                <span className="text-xs text-gray-400 self-center">Color Texto</span>
+                                                <input type="color" className="h-8 w-8 bg-transparent cursor-pointer" onChange={e => updateSelected('color', e.target.value)} />
+                                                <input type="range" className="flex-1" min="10" max="200" value={elements.find(e => e.id === selectedId).size} onChange={e => updateSelected('size', e.target.value)} />
                                             </div>
-                                            <select className="glass-input text-xs" onChange={(e) => { selectedObj.set('fontFamily', e.target.value); fabricCanvas.renderAll(); }}>
+                                            <select className="glass-input text-xs" onChange={e => updateSelected('font', e.target.value)}>
                                                 <option value="Chakra Petch">Tech (Chakra)</option>
                                                 <option value="Inter">Modern (Inter)</option>
                                                 <option value="Oswald">Impact (Oswald)</option>
                                                 <option value="Playfair Display">Luxury (Serif)</option>
+                                                <option value="Montserrat">Clean (Montserrat)</option>
+                                                <option value="Roboto Mono">Code (Mono)</option>
                                             </select>
                                          </>
                                      )}
-                                     
-                                     <div className="flex flex-col gap-1">
-                                        <label className="text-[9px] text-gray-500">OPACIDAD</label>
-                                        <input type="range" min="0" max="1" step="0.1" defaultValue={selectedObj.opacity} onChange={(e) => { selectedObj.set('opacity', parseFloat(e.target.value)); fabricCanvas.renderAll(); }} />
-                                     </div>
-                                     
-                                     {selectedObj.type === 'image' && (
-                                         <div className="text-[9px] text-yellow-400 mt-2 border border-yellow-400/30 p-2 rounded">
-                                             ⚠️ MODO BLEND: MULTIPLY
-                                         </div>
+                                     {elements.find(e => e.id === selectedId)?.type === 'image' && (
+                                         <input type="range" min="50" max="800" value={elements.find(e => e.id === selectedId).size} onChange={e => updateSelected('size', e.target.value)} />
                                      )}
-
-                                     <button onClick={deleteSelected} className="w-full py-2 bg-red-900/30 text-red-400 rounded text-xs flex items-center justify-center gap-2 hover:bg-red-900/50 border border-red-900/50"><Icons.Trash /> ELIMINAR</button>
+                                     <button onClick={deleteSelected} className="w-full py-2 bg-red-900/30 text-red-400 rounded text-xs flex items-center justify-center gap-2 hover:bg-red-900/50"><Icons.Trash /> ELIMINAR</button>
                                  </div>
-                             ) : <div className="text-center py-10 text-gray-600 text-xs italic">Toca un elemento para editar.</div>}
-                             
-                             <div className="mt-auto flex flex-col gap-3">
-                                <button onClick={downloadHD} className="tech-btn bg-cyan-500 text-black border-none w-full flex justify-center gap-2 text-xs py-4"><Icons.Download /> DESCARGAR 4K</button>
-                                <button onClick={onClose} className="w-full py-3 border border-gray-700 rounded text-xs hover:bg-white/5 text-gray-400 uppercase tracking-widest">{tLang.close_editor}</button>
+                             ) : <div className="text-center py-10 text-gray-600 text-xs">Selecciona un elemento para editar.</div>}
+                             <div className="mt-auto flex flex-col gap-2">
+                                <button onClick={download} className="tech-btn bg-cyan-500 text-black border-none w-full flex justify-center gap-2"><Icons.Download /> DESCARGAR HD</button>
+                                <button onClick={onClose} className="w-full py-3 border border-gray-700 rounded text-xs hover:bg-white/5">{tLang.close_editor}</button>
                              </div>
                         </div>
-
-                        {/* CANVAS AREA - INTEGRADA */}
-                        <div className="flex-1 bg-[#080808] canvas-wrapper relative overflow-hidden p-4">
-                             {/* Escala CSS para ajuste visual sin perder resolución interna */}
-                             <div className="relative shadow-2xl border border-gray-700" style={{width: 'fit-content', height: 'fit-content', transform: 'scale(0.6)'}}>
-                                 <canvas ref={canvasEl} /> 
-                             </div>
-                             <div className="absolute bottom-4 right-4 text-[10px] text-gray-500 font-mono pointer-events-none">NANO-STUDIO ENGINE V2.0 (4K READY)</div>
+                        <div className="flex-1 bg-[#080808] canvas-container flex items-center justify-center relative overflow-hidden p-10">
+                             {loading ? <div className="text-cyan-500 animate-pulse font-tech text-xl">CARGANDO ESTUDIO...</div> : <canvas ref={canvasRef} className="bg-white shadow-2xl cursor-move max-w-full max-h-full border border-gray-700" onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={() => setDragging(false)} onMouseLeave={() => setDragging(false)} />}
                         </div>
                     </div>
                 </div>
@@ -610,7 +659,7 @@
             </div>
         );
 
-        // --- APP PRINCIPAL ---
+        // --- APP ---
         const App = () => {
             const [view, setView] = useState('landing');
             const [lang, setLang] = useState('ES'); 
@@ -619,183 +668,127 @@
             const [userCloud, setUserCloud] = useState([]);
             const [isEditing, setIsEditing] = useState(false);
 
-            // Estado del Formulario
-            const initialForm = { 
-                image: null, logo: null, inspirationImg: null, target: '', company: '', whatsapp: '', city: '', country: '',
-                product: { name: '', price: '', promo: '' }, style: '', light: '', colors: [], googleData: false, inspiration: ''
-            };
-
+            const initialForm = { image: null, logo: null, inspirationImg: null, target: '', company: '', whatsapp: '', product: { name: '', price: '', promo: '' }, textOnImage: '', style: '', light: '', colors: [], googleData: false, inspiration: '', connected: { fb: false, ig: false, tk: false }, format: 'post' };
             const [formData, setFormData] = useState(initialForm);
             const [loadingText, setLoadingText] = useState('');
             const [progress, setProgress] = useState(0);
             const [isMuted, setIsMuted] = useState(false);
-            const [designState, setDesignState] = useState({ top: "TU MARCA" });
+            const [textOverlay, setTextOverlay] = useState({ top: "TU MARCA", bottom: "OFERTA LIMITADA" });
+            const [designState, setDesignState] = useState({ top: "TU MARCA", bottom: "OFERTA LIMITADA", logoSize: 24, colorTop: "#FFFFFF", colorBot: "#06b6d4", posTop: 33, posBot: 66 });
             const [resultImage, setResultImage] = useState(MAGIC_RESULT_IMAGE_DEFAULT);
             const [generatedCopy, setGeneratedCopy] = useState("");
             const [apiKey, setApiKey] = useState('');
             const [inputEmail, setInputEmail] = useState('');
             const [inputApiKey, setInputApiKey] = useState('');
-            
-            // Refs
             const fileInputProduct = useRef(null);
             const fileInputLogo = useRef(null);
             const fileInputInspiration = useRef(null);
             const t = TRANSLATIONS[lang];
 
-            useEffect(() => { 
-                const storedUser = localStorage.getItem('clickia_user'); 
-                const storedCloud = JSON.parse(localStorage.getItem('clickia_cloud') || '[]'); 
-                if (storedUser) { setUser(JSON.parse(storedUser)); setUserCloud(storedCloud); } 
-            }, []);
+            useEffect(() => { setTextOverlay({ top: t.txt_top, bottom: t.txt_bot }); setDesignState(prev => ({ ...prev, top: t.txt_top, bottom: t.txt_bot })); }, [lang]);
+            useEffect(() => { const storedUser = localStorage.getItem('clickia_user'); const storedCloud = JSON.parse(localStorage.getItem('clickia_cloud') || '[]'); const storedKey = localStorage.getItem('clickia_apikey'); if (storedUser) { setUser(JSON.parse(storedUser)); setUserCloud(storedCloud); if(storedKey) setApiKey(storedKey); } }, []);
 
-            const playSound = (type) => { 
-                if (isMuted) return; 
-                const audio = document.getElementById(`sfx-${type}`); 
-                if(audio) { audio.currentTime = 0; audio.play().catch(()=>{}); } 
-            };
-            
+            const playSound = (type) => { if (isMuted) return; const audio = document.getElementById(`sfx-${type}`); if(audio) { audio.currentTime = 0; audio.play().catch(()=>{}); } if(type === 'click') { const bg = document.getElementById('bg-music'); if(bg && bg.paused) { bg.volume = 0.2; bg.play().catch(()=>{}); } } };
             const changeView = (v) => { playSound('click'); setView(v); };
-            
-            const handleUpload = (e, field) => { 
-                const file = e.target.files[0]; 
-                if(file) { playSound('click'); setFormData(prev => ({...prev, [field]: URL.createObjectURL(file)})); } 
-            };
-            
+            const handleUpload = (e, field) => { const file = e.target.files[0]; if(file) { playSound('click'); setFormData(prev => ({...prev, [field]: URL.createObjectURL(file)})); } };
             const updateProduct = (field, value) => { setFormData(prev => ({ ...prev, product: { ...prev.product, [field]: value } })); };
-            
-            const toggleColor = (color) => { 
-                playSound('click'); 
-                setFormData(prev => { 
-                    const newColors = prev.colors.includes(color) ? prev.colors.filter(c => c !== color) : [...prev.colors, color].slice(0, 4); 
-                    return { ...prev, colors: newColors }; 
-                }); 
-            };
-            
+            const toggleColor = (color) => { playSound('click'); setFormData(prev => { const newColors = prev.colors.includes(color) ? prev.colors.filter(c => c !== color) : [...prev.colors, color].slice(0, 4); return { ...prev, colors: newColors }; }); };
             const handleNewGeneration = () => { playSound('click'); setFormData(initialForm); setResultImage(MAGIC_RESULT_IMAGE_DEFAULT); setGeneratedCopy(""); setView('upload'); };
-            
-            const handleLogin = () => { 
-                if(!inputEmail) return alert("Email required"); 
-                const fakeUser = { name: inputEmail.split('@')[0], email: inputEmail }; 
-                setUser(fakeUser); setApiKey(inputApiKey); 
-                localStorage.setItem('clickia_user', JSON.stringify(fakeUser)); 
-                changeView('upload'); 
-            };
-            
+            const handleLogin = () => { if(!inputEmail) return alert("Email required"); const fakeUser = { name: inputEmail.split('@')[0], email: inputEmail }; setUser(fakeUser); setApiKey(inputApiKey); localStorage.setItem('clickia_user', JSON.stringify(fakeUser)); if(inputApiKey) localStorage.setItem('clickia_apikey', inputApiKey); changeView('upload'); };
             const handleCopyText = () => { navigator.clipboard.writeText(generatedCopy); alert("Copy copiado!"); };
-            
-            const handleDownloadImage = () => { 
-                const link = document.createElement('a'); 
-                link.href = resultImage; 
-                link.download = `CLICK_IA_${Date.now()}.jpg`; 
-                link.click(); 
-            };
-            
+            const handleDownloadImage = () => { fetch(resultImage).then(response => response.blob()).then(blob => { const url = window.URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = `CLICK_IA_${Date.now()}.jpg`; document.body.appendChild(link); link.click(); document.body.removeChild(link); window.URL.revokeObjectURL(url); }).catch(e => { window.open(resultImage, '_blank'); }); };
             const saveDesign = (newState) => { setDesignState(newState); setIsEditing(false); playSound('success'); };
+            const generateImageURL = (prompt) => { const encodedPrompt = encodeURIComponent(prompt); return `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1080&height=1080&nologo=true&seed=${Math.floor(Math.random() * 10000)}`; };
+            const callGeminiAPI = async (prompt) => { if (!apiKey) return null; try { const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) }); const data = await response.json(); return data.candidates?.[0]?.content?.parts?.[0]?.text; } catch (error) { console.error("Gemini Error:", error); return null; } };
+            const generateDynamicCopy = () => { const product = formData.product.name || "Producto"; const promo = formData.product.promo || t.default_promo; const contact = formData.whatsapp || "5939999999"; const company = formData.company || "Tu Empresa"; let copy = ""; if (lang === 'ES') { copy = `🚀 **¡${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${promo}\n📍 Disponible en: ${company}\n\n👇 **¡No esperes más!** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; } else { copy = `🚀 **${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${promo}\n📍 Available at: ${company}\n\n👇 **Don't wait!** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; } return copy; };
             
-            // --- ENGINE IA ---
-            const generateImageURL = (prompt) => { 
-                const cleanPrompt = prompt ? prompt.replace(/(\r\n|\n|\r)/gm, " ").trim() : "marketing";
-                return `https://image.pollinations.ai/prompt/${encodeURIComponent(cleanPrompt)}?width=1080&height=1080&nologo=true&seed=${Math.floor(Math.random() * 10000)}`; 
-            };
+            const restoreCampaign = (item) => { setResultImage(item.image); setGeneratedCopy(item.copy); setFormData(prev => ({...prev, logo: item.logo || null })); setView('result'); };
 
             const runEngine = async () => {
                 if(!formData.style) return alert("Elige un estilo");
-                if(credits <= 0) return alert("Sin créditos.");
-                
-                playSound('process'); 
-                setView('processing');
-
+                if(credits <= 0) return alert("¡Te has quedado sin créditos! Por favor recarga para continuar.");
+                playSound('process'); setView('processing');
+                const promptBase = formData.product.name || "luxury product";
+                const magicPrompt = `Hyper-ultra-realistic 8k commercial photography of ${promptBase}, ${formData.style} aesthetic, ${formData.light}, perfect composition, golden ratio, product centered, vivid colors ${formData.colors.join(", ")}, highly detailed texture, 8k render, unreal engine 5 style, cinematic lighting, volumetric fog, professional advertising, award winning photography`;
+                const newImageURL = generateImageURL(magicPrompt);
+                let finalCopy = "";
+                let copyPromise = null;
+                if (apiKey) { const textPrompt = `Act as a world-class marketing expert. Write a short viral social media caption for ${promptBase}. Promo: ${formData.product.promo}. Company: ${formData.company}. Language: ${lang}. Include 5 trending hashtags.`; copyPromise = callGeminiAPI(textPrompt); }
                 const steps = t.loading_steps;
-                for(let i=0; i<3; i++) { 
-                    setLoadingText(steps[i]); 
-                    setProgress(((i+1)/steps.length)*50); 
-                    await new Promise(r => setTimeout(r, 600)); 
-                }
-
-                // Simulación IA (Aquí iría la llamada real a Gemini)
-                const imagePrompt = `${formData.product.name}, ${formData.style}, ${formData.light}, 8k commercial render`;
-                const newImageURL = generateImageURL(imagePrompt);
-
-                await new Promise(r => setTimeout(r, 1500));
-                
-                setResultImage(newImageURL); 
-                setGeneratedCopy("¡Descubre lo nuevo! 🚀 #" + (formData.product.name || "Producto"));
-                setCredits(prev => prev - 1);
-                
-                playSound('success'); 
-                setView('result');
+                for(let i=0; i<steps.length; i++) { setLoadingText(steps[i]); setProgress(((i+1)/steps.length)*100); await new Promise(r => setTimeout(r, 800)); }
+                if (copyPromise) { const res = await copyPromise; finalCopy = res || generateDynamicCopy(); } else { finalCopy = generateDynamicCopy(); }
+                setResultImage(newImageURL); setGeneratedCopy(finalCopy); setCredits(prev => prev - 1);
+                const newItem = { id: Date.now(), image: newImageURL, copy: finalCopy, logo: formData.logo, date: new Date().toLocaleDateString() };
+                const updatedCloud = [newItem, ...userCloud]; setUserCloud(updatedCloud); localStorage.setItem('clickia_cloud', JSON.stringify(updatedCloud));
+                playSound('success'); setView('result');
             };
 
-            const HeaderInternal = () => (
-                <div className="absolute top-0 left-0 w-full p-6 flex justify-center items-center gap-6 z-50 pointer-events-none">
-                    <div className="pointer-events-auto">
-                        <button onClick={() => setView('pricing')} className="flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-md rounded-full border border-yellow-500/30 hover:border-yellow-400 hover:scale-105 transition-all shadow-lg group">
-                            <span className="text-yellow-400 group-hover:rotate-12 transition-transform"><Icons.Credit /></span>
-                            <span className="text-xs font-bold font-tech text-white">{credits} {t.credits}</span>
-                        </button>
-                    </div>
-                    <div className="pointer-events-auto flex items-center gap-2 cursor-pointer group" onClick={() => setView('landing')}>
-                        <Icons.Logo /><span className="text-xl font-black font-tech tracking-tighter group-hover:text-cyan-400 transition-colors">CLICK.IA</span>
-                    </div>
-                </div>
-            );
+            const HeaderInternal = () => (<div className="absolute top-0 left-0 w-full p-6 flex justify-center items-center gap-6 z-50 pointer-events-none"><div className="pointer-events-auto"><button onClick={() => setView('pricing')} className="flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-md rounded-full border border-yellow-500/30 hover:border-yellow-400 hover:scale-105 transition-all shadow-lg group"><span className="text-yellow-400 group-hover:rotate-12 transition-transform"><Icons.Credit /></span><span className="text-xs font-bold font-tech text-white">{credits} {t.credits}</span><span className="w-4 h-4 bg-yellow-500 text-black rounded-full flex items-center justify-center text-[10px] font-bold">+</span></button></div><div className="pointer-events-auto flex items-center gap-2 cursor-pointer group" onClick={() => setView('landing')}><Icons.Logo /><span className="text-xl font-black font-tech tracking-tighter group-hover:text-cyan-400 transition-colors">CLICK.IA</span></div><div className="pointer-events-auto flex items-center gap-1 text-[8px] text-cyan-400 font-bold uppercase tracking-[0.2em] bg-cyan-900/20 px-3 py-2 rounded-full border border-cyan-500/20"><Icons.Google /> {t.powered}</div></div>);
 
-            // --- VISTAS ---
-            if (view === 'landing') return (
-                <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center relative fade-enter">
-                    <div className="z-10 max-w-6xl w-full flex flex-col items-center mt-20">
-                        <h1 className="text-4xl md:text-7xl font-black font-tech mb-8 leading-none tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">{t.hero_mk}</h1>
-                        <button onClick={() => {playSound('click'); setView('setup')}} className="tech-btn px-16 py-6 text-xl rounded-full mb-12 shadow-[0_0_50px_rgba(6,182,212,0.4)]">{t.cta_trial}</button>
-                        
-                        {/* SECCIÓN CEO ACTUALIZADA */}
-                        <div className="w-full max-w-4xl glass p-8 rounded-3xl border border-white/10 mb-20 flex flex-col md:flex-row items-center gap-8 text-left relative overflow-hidden">
-                            <div className="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-white/10 shadow-2xl flex-shrink-0 overflow-hidden relative z-10 ceo-photo-wrapper">
-                                {/* AQUÍ ESTÁ LA FOTO DEL CEO */}
-                                <img src="./assets/ceo-roddy.jpg" className="ceo-photo-style" alt="Roddy Smith CEO" />
-                            </div>
-                            <div className="flex-1 relative z-10">
-                                <div className="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2">{t.creator_title}</div>
-                                <h3 className="text-3xl font-black font-tech mb-1">RODDY SMITH</h3>
-                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{t.creator_role}</p>
-                                <p className="text-sm text-gray-300 leading-relaxed italic">"{t.creator_bio}"</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-
-            if (view === 'setup') return <div className="min-h-screen flex items-center justify-center p-6"><div className="w-full max-w-md glass p-10 rounded-2xl text-center relative"><button onClick={() => changeView('landing')} className="absolute top-4 right-4 text-gray-500 hover:text-white"><Icons.X /></button><h2 className="text-3xl font-bold font-tech mb-8">{t.setup_title}</h2><div className="space-y-4"><div><input className="glass-input" placeholder={t.ph_email} value={inputEmail} onChange={e => setInputEmail(e.target.value)} /></div><button onClick={handleLogin} className="w-full py-4 bg-white text-black font-black uppercase tracking-widest hover:bg-cyan-400 transition-colors rounded-lg">{t.setup_btn}</button></div></div></div>;
-            
-            if (view === 'upload') return <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative"><HeaderInternal /><div className="w-full max-w-4xl glass p-12 rounded-3xl text-center border border-white/10 mt-20"><h2 className="text-3xl font-bold font-tech mb-8 uppercase">{t.upload_title}</h2><div className="grid md:grid-cols-2 gap-8 mb-10"><div onClick={() => fileInputProduct.current.click()} className="relative h-64 border-2 border-dashed border-white/20 hover:border-cyan-500 rounded-2xl flex flex-col items-center justify-center cursor-pointer">{formData.image ? <img src={formData.image} className="w-full h-full object-contain p-4" /> : <Icons.Upload />}<input type="file" ref={fileInputProduct} className="hidden" onChange={(e) => handleUpload(e, 'image')} /></div><div onClick={() => fileInputLogo.current.click()} className="relative h-64 border-2 border-dashed border-white/20 hover:border-purple-500 rounded-2xl flex flex-col items-center justify-center cursor-pointer">{formData.logo ? <img src={formData.logo} className="w-full h-full object-contain p-4" /> : <Icons.Zap />}<input type="file" ref={fileInputLogo} className="hidden" onChange={(e) => handleUpload(e, 'logo')} /></div></div><button onClick={() => { if(!formData.image) return alert("Sube producto"); changeView('style'); }} className="tech-btn w-full py-5 text-xl uppercase tracking-widest">{t.next}</button></div></div>;
-            
-            if (view === 'style') return <div className="min-h-screen p-6 fade-enter flex flex-col relative"><HeaderInternal /><div className="max-w-7xl mx-auto w-full mt-20"><h2 className="text-3xl font-bold font-tech mb-8">{t.style_title}</h2><div className="grid grid-cols-2 md:grid-cols-3 gap-6">{STYLES_DATA.map(s => (<div key={s.id} onClick={() => {setFormData({...formData, style: t[`s_${s.id}`]}); runEngine();}} className="glass-card rounded-xl h-64"><img src={s.img} className="w-full h-full object-cover opacity-70" /><div className="card-label">{t[`s_${s.id}`]}</div></div>))}</div></div></div>;
-            
-            if (view === 'processing') return <div className="min-h-screen flex flex-col items-center justify-center p-8 fade-enter"><NeuralBrain /><h2 className="text-3xl font-black font-tech text-white animate-pulse mt-8">{loadingText}</h2></div>;
+            if (view === 'landing') return <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center relative fade-enter"><nav className="absolute top-0 w-full p-6 flex justify-center items-center z-50"><div className="flex flex-wrap justify-center gap-4 items-center bg-black/40 backdrop-blur-xl p-3 rounded-full border border-white/10 shadow-2xl hover:border-white/20 transition-all duration-500"><div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500/10 to-transparent rounded-full border border-yellow-500/30"><span className="text-yellow-400 animate-pulse"><Icons.Credit /></span><span className="text-xs font-black font-tech text-yellow-100 tracking-widest">{credits} {t.credits}</span></div><div className="flex items-center gap-3 px-4 border-r border-white/10">{['ES', 'EN', 'ZH', 'FR'].map(l => (<button key={l} onClick={() => { playSound('click'); setLang(l); }} className={`text-[10px] font-bold font-tech transition-all duration-300 hover:scale-110 ${lang === l ? 'text-cyan-400 scale-110' : 'text-gray-500 hover:text-white'}`}>{l}</button>))}</div><div className="flex items-center gap-2"><button onClick={() => {playSound('click'); setView('setup')}} className="text-xs font-bold text-white hover:text-cyan-400 font-tech uppercase tracking-widest px-4 py-2 hover:bg-white/5 rounded-full transition-all">{t.enter}</button><button onClick={() => {playSound('click'); setView('pricing')}} className="text-xs font-bold text-gray-300 hover:text-white font-tech uppercase tracking-widest bg-white/5 border border-white/10 px-5 py-2 rounded-full hover:bg-white/20 transition-all shadow-lg">{t.prices}</button><button onClick={() => {playSound('click'); setView('faq')}} className="text-xs font-bold text-gray-300 hover:text-white font-tech uppercase tracking-widest bg-white/5 border border-white/10 px-5 py-2 rounded-full hover:bg-white/20 transition-all shadow-lg">{t.faq}</button></div></div></nav><div className="z-10 max-w-6xl w-full flex flex-col items-center mt-40"><div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12 animate-pulse-fast"><div className="flex items-center gap-3 select-none"><div className="transform scale-150"><Icons.Logo /></div><span className="text-5xl font-black font-tech tracking-tighter">CLICK<span className="text-cyan-400">.IA</span></span></div><div className="hidden md:block w-px h-12 bg-gradient-to-b from-transparent via-white/30 to-transparent"></div><div className="inline-flex items-center gap-3 px-5 py-2 glass rounded-full border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(6,182,212,0.15)]"><Icons.Google /> {t.powered}</div></div><h1 className="text-4xl md:text-7xl font-black font-tech mb-8 leading-none tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]">{t.hero_mk} <br/><span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-700">{t.hero_auto}</span></h1><div className="flex flex-wrap justify-center gap-4 mb-12 text-xs font-bold uppercase tracking-widest text-gray-300">{t.bullets.map(b => (<div key={b} className="flex items-center gap-2 bg-white/5 px-3 py-1 rounded border border-white/10"><Icons.Check /> {b}</div>))}</div><div className="w-full max-w-4xl h-96 mb-12 shadow-[0_0_50px_rgba(6,182,212,0.2)] rounded-2xl overflow-hidden border border-white/20"><ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} /></div><div className="flex flex-col items-center gap-3 mb-12"><button onClick={() => {playSound('click'); setView('setup')}} className="tech-btn px-16 py-6 text-xl rounded-full flex items-center gap-4 mx-auto shadow-[0_0_50px_rgba(6,182,212,0.4)]">{t.cta_trial}</button><div className="flex items-center gap-2 text-cyan-400 font-bold text-sm uppercase tracking-widest animate-pulse"><Icons.Zap /> {t.cta_posts}</div></div><div className="w-full max-w-4xl glass p-8 rounded-3xl border border-white/10 mb-20 flex flex-col md:flex-row items-center gap-8 text-left relative overflow-hidden"><div className="absolute -top-20 -right-20 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl"></div><div className="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-white/10 shadow-2xl flex-shrink-0 overflow-hidden relative z-10"><img src={CREATOR_IMAGE} className="w-full h-full object-cover" /></div><div className="flex-1 relative z-10"><div className="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2">{t.creator_title}</div><h3 className="text-3xl font-black font-tech mb-1">RODDY SMITH</h3><p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">{t.creator_role}</p><p className="text-sm text-gray-300 leading-relaxed mb-4 italic border-l-2 border-cyan-500 pl-4">"{t.creator_bio}"</p><p className="text-xs text-gray-400 leading-relaxed">{t.creator_mission}</p></div></div><div className="floating-credit">{t.credit_text}</div></div></div>;
+            if (view === 'setup') return <div className="min-h-screen flex items-center justify-center p-6"><div className="w-full max-w-md glass p-10 rounded-2xl text-center relative overflow-hidden"><button onClick={() => changeView('landing')} className="absolute top-4 right-4 text-gray-500 hover:text-white"><Icons.X /></button><h2 className="text-3xl font-bold font-tech mb-2">{t.setup_title}</h2><p className="text-gray-400 text-sm mb-8">{t.setup_desc}</p>{user ? (<div className="text-center mb-6"><p className="text-green-400 font-bold mb-4">¡Hola, {user.name}!</p><button onClick={() => changeView('upload')} className="w-full py-4 bg-white text-black font-black uppercase tracking-widest hover:bg-cyan-400 transition-colors rounded-lg mb-4">CREAR CAMPAÑA</button><div className="text-left mt-6"><h4 className="text-xs font-bold text-gray-400 mb-2">{t.cloud_welcome}</h4><div className="h-40 overflow-y-auto custom-scroll bg-black/20 rounded-lg p-2">{userCloud.length === 0 ? <p className="text-gray-500 text-xs">{t.cloud_desc}</p> : userCloud.map((item, i) => (<div key={i} onClick={() => restoreCampaign(item)} className="cloud-item flex items-center gap-2 mb-2 p-2 bg-white/5 rounded border border-white/10"><img src={item.image} className="w-10 h-10 rounded object-cover" /><div className="overflow-hidden"><p className="text-[10px] text-gray-300 truncate">{item.date}</p><p className="text-[9px] text-gray-500 truncate w-40">Campaña #{i+1}</p></div></div>))}</div></div></div>) : (<div className="space-y-4 auth-form-container"><div><label className="auth-label">{t.lbl_email}</label><input className="glass-input" placeholder={t.ph_email} value={inputEmail} onChange={e => setInputEmail(e.target.value)} /></div><div><label className="auth-label">{t.lbl_api}</label><div className="relative"><input className="glass-input pl-10" type="password" placeholder={t.ph_api} value={inputApiKey} onChange={e => setInputApiKey(e.target.value)} /><div className="absolute left-3 top-3.5 text-cyan-500"><Icons.Key /></div></div></div><button onClick={handleLogin} className="w-full py-4 bg-white text-black font-black uppercase tracking-widest hover:bg-cyan-400 transition-colors rounded-lg flex items-center justify-center gap-2 mt-4">{t.setup_btn} <Icons.Google /></button></div>)}</div></div>;
+            if (view === 'upload') return <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative"><HeaderInternal /><div className="w-full max-w-4xl glass p-12 rounded-3xl text-center border border-white/10 mt-20"><div className="absolute top-8 left-8 cursor-pointer text-gray-500 hover:text-white" onClick={() => setView('landing')}><Icons.ChevronLeft /></div><h2 className="text-3xl font-bold font-tech mb-8 uppercase">{t.upload_title}</h2><div className="grid md:grid-cols-2 gap-8 mb-10"><div onClick={() => fileInputProduct.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.image ? 'border-cyan-500 bg-cyan-900/10' : 'border-white/20 hover:border-cyan-500'}`}>{formData.image ? (<><img src={formData.image} className="w-full h-full object-contain p-4" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Upload /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_prod}</span></>}<input type="file" ref={fileInputProduct} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'image')} /></div><div onClick={() => fileInputLogo.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.logo ? 'border-purple-500 bg-purple-900/10' : 'border-white/20 hover:border-purple-500'}`}>{formData.logo ? (<><img src={formData.logo} className="w-full h-full object-contain p-8" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4"><Icons.Zap /></div><span className="text-xs font-bold uppercase text-gray-400">{t.upload_logo}</span></>}<input type="file" ref={fileInputLogo} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'logo')} /></div></div><button onClick={() => { if(!formData.image) return alert("Sube producto"); playSound('click'); changeView('q1'); }} className={`tech-btn w-full py-5 text-xl uppercase tracking-widest ${!formData.image && 'opacity-50 cursor-not-allowed'}`}>{t.next}</button><div className="embedded-credit">{t.credit_text}</div></div></div>;
+            if (view === 'q1') return <QuestionScreen title={t.q1_title} color="text-cyan-400" nextView="q2" prevView="upload" onNext={() => changeView('q2')} onPrev={() => changeView('upload')} credits={credits} setView={setView} tLang={t}><input className="quiz-input" placeholder={t.q1_ph} autoFocus value={formData.target} onChange={e => setFormData({...formData, target: e.target.value})} /></QuestionScreen>;
+            if (view === 'q2') return <QuestionScreen title={t.q2_title} color="text-purple-400" nextView="q3" prevView="q1" onNext={() => changeView('q3')} onPrev={() => changeView('q1')} credits={credits} setView={setView} tLang={t}><div className="space-y-4"><input className="quiz-input" placeholder={t.q2_p1} value={formData.product.name} onChange={e => updateProduct('name', e.target.value)} /><div className="grid grid-cols-2 gap-4"><input className="quiz-input" placeholder={t.q2_p2} value={formData.product.price} onChange={e => updateProduct('price', e.target.value)} /><input className="quiz-input" placeholder={t.q2_p3} value={formData.product.promo} onChange={e => updateProduct('promo', e.target.value)} /></div></div></QuestionScreen>;
+            if (view === 'q3') return <QuestionScreen title={t.q3_title} color="text-green-400" nextView="q4" prevView="q2" onNext={() => changeView('q4')} onPrev={() => changeView('q2')} credits={credits} setView={setView} tLang={t}><div className="space-y-4"><input className="quiz-input" placeholder={t.q3_p1} value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} /><div className="relative"><input className="quiz-input pl-10" placeholder={t.q3_p2} value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} /><div className="absolute left-2 top-4 text-green-500 font-bold">WA</div></div></div></QuestionScreen>;
+            if (view === 'q4') return <QuestionScreen title={t.q4_title} color="text-yellow-400" nextView="q5" prevView="q3" onNext={() => changeView('q5')} onPrev={() => changeView('q3')} credits={credits} setView={setView} tLang={t}><div className="space-y-6"><input className="quiz-input" placeholder={t.q4_ph1} value={formData.inspiration} onChange={e => setFormData({...formData, inspiration: e.target.value})} /><div onClick={() => fileInputInspiration.current.click()} className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all text-center relative h-48 flex items-center justify-center overflow-hidden ${formData.inspirationImg ? 'border-yellow-400' : 'border-white/20 hover:border-yellow-400'}`}>{formData.inspirationImg ? (<><img src={formData.inspirationImg} className="w-full h-full object-cover absolute top-0 left-0 opacity-60" /><div className={`scan-line opacity-100`}></div><div className="relative z-10 bg-black/50 px-4 py-2 rounded-full text-xs font-bold text-yellow-400 border border-yellow-400 uppercase">{t.q4_change}</div></>) : (<div className="text-gray-500 text-xs uppercase">{t.q4_upload}</div>)}<input type="file" ref={fileInputInspiration} className="hidden" onChange={(e) => handleUpload(e, 'inspirationImg')} /></div></div></QuestionScreen>;
+            if (view === 'q5') return <QuestionScreen title={t.q5_title} color="text-red-400" nextView="style" prevView="q4" onNext={() => changeView('style')} onPrev={() => changeView('q4')} credits={credits} setView={setView} tLang={t}><div className="h-64 overflow-y-auto pr-2 custom-scroll">{Object.entries(COLOR_GROUPS).map(([group, colors]) => (<div key={group} className="mb-6"><p className="text-[10px] font-bold text-gray-500 uppercase mb-3 tracking-widest text-left">{group === "NEUTROS" ? t.color_n : group === "NUDE" ? t.color_nu : group === "PRIMARIOS" ? t.color_p : group === "SECUNDARIOS" ? t.color_s : group === "TERCIARIOS" ? t.color_t : t.color_q}</p><div className="flex flex-wrap gap-3">{colors.map(c => (<div key={c} onClick={() => toggleColor(c)} className={`color-check ${formData.colors.includes(c) ? 'selected' : ''}`} style={{backgroundColor: c}}></div>))}</div></div>))}</div></QuestionScreen>;
+            if (view === 'style') return <div className="min-h-screen p-6 fade-enter flex flex-col relative"><HeaderInternal /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => setView('q5')} className="p-2 rounded-full bg-white/10 hover:bg-white/20"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech">{t.style_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto w-full">{STYLES_DATA.map(s => (<div key={s.id} onClick={() => {playSound('click'); setFormData({...formData, style: t[`s_${s.id}`]}); changeView('light')}} className="glass-card rounded-xl h-64 group cursor-pointer"><img src={s.img} className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" /><div className="card-label">{t[`s_${s.id}`]}</div></div>))}</div><div className="mt-8 w-full max-w-7xl mx-auto"><div className="floating-credit">{t.credit_text}</div></div></div>;
+            if (view === 'light') return <div className="min-h-screen p-6 fade-enter flex flex-col relative"><HeaderInternal /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => changeView('style')} className="p-2 rounded-full bg-white/10 hover:bg-white/20"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech">{t.light_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-7xl mx-auto w-full mb-12">{LIGHTING_DATA.map(l => (<div key={l.id} onClick={() => {playSound('click'); setFormData({...formData, light: t[`l_${l.id}`]}); }} className={`glass-card rounded-xl h-64 group cursor-pointer ${formData.light === t[`l_${l.id}`] ? 'selected' : ''}`}><img src={l.img} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all" /><div className="card-label">{t[`l_${l.id}`]} <br/><span className="text-[9px] text-gray-400 font-normal">{t[`l_${l.id}_desc`]}</span></div></div>))}</div><div onClick={() => {playSound('click'); setFormData(prev => ({...prev, googleData: !prev.googleData}));}} className={`glass p-6 rounded-2xl flex justify-between items-center border transition-all cursor-pointer mb-8 max-w-2xl mx-auto w-full ${formData.googleData ? 'border-blue-500 bg-blue-900/20' : 'border-white/10 hover:border-blue-500/50'}`}><div className="flex items-center gap-4"><div className="bg-blue-500/20 p-3 rounded-full text-blue-400"><Icons.Google /></div><div><h3 className="font-bold">{t.google_data}</h3><p className="text-xs text-gray-400">{t.google_desc}</p></div></div><div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${formData.googleData ? 'bg-blue-500 border-blue-500' : 'border-gray-500'}`}>{formData.googleData && <Icons.Check />}</div></div><div className="max-w-7xl mx-auto w-full text-center"><button onClick={runEngine} className="tech-btn px-20 py-6 text-2xl rounded-full shadow-[0_0_50px_rgba(6,182,212,0.5)]">{t.gen_btn}</button></div><div className="mt-8 w-full max-w-7xl mx-auto"><div className="floating-credit">{t.credit_text}</div></div></div>;
+            if (view === 'processing') return <div className="min-h-screen flex flex-col items-center justify-center p-8 fade-enter relative overflow-hidden"><HeaderInternal /><div className="flex flex-col items-center justify-center gap-6 w-full max-w-2xl z-10 mt-32"><NeuralBrain /><div className="flex flex-col items-center gap-4 w-full"><h2 className="text-3xl md:text-4xl font-black font-tech text-white tracking-[0.2em] text-center animate-pulse uppercase drop-shadow-[0_0_25px_rgba(6,182,212,0.5)]">{loadingText}</h2><div className="flex flex-col items-center gap-2"><p className="text-cyan-400 font-mono text-xs tracking-[0.3em] font-bold">{t.processing}</p><p className="text-white font-black font-mono text-xl">{Math.round(progress)}%</p></div></div><div className="w-full max-w-md h-1 bg-gray-900 rounded-full overflow-hidden border border-white/10 shadow-lg"><div className="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 transition-all duration-200 ease-out shadow-[0_0_30px_#06b6d4]" style={{ width: `${progress}%` }}></div></div></div><div className="floating-credit">{t.credit_text}</div></div>;
 
             if (view === 'result') return (
                 <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative">
                     <HeaderInternal />
                     <h2 className="text-5xl font-black font-tech text-white mt-24 mb-8 tracking-widest">{t.result_title}</h2>
+                    
                     <div className="w-full max-w-7xl grid md:grid-cols-2 gap-10 glass p-8 rounded-3xl border border-white/20">
-                        <div className="space-y-4">
-                            <div className="relative h-[500px] rounded-2xl overflow-hidden border border-white/20 shadow-2xl">
+                        <div className="space-y-4 relative">
+                            <div className="relative group rounded-2xl overflow-hidden border border-white/20 shadow-2xl mx-auto transition-all duration-500 h-[500px]">
                                 <ComparisonSlider beforeImage={formData.image || UGLY_BURGER_IMAGE} afterImage={resultImage} tLang={t} />
                             </div>
                             <div className="flex gap-2">
-                                <button onClick={handleDownloadImage} className="flex-1 py-3 bg-cyan-500 text-black text-xs font-bold uppercase rounded-xl hover:bg-cyan-400 transition-colors flex items-center justify-center gap-2"><Icons.Download /> {t.download}</button>
+                                <button onClick={handleDownloadImage} className="flex-1 py-3 bg-cyan-500 text-black text-xs font-bold uppercase rounded-xl hover:bg-cyan-400 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20"><Icons.Download /> {t.download}</button>
                                 <button onClick={() => setIsEditing(true)} className="flex-1 py-3 border border-white/20 text-white text-xs font-bold uppercase rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center gap-2">{t.edit_design}</button>
                             </div>
                         </div>
                         <div className="flex flex-col space-y-6">
-                            <div className="glass p-6 rounded-2xl border-l-4 border-purple-500"><h3 className="text-xs font-bold text-purple-400 uppercase tracking-widest mb-4">{t.copy_viral}</h3><div className="text-sm text-gray-300">{generatedCopy}</div></div>
-                            <button onClick={handleNewGeneration} className="mt-auto w-full py-4 border border-white/20 rounded-xl text-xs font-bold uppercase hover:bg-white hover:text-black transition-colors">{t.new_btn}</button>
+                            <div className="bg-black/40 backdrop-blur-md p-4 rounded-xl border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.1)] w-full animate-pulse-fast flex flex-col justify-center"><div className="flex items-center justify-between mb-2 px-2"><div className="flex items-center gap-2"><Icons.Zap /><span className="text-xs font-bold text-cyan-400 uppercase tracking-widest">{t.viral_score}</span></div><div className="text-2xl font-black font-tech text-white">9.8<span className="text-sm text-gray-500">/10</span></div></div><div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden mb-2"><div className="h-full bg-gradient-to-r from-cyan-400 to-blue-600 w-[98%]"></div></div><p className="text-[10px] text-gray-400 text-center">{t.viral_desc}</p></div>
+                            <div className="glass p-6 rounded-2xl border-l-4 border-blue-500"><h3 className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2"><Icons.Clock /> {t.schedule}</h3><div className="grid grid-cols-3 gap-2">{BEST_TIMES.map((bt, i) => (<div key={i} className="bg-white/5 p-3 rounded-lg text-center border border-white/5 hover:bg-white/10 transition-colors"><div className="flex justify-center mb-2 text-gray-300 scale-75">{bt.icon}</div><div className="text-lg font-black font-tech">{bt.time}</div><div className="text-[10px] text-gray-500 uppercase">{bt.day}</div></div>))}</div></div>
+                            <div className="glass p-6 rounded-2xl border-l-4 border-purple-500 relative"><div className="flex justify-between items-center mb-4"><h3 className="text-xs font-bold text-purple-400 uppercase tracking-widest flex items-center gap-2"><Icons.Zap /> {t.copy_viral}</h3><button onClick={handleCopyText} className="text-[10px] font-bold text-gray-400 hover:text-white flex items-center gap-1 uppercase border border-white/20 px-2 py-1 rounded transition-colors"><Icons.Copy /> {t.copy_clipboard}</button></div><div className="copy-area custom-scroll">{generatedCopy}</div></div>
+                            <div className="glass p-6 rounded-2xl border-l-4 border-green-500"><h3 className="text-xs font-bold text-green-400 uppercase tracking-widest mb-4 flex items-center gap-2"><Icons.Music /> {t.trends}</h3><div className="space-y-3">{REAL_MUSIC_IDS.map((track, i) => (<div key={i} className="bg-white/5 p-3 rounded-lg border border-white/10 flex justify-between items-center"><p className="text-xs font-bold text-white">{track.title} <span className="text-gray-500">- {track.artist}</span></p></div>))}</div></div>
+                            <div className="flex gap-4 mt-auto"><button onClick={handleNewGeneration} className="w-full py-4 border border-white/20 rounded-xl text-xs font-bold uppercase hover:bg-white hover:text-black transition-colors">{t.new_btn}</button></div>
                         </div>
                     </div>
-                    {isEditing && <FabricEditor image={resultImage} logo={formData.logo} initialText={designState} onSave={saveDesign} onClose={() => setIsEditing(false)} tLang={t} />}
+                    <div className="floating-credit">{t.credit_text}</div>
+                    {isEditing && <DesignEditor image={resultImage} logo={formData.logo} initialText={designState} onSave={saveDesign} onClose={() => setIsEditing(false)} tLang={t} />}
                 </div>
             );
 
-            return null; // Fallback
+            if (view === 'pricing') return <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter"><button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all text-xl font-bold"><Icons.X /></button><h2 className="text-5xl font-black font-tech text-center mb-10">{t.plans}</h2><div className="grid md:grid-cols-3 gap-8 w-full max-w-6xl pb-10 items-center"><PricingCard title={t.p_names[0]} price="99" features={t.f_1} onSelect={() => {}} sub={t.p_subs[0]} tLang={t} /><PricingCard title={t.p_names[1]} price="297" strike="1200" recommended={true} features={t.f_2} onSelect={() => {}} sub={t.p_subs[1]} tLang={t} /><PricingCard title={t.p_names[2]} price="997" features={t.f_3} onSelect={() => {}} sub={t.p_subs[2]} tLang={t} /></div><div className="floating-credit">{t.credit_text}</div></div>;
+            if (view === 'faq') return <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter"><button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all text-xl font-bold"><Icons.X /></button><h2 className="text-5xl font-black font-tech text-center mb-16">{t.faq_title}</h2><div className="max-w-3xl w-full space-y-6"> {[{q: t.q1, a: t.a1}, {q: t.q2, a: t.a2}, {q: t.q3, a: t.a3}].map((item, i) => (<details key={i} className="glass p-6 rounded-xl border border-white/10 group cursor-pointer open:bg-white/5"><summary className="font-bold text-lg flex justify-between items-center outline-none list-none uppercase font-tech">{item.q} <span className="text-cyan-500 transition-transform group-open:rotate-180"><Icons.ChevronDown /></span></summary><p className="text-gray-400 text-sm mt-4 leading-relaxed pl-4 border-l-2 border-cyan-500/50">{item.a}</p></details>))} </div><div className="floating-credit">{t.credit_text}</div></div>;
+
+            return (
+                <>
+                    <button onClick={() => {setIsMuted(!isMuted); document.querySelectorAll('audio').forEach(el => el.muted = !isMuted)}} className="mute-btn">
+                        {isMuted ? <Icons.VolumeX /> : <Icons.Volume2 />}
+                    </button>
+                    {view === 'landing' && landingView}
+                    {view === 'pricing' && pricingView}
+                    {view === 'setup' && setupView}
+                    {view === 'upload' && uploadView}
+                    {view === 'q1' && q1View}
+                    {view === 'q2' && q2View}
+                    {view === 'q3' && q3View}
+                    {view === 'q4' && q4View}
+                    {view === 'q5' && q5View}
+                    {view === 'style' && styleView}
+                    {view === 'light' && lightView}
+                    {view === 'processing' && processingView}
+                    {view === 'result' && resultView}
+                    {view === 'faq' && faqView}
+                </>
+            );
         };
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
