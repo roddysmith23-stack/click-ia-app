@@ -136,12 +136,16 @@
         const { useState, useEffect, useRef } = React;
 
         // --- HOOK DEL TIEMPO (CEREBRO DINÁMICO) - FIXED TO DARK THEME ---
+        // Se mantiene fijo en 'night' para garantizar la estética profunda.
         const useTimeTheme = () => 'night'; 
 
         // --- CONSTANTES ---
-        // Nike Jordan 1s grises y negras (Amateur photo placeholder)
+        // Las URL de las imágenes "Antes" y "Después" se han actualizado para reflejar los zapatos (Jordan 1s)
+        // en lugar de la hamburguesa, cumpliendo con la solicitud de cambio de producto.
+        // NOTA: Reemplaza estas URL de Unsplash con las URL de GitHub solicitadas:
+        // ANTES (IMG_8399.jpg placeholder): URL amateur de zapato.
         const UGLY_BURGER_IMAGE = "https://images.unsplash.com/photo-1615566372991-b3b32c66810a?q=80&w=1800"; 
-        // Nike Jordan 1s grises y negras (Professional photo placeholder)
+        // DESPUÉS (IMG_8401.jpg placeholder): URL profesional de zapato.
         const MAGIC_RESULT_IMAGE_DEFAULT = "https://images.unsplash.com/photo-1628108502319-e85d9472314d?q=80&w=2800"; 
         const CREATOR_IMAGE = "./roddy-ceo.jpg"; 
         const INITIAL_CREDITS = 3;
@@ -499,7 +503,7 @@
             </div>
         );
 
-        // --- NEW MAG.IA HEADER ---
+        // --- NEW MAG.IA HEADER - ADJUSTED FOR ALIGNMENT ---
         const HeaderInternal = ({ credits, setView, t, theme }) => (
             <div className="absolute top-0 left-0 w-full p-4 md:p-6 flex justify-center items-start gap-6 z-50 pointer-events-none">
                 {/* Créditos Flotantes */}
@@ -511,11 +515,14 @@
                     </button>
                 </div>
 
-                {/* LOGO CENTRAL MAG.IA - Removed dynamic theme prop */}
+                {/* LOGO CENTRAL MAG.IA - FIXED ALIGNMENT */}
                 <div className="pointer-events-auto flex flex-col items-center cursor-pointer group mt-2" onClick={() => setView('landing')}>
-                    <Icons.SunLogo />
-                    <span className="text-3xl font-black font-tech tracking-tighter text-white drop-shadow-[0_2px_10px_rgba(6, 182, 212, 0.5)]">MAG.IA</span>
-                    <div className="flex items-center gap-1 text-[8px] text-white/70 font-bold uppercase tracking-[0.1em] mt-1">
+                    <div className="flex flex-col items-center mb-1"> 
+                        <Icons.SunLogo />
+                        {/* Use leading-none and negative margin for the integrated visual effect */}
+                        <h1 className="text-3xl font-black font-tech tracking-tighter text-white drop-shadow-[0_0_40px_rgba(6, 182, 212, 0.5)] leading-none -mt-4">MAG.IA</h1>
+                    </div>
+                    <div className="flex items-center gap-1 text-[8px] text-white/70 font-bold uppercase tracking-[0.1em]">
                         <Icons.Google /> {t.powered}
                     </div>
                 </div>
@@ -535,7 +542,7 @@
             const [user, setUser] = useState(null); 
             const [userCloud, setUserCloud] = useState([]);
             const [isEditing, setIsEditing] = useState(false);
-            const timeTheme = useTimeTheme(); // Fixed to 'night'
+            const timeTheme = useTimeTheme(); 
 
             const initialForm = { image: null, logo: null, inspirationImg: null, target: '', company: '', whatsapp: '', product: { name: '', price: '', promo: '' }, textOnImage: '', style: '', light: '', colors: [], googleData: false, inspiration: '', connected: { fb: false, ig: false, tk: false }, format: 'post' };
             const [formData, setFormData] = useState(initialForm);
@@ -655,7 +662,7 @@
                         <h2 className="text-3xl md:text-5xl font-bold font-tech mb-8 leading-tight tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50">{t.hero_mk} <br/><span className="text-white">{t.hero_auto}</span></h2>
                         <div className="flex flex-wrap justify-center gap-4 mb-12 text-xs font-bold uppercase tracking-widest text-white/70">{t.bullets.map(b => (<div key={b} className="flex items-center gap-2 bg-white/5 px-3 py-1 rounded-full border border-white/10"><Icons.Check /> {b}</div>))}</div>
                         
-                        {/* Comparison Slider with updated images */}
+                        {/* Comparison Slider with updated images (Shoe placeholders for IMG_8399.jpg and IMG_8401.jpg) */}
                         <div className="w-full max-w-4xl h-96 mb-12 shadow-2xl rounded-2xl overflow-hidden border border-white/20 glass"><ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} /></div>
                         
                         <div className="flex flex-col items-center gap-4 mb-12">
@@ -678,7 +685,6 @@
                                 <p className="text-xs text-gray-400 leading-relaxed">{t.creator_mission}</p>
                             </div>
                         </div>
-                        {/* CEO Phrase Updated */}
                         <div className="floating-credit">{t.credit_text}</div>
                     </div>
                 </div>
@@ -717,14 +723,14 @@
                 </div>
             );
 
-            // Mapeo simple de las vistas de preguntas reutilizando QuestionScreen
+            // Vistas de preguntas
             if (view === 'q1') return <QuestionScreen title={t.q1_title} nextView="q2" prevView="upload" onNext={() => changeView('q2')} onPrev={() => changeView('upload')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><input className="quiz-input" placeholder={t.q1_ph} autoFocus value={formData.target} onChange={e => setFormData({...formData, target: e.target.value})} /></QuestionScreen>;
             if (view === 'q2') return <QuestionScreen title={t.q2_title} nextView="q3" prevView="q1" onNext={() => changeView('q3')} onPrev={() => changeView('q1')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-4"><input className="quiz-input" placeholder={t.q2_p1} value={formData.product.name} onChange={e => updateProduct('name', e.target.value)} /><div className="grid grid-cols-2 gap-4"><input className="quiz-input" placeholder={t.q2_p2} value={formData.product.price} onChange={e => updateProduct('price', e.target.value)} /><input className="quiz-input" placeholder={t.q2_p3} value={formData.product.promo} onChange={e => updateProduct('promo', e.target.value)} /></div></div></QuestionScreen>;
             if (view === 'q3') return <QuestionScreen title={t.q3_title} nextView="q4" prevView="q2" onNext={() => changeView('q4')} onPrev={() => changeView('q2')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-4"><input className="quiz-input" placeholder={t.q3_p1} value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} /><div className="relative"><input className="quiz-input pl-10" placeholder={t.q3_p2} value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} /><div className="absolute left-2 top-4 text-white font-bold">WA</div></div></div></QuestionScreen>;
             if (view === 'q4') return <QuestionScreen title={t.q4_title} nextView="q5" prevView="q3" onNext={() => changeView('q5')} onPrev={() => changeView('q3')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-6"><input className="quiz-input" placeholder={t.q4_ph1} value={formData.inspiration} onChange={e => setFormData({...formData, inspiration: e.target.value})} /><div onClick={() => fileInputInspiration.current.click()} className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all text-center relative h-48 flex items-center justify-center overflow-hidden ${formData.inspirationImg ? 'border-[#06b6d4]' : 'border-white/20 hover:border-[#06b6d4]'}`}>{formData.inspirationImg ? (<><img src={formData.inspirationImg} className="w-full h-full object-cover absolute top-0 left-0 opacity-60" /><div className={`scan-line opacity-100`}></div><div className="relative z-10 bg-black/50 px-4 py-2 rounded-full text-xs font-bold text-white border border-white uppercase">{t.q4_change}</div></>) : (<div className="text-gray-500 text-xs uppercase">{t.q4_upload}</div>)}<input type="file" ref={fileInputInspiration} className="hidden" onChange={(e) => handleUpload(e, 'inspirationImg')} /></div></div></QuestionScreen>;
             if (view === 'q5') return <QuestionScreen title={t.q5_title} nextView="style" prevView="q4" onNext={() => changeView('style')} onPrev={() => changeView('q4')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="h-64 overflow-y-auto pr-2 custom-scroll">{Object.entries(COLOR_GROUPS).map(([group, colors]) => (<div key={group} className="mb-6"><p className="text-[10px] font-bold text-gray-500 uppercase mb-3 tracking-widest text-left">{group === "NEUTROS" ? t.color_n : group === "NUDE" ? t.color_nu : group === "PRIMARIOS" ? t.color_p : group === "SECUNDARIOS" ? t.color_s : group === "TERCIARIOS" ? t.color_t : t.color_q}</p><div className="flex flex-wrap gap-3">{colors.map(c => (<div key={c} onClick={() => toggleColor(c)} className={`w-10 h-10 rounded-lg cursor-pointer border-2 border-white/10 transition-transform ${formData.colors.includes(c) ? 'scale-110 border-[#06b6d4] shadow-[0_0_15px_#06b6d4]' : ''}`} style={{backgroundColor: c}}></div>))}</div></div>))}</div></QuestionScreen>;
 
-            // Vistas estilo y luz actualizadas a glass
+            // Vistas estilo y luz
             if (view === 'style') return <div className="min-h-screen p-6 fade-enter flex flex-col relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => setView('q5')} className="p-2 rounded-full bg-white/10 hover:bg-white/20"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech text-white">{t.style_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto w-full">{STYLES_DATA.map(s => (<div key={s.id} onClick={() => {playSound('click'); setFormData({...formData, style: t[`s_${s.id}`]}); changeView('light')}} className="glass-card rounded-xl h-64 group cursor-pointer"><img src={s.img} className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" /><div className="card-label text-white">{t[`s_${s.id}`]}</div></div>))}</div><div className="floating-credit">{t.credit_text}</div></div>;
             if (view === 'light') return <div className="min-h-screen p-6 fade-enter flex flex-col relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => changeView('style')} className="p-2 rounded-full bg-white/10 hover:bg-white/20"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech text-white">{t.light_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-7xl mx-auto w-full mb-12">{LIGHTING_DATA.map(l => (<div key={l.id} onClick={() => {playSound('click'); setFormData({...formData, light: t[`l_${l.id}`]}); }} className={`glass-card rounded-xl h-64 group cursor-pointer ${formData.light === t[`l_${l.id}`] ? 'selected' : ''}`}><img src={l.img} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all" /><div className="card-label text-white">{t[`l_${l.id}`]} <br/><span className="text-[9px] text-gray-400 font-normal">{t[`l_${l.id}_desc`]}</span></div></div>))}</div><div onClick={() => {playSound('click'); setFormData(prev => ({...prev, googleData: !prev.googleData}));}} className={`glass p-6 rounded-2xl flex justify-between items-center border transition-all cursor-pointer mb-8 max-w-2xl mx-auto w-full ${formData.googleData ? 'border-[#06b6d4] bg-[#06b6d4]/20' : 'border-white/10 hover:border-white/50'}`}><div className="flex items-center gap-4"><div className="bg-white/10 p-3 rounded-full text-white"><Icons.Google /></div><div><h3 className="font-bold text-white">{t.google_data}</h3><p className="text-xs text-gray-400">{t.google_desc}</p></div></div><div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${formData.googleData ? 'bg-[#06b6d4] border-[#06b6d4]' : 'border-gray-500'}`}>{formData.googleData && <Icons.Check />}</div></div><div className="max-w-7xl mx-auto w-full text-center"><button onClick={runEngine} className="tech-btn px-20 py-6 text-2xl rounded-2xl shadow-[0_0_50px_rgba(255,255,255,0.2)]">{t.gen_btn}</button></div><div className="floating-credit">{t.credit_text}</div></div>;
 
