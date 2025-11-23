@@ -136,17 +136,21 @@
         const { useState, useEffect, useRef } = React;
 
         // --- HOOK DEL TIEMPO (CEREBRO DINÁMICO) - FIXED TO DARK THEME ---
-        // Se mantiene fijo en 'night' para garantizar la estética profunda.
         const useTimeTheme = () => 'night'; 
+        
+        // ==============================================================================
+        // ✅ CONFIGURACIÓN CRÍTICA DE URLS - HARDCODED RAW GITHUB LINKS ✅
+        // ==============================================================================
+        // Se utilizan las rutas RAW de GitHub construidas a partir de la estructura del repositorio.
+        const JORDAN_ANTES_URL = 'https://raw.githubusercontent.com/roddysmith23-stack/click-ia-app/main/IMG_8399.jpg'; 
+        
+        const JORDAN_DESPUES_URL = 'https://raw.githubusercontent.com/roddysmith23-stack/click-ia-app/main/IMG_8401.jpg';
+        // ==============================================================================
 
         // --- CONSTANTES ---
-        // Las URL de las imágenes "Antes" y "Después" se han actualizado para reflejar los zapatos (Jordan 1s)
-        // en lugar de la hamburguesa, cumpliendo con la solicitud de cambio de producto.
-        // NOTA: Reemplaza estas URL de Unsplash con las URL de GitHub solicitadas:
-        // ANTES (IMG_8399.jpg placeholder): URL amateur de zapato.
-        const UGLY_BURGER_IMAGE = "https://images.unsplash.com/photo-1615566372991-b3b32c66810a?q=80&w=1800"; 
-        // DESPUÉS (IMG_8401.jpg placeholder): URL profesional de zapato.
-        const MAGIC_RESULT_IMAGE_DEFAULT = "https://images.unsplash.com/photo-1628108502319-e85d9472314d?q=80&w=2800"; 
+        // Se utilizan las variables hardcodeadas para las imágenes "Antes" y "Después".
+        const MAGIC_RESULT_IMAGE_DEFAULT = JORDAN_DESPUES_URL; 
+        const UGLY_BURGER_IMAGE = JORDAN_ANTES_URL; 
         const CREATOR_IMAGE = "./roddy-ceo.jpg"; 
         const INITIAL_CREDITS = 3;
 
@@ -241,7 +245,7 @@
                 viral_score: "Viral Score", viral_desc: "Alto potencial de alcance orgánico detectado.",
                 schedule: "Cronograma IA", copy_viral: "Copy Viral", star_text: "TEXTO ESTRELLA ★",
                 trends: "Tendencias Detectadas", publish: "PUBLICAR AHORA", new_btn: "NUEVO", ready: "LISTO",
-                credits: "CRÉDITOS", color_n: "NEUTROS", color_nu: "NUDE", color_p: "PRIMARIOS", color_s: "SECUNDARIOS", color_t: "TERTIARIOS", color_q: "CUATERNARIOS",
+                credits: "CRÉDITOS", color_n: "NEUTROS", color_nu: "NUDE", color_p: "PRIMARIOS", color_s: "SECUNDARIOS", color_t: "TERCIARIOS", color_q: "CUATERNARIOS",
                 loading_steps: ["BUSCANDO EN LA WEB...", "ANALIZANDO TENDENCIAS...", "ESTRUCTURANDO ESTRATEGIA...", "GENERANDO IMAGEN 8K...", "REDACTANDO COPY VIRAL..."],
                 credit_text: '"Si para el universo no existen límites, no debería haber límites para la mente humana” — Roddy Smith',
                 creator_title: "NUESTRO CREADOR", creator_role: "CEO & FOUNDER", creator_bio: "Roddy Smith, visionario estratégico. Dominio total de la IA para cambiar el marketing global.",
@@ -257,42 +261,6 @@
                 s_realistic: 'Fotorealismo', s_cinematic: 'Cinemático', s_luxury: 'Lujo Minimal', s_neon: 'Neon Pop', s_3d: '3D Pixar', s_cyber: 'Cyberpunk',
                 l_studio: 'Luz de Estudio', l_studio_desc: 'Frontal Suave', l_neon: 'Neón', l_neon_desc: 'Lateral Color', l_golden: 'Hora Dorada', l_golden_desc: 'Trasera Solar', l_dramatic: 'Cinemático', l_dramatic_desc: 'Contraste Alto',
                 txt_top: 'TU MARCA', txt_bot: 'OFERTA LIMITADA'
-            },
-            EN: {
-                enter: "ENTER", prices: "PRICING", faq: "FAQ", powered: "Powered by Google Gemini",
-                hero_mk: "THE FUTURE OF MARKETING", hero_auto: "FOR BUSINESSES.",
-                bullets: ['Latest Tech', 'Light Speed', 'Neuromarketing', 'Total Savings', 'Sales Expert'],
-                cta_trial: "GET FREE TRIAL", cta_posts: "GENERATE 50 POSTS/MO",
-                setup_title: "IDENTIFICATION", setup_desc: "Enter your details to connect.", setup_btn: "CONNECT & ENTER",
-                lbl_email: "YOUR EMAIL", ph_email: "ex@company.com",
-                lbl_api: "YOUR GOOGLE GEMINI API KEY", ph_api: "Paste your AIza key...",
-                upload_title: "Phase 1: Asset Upload", upload_prod: "PRODUCT", upload_logo: "LOGO", next: "NEXT",
-                q1_title: "WHO IS YOUR CLIENT?", q1_ph: "Ex: Young women, athletes...",
-                q2_title: "PRODUCT DETAILS", q2_p1: "What do you sell? (Ex: Burger)", q2_p2: "Price ($)", q2_p3: "Promo (Optional)",
-                q3_title: "COMPANY DATA", q3_p1: "Company Name...", q3_p2: "WhatsApp (593...)",
-                q4_title: "YOUR INSPIRATION", q4_ph1: "Ex: Apple, Nike...", q4_upload: "Or Upload Reference", q4_change: "Change Image",
-                q5_title: "COLOR PALETTE", style_title: "CHOOSE STYLE", light_title: "LIGHTING",
-                google_data: "Google Data Pro", google_desc: "Use real search data",
-                gen_btn: "GENERATE CAMPAIGN", processing: "PROCESSING DATA...", result_title: "RESULTS",
-                viral_score: "Viral Score", viral_desc: "High organic reach potential detected.",
-                schedule: "AI Schedule", copy_viral: "Viral Copy", star_text: "STAR TEXT ★",
-                trends: "Detected Trends", publish: "PUBLISH NOW", new_btn: "NEW", ready: "READY",
-                credits: "CREDITS", color_n: "NEUTRALS", color_nu: "NUDE", color_p: "PRIMARY", color_s: "SECONDARY", color_t: "TERTIARY", color_q: "QUATERNARY",
-                loading_steps: ["SEARCHING WEB...", "ANALIZING TRENDS...", "STRUCTURING STRATEGY...", "GENERATING 8K IMAGE...", "WRITING VIRAL COPY..."],
-                credit_text: '"If limits do not exist for the universe, they should not exist for the human mind” — Roddy Smith',
-                creator_title: "OUR CREATOR", creator_role: "CEO & FOUNDER", creator_bio: "Roddy Smith, strategic visionary. Total mastery of AI to change global marketing.",
-                creator_mission: "Our mission is to break entry barriers. MAG.IA was born to change the world.",
-                download: "DOWNLOAD IMAGE", premium_download: "DOWNLOAD 8K ULTRA (Billboard) - $0.99",
-                copy_clipboard: "COPY TEXT",
-                cloud_welcome: "WELCOME TO YOUR CLOUD", cloud_desc: "We save all your campaigns here.",
-                edit_design: "🛠️ OPEN NANO-STUDIO", editor_title: "NANO-STUDIO 2.0", save_design: "SAVE DESIGN", close_editor: "CLOSE",
-                edit_text_1: "Main Text", edit_text_2: "Subtitle", edit_size: "Logo Size",
-                default_promo: "Limited time only",
-                copy_headline: "Ready for the next level?", copy_body_1: "It's not just", copy_body_2: "It's an experience.", copy_offer: "Exclusive offer:", copy_cta: "📲 Order here:",
-                plans: "PLANS", p_names: ["BEGINNER", "BUSINESS", "AGENCY"], p_subs: ["MONTHLY", "ONE TIME 1 YEAR", "ONE TIME"], rec: "RECOMMENDED", buy: "BUY NOW", sel: "SELECT", f_1: ["1 Month Service", "4K High Definition", "50 Posts Monthly"], f_2: ["1 YEAR Service", "8K High Definition", "100 Posts Monthly", "VIP Support"], f_3: ["1 Month Service", "8K High Definition", "Unlimited", "White Label"], faq_title: "FREQUENT QUESTIONS", q1: "WHAT IS MARKETING?", a1: "Marketing is not selling. It's being chosen.", q2: "WHAT IS THE APP FOR?", a2: "MAG.IA clones the brains of top advertisers.", q3: "WHAT DO I GET?", a3: "You gain time and world-class quality.", before: "Before", after: "After",
-                s_realistic: 'Photorealism', s_cinematic: 'Cinematic', s_luxury: 'Minimal Luxury', s_neon: 'Neon Pop', s_3d: '3D Pixar', s_cyber: 'Cyberpunk',
-                l_studio: 'Studio Light', l_studio_desc: 'Soft Frontal', l_neon: 'Neon', l_neon_desc: 'Side Color', l_golden: 'Golden Hour', l_golden_desc: 'Back Sun', l_dramatic: 'Cinematic', l_dramatic_desc: 'High Contrast',
-                txt_top: 'YOUR BRAND', txt_bot: 'LIMITED OFFER'
             }
         };
 
@@ -366,8 +334,8 @@
             };
             return (
                 <div className="relative w-full h-full overflow-hidden cursor-ew-resize select-none rounded-xl border border-white/20 shadow-2xl bg-black" ref={containerRef} onMouseMove={handleMove} onTouchMove={handleMove}>
-                    <img src={afterImage} alt="After" className="absolute top-0 left-0 w-full h-full object-cover" />
-                    <div className="absolute top-0 left-0 h-full overflow-hidden border-r-2 border-[#06b6d4]" style={{ width: `${sliderPos}%` }}><img src={beforeImage} alt="Before" className="absolute top-0 left-0 h-full max-w-none object-cover" style={{ width: containerRef.current ? containerRef.current.offsetWidth : '100%' }} /></div>
+                    <img src={afterImage} id="despues" alt="After" className="absolute top-0 left-0 w-full h-full object-cover" />
+                    <div className="absolute top-0 left-0 h-full overflow-hidden border-r-2 border-[#06b6d4]" style={{ width: `${sliderPos}%` }}><img src={beforeImage} id="antes" alt="Before" className="absolute top-0 left-0 h-full max-w-none object-cover" style={{ width: containerRef.current ? containerRef.current.offsetWidth : '100%' }} /></div>
                     <div className="absolute top-1/2 w-10 h-10 bg-[#06b6d4] rounded-full flex items-center justify-center text-black shadow-lg transform -translate-y-1/2 -translate-x-1/2 pointer-events-none" style={{ left: `${sliderPos}%` }}><Icons.Sliders /></div>
                     <div className="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded uppercase shadow-md">{tLang.before}</div>
                     <div className="absolute bottom-4 right-4 bg-green-500 text-black text-xs font-bold px-2 py-1 rounded uppercase shadow-md">{tLang.after}</div>
@@ -662,7 +630,7 @@
                         <h2 className="text-3xl md:text-5xl font-bold font-tech mb-8 leading-tight tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50">{t.hero_mk} <br/><span className="text-white">{t.hero_auto}</span></h2>
                         <div className="flex flex-wrap justify-center gap-4 mb-12 text-xs font-bold uppercase tracking-widest text-white/70">{t.bullets.map(b => (<div key={b} className="flex items-center gap-2 bg-white/5 px-3 py-1 rounded-full border border-white/10"><Icons.Check /> {b}</div>))}</div>
                         
-                        {/* Comparison Slider with updated images (Shoe placeholders for IMG_8399.jpg and IMG_8401.jpg) */}
+                        {/* Comparison Slider with updated images (Shoe placeholders) */}
                         <div className="w-full max-w-4xl h-96 mb-12 shadow-2xl rounded-2xl overflow-hidden border border-white/20 glass"><ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} /></div>
                         
                         <div className="flex flex-col items-center gap-4 mb-12">
@@ -727,7 +695,7 @@
             if (view === 'q1') return <QuestionScreen title={t.q1_title} nextView="q2" prevView="upload" onNext={() => changeView('q2')} onPrev={() => changeView('upload')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><input className="quiz-input" placeholder={t.q1_ph} autoFocus value={formData.target} onChange={e => setFormData({...formData, target: e.target.value})} /></QuestionScreen>;
             if (view === 'q2') return <QuestionScreen title={t.q2_title} nextView="q3" prevView="q1" onNext={() => changeView('q3')} onPrev={() => changeView('q1')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-4"><input className="quiz-input" placeholder={t.q2_p1} value={formData.product.name} onChange={e => updateProduct('name', e.target.value)} /><div className="grid grid-cols-2 gap-4"><input className="quiz-input" placeholder={t.q2_p2} value={formData.product.price} onChange={e => updateProduct('price', e.target.value)} /><input className="quiz-input" placeholder={t.q2_p3} value={formData.product.promo} onChange={e => updateProduct('promo', e.target.value)} /></div></div></QuestionScreen>;
             if (view === 'q3') return <QuestionScreen title={t.q3_title} nextView="q4" prevView="q2" onNext={() => changeView('q4')} onPrev={() => changeView('q2')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-4"><input className="quiz-input" placeholder={t.q3_p1} value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} /><div className="relative"><input className="quiz-input pl-10" placeholder={t.q3_p2} value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} /><div className="absolute left-2 top-4 text-white font-bold">WA</div></div></div></QuestionScreen>;
-            if (view === 'q4') return <QuestionScreen title={t.q4_title} nextView="q5" prevView="q3" onNext={() => changeView('q5')} onPrev={() => changeView('q3')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-6"><input className="quiz-input" placeholder={t.q4_ph1} value={formData.inspiration} onChange={e => setFormData({...formData, inspiration: e.target.value})} /><div onClick={() => fileInputInspiration.current.click()} className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all text-center relative h-48 flex items-center justify-center overflow-hidden ${formData.inspirationImg ? 'border-[#06b6d4]' : 'border-white/20 hover:border-[#06b6d4]'}`}>{formData.inspirationImg ? (<><img src={formData.inspirationImg} className="w-full h-full object-cover absolute top-0 left-0 opacity-60" /><div className={`scan-line opacity-100`}></div><div className="relative z-10 bg-black/50 px-4 py-2 rounded-full text-xs font-bold text-white border border-white uppercase">{t.q4_change}</div></>) : (<div className="text-gray-500 text-xs uppercase">{t.q4_upload}</div>)}<input type="file" ref={fileInputInspiration} className="hidden" onChange={(e) => handleUpload(e, 'inspirationImg')} /></div></div></QuestionScreen>;
+            if (view === 'q4') return <QuestionScreen title={t.q4_title} nextView="q5" prevView="q3" onNext={() => changeView('q5')} onPrev={() => changeView('q3')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-6"><input className="quiz-input" placeholder={t.q4_ph1} value={formData.inspiration} onChange={e => setFormData({...formData, inspiration: e.target.value})} /><div onClick={() => fileInputInspiration.current.click()} className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all text-center relative h-48 flex items-center justify-center overflow-hidden ${formData.inspirationImg ? 'border-[#06b6d4]' : 'border-white/20 hover:border-[#06b6d4]'}`}>{formData.inspirationImg ? (<><img src={formData.inspirationImg} className="w-full h-full object-cover absolute top-0 left-0 opacity-60" /><div className={`scan-line opacity-100`}></div><div className="relative z-10 bg-black/50 px-4 py-2 rounded-full text-xs font-bold text-white border border-white uppercase">{t.q4_change}</div></>) : (<div className="text-gray-500 text-xs uppercase">{t.q4_upload}</div>)}<input type="file" ref={fileInputInspiration} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'inspirationImg')} /></div></div></QuestionScreen>;
             if (view === 'q5') return <QuestionScreen title={t.q5_title} nextView="style" prevView="q4" onNext={() => changeView('style')} onPrev={() => changeView('q4')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="h-64 overflow-y-auto pr-2 custom-scroll">{Object.entries(COLOR_GROUPS).map(([group, colors]) => (<div key={group} className="mb-6"><p className="text-[10px] font-bold text-gray-500 uppercase mb-3 tracking-widest text-left">{group === "NEUTROS" ? t.color_n : group === "NUDE" ? t.color_nu : group === "PRIMARIOS" ? t.color_p : group === "SECUNDARIOS" ? t.color_s : group === "TERCIARIOS" ? t.color_t : t.color_q}</p><div className="flex flex-wrap gap-3">{colors.map(c => (<div key={c} onClick={() => toggleColor(c)} className={`w-10 h-10 rounded-lg cursor-pointer border-2 border-white/10 transition-transform ${formData.colors.includes(c) ? 'scale-110 border-[#06b6d4] shadow-[0_0_15px_#06b6d4]' : ''}`} style={{backgroundColor: c}}></div>))}</div></div>))}</div></QuestionScreen>;
 
             // Vistas estilo y luz
@@ -760,6 +728,7 @@
                 </div>
             );
         };
+
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
