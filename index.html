@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAG.IA - The Future of Marketing</title>
+    <title>MAG.IA - Potenciado por Google Gemini</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=Chakra+Petch:wght@400;600;700&family=Oswald:wght@500&family=Playfair+Display:ital,wght@0,600;1,600&family=Montserrat:wght@700&family=Roboto+Mono:wght@400;500&family=Bebas+Neue&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
@@ -15,10 +15,11 @@
     
     <style>
         /* --- MAG.IA CORE STYLES (DARK LIQUID GLASS AESTHETIC) --- */
+        /* NO TOCAR: Mantiene la identidad visual oscura */
         body { margin: 0; overflow-x: hidden; font-family: 'Inter', sans-serif; background: #000; color: white; transition: none; }
         h1, h2, h3, .font-tech { font-family: 'Chakra Petch', sans-serif; }
         
-        /* FUENTE ESTILIZADA PARA LA MARCA */
+        /* FUENTE DE MARCA (CURSIVA ELEGANTE) */
         .font-brand { font-family: 'Playfair Display', serif; font-style: italic; }
 
         /* FONDO DEEP MIDNIGHT (Oscuro Profundo) */
@@ -37,12 +38,12 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* DARK LIQUID GLASS (Cristal Oscuro Líquido) */
+        /* DARK LIQUID GLASS */
         .glass {
-            background: rgba(20, 20, 30, 0.4); /* Mucho más transparente y oscuro */
-            backdrop-filter: blur(20px); /* Desenfoque intenso */
+            background: rgba(20, 20, 30, 0.4);
+            backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08); /* Borde sutil */
+            border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.05); 
             border-radius: 24px;
         }
@@ -52,14 +53,6 @@
             transition: all 1s ease; 
             color: #fbbf24; /* Gold/Sun Color */
             filter: drop-shadow(0 0 25px #fbbf24);
-        }
-
-        /* Avatar Adaptativo */
-        .avatar-wrapper { position: relative; overflow: hidden; border-radius: 999px; transition: all 0.5s ease; }
-        .avatar-overlay { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; mix-blend-mode: overlay; 
-            opacity: 0.7; transition: none; pointer-events: none; 
-            background: linear-gradient(to bottom, #1e3a8a, #4c1d95);
         }
 
         /* UI Elements & Buttons */
@@ -111,13 +104,13 @@
         .glass-input { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-family: 'Chakra Petch'; padding: 14px; width: 100%; border-radius: 12px; backdrop-filter: blur(5px); }
         .glass-input:focus { outline: none; border-color: #06b6d4; background: rgba(255, 255, 255, 0.1); }
 
-        /* Footer Credit */
+        /* Footer Credit - AJUSTADO PARA NO PEGARSE */
         .floating-credit { 
-            position: relative; margin-top: 50px; padding-bottom: 30px; width: 100%; 
-            text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; 
-            color: rgba(255,255,255,0.4); font-family: 'Chakra Petch'; pointer-events: none;
+            position: relative; margin-top: 60px; padding-bottom: 40px; width: 100%; 
+            text-align: center; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; 
+            color: rgba(255,255,255,0.5); font-family: 'Chakra Petch'; pointer-events: none;
             text-shadow: 0 2px 10px rgba(0,0,0,0.5); 
-            max-width: 800px; margin-left: auto; margin-right: auto;
+            max-width: 90%; margin-left: auto; margin-right: auto;
             line-height: 1.6;
         }
 
@@ -138,6 +131,14 @@
         /* Nano Studio Fixes */
         .editor-btn { background: rgba(0,0,0,0.6); color: white; border: 1px solid rgba(255,255,255,0.2); }
         .editor-btn:hover { background: rgba(255,255,255,0.1); border-color: #06b6d4; }
+        
+        /* Avatar Adaptativo */
+        .avatar-wrapper { position: relative; overflow: hidden; border-radius: 999px; transition: all 0.5s ease; }
+        .avatar-overlay { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; mix-blend-mode: overlay; 
+            opacity: 0.7; transition: none; pointer-events: none; 
+            background: linear-gradient(to bottom, #1e3a8a, #4c1d95);
+        }
     </style>
 </head>
 <body>
@@ -153,12 +154,12 @@
         const useTimeTheme = () => 'night'; 
         
         // ==============================================================================
-        // ✅ CONFIGURACIÓN DE ACTIVOS (HARDCODED JORDAN 1s & RODDY)
+        // ✅ CONFIGURACIÓN DE ACTIVOS (HARDCODED JORDAN 1s)
         // ==============================================================================
         const JORDAN_ANTES_URL = 'https://raw.githubusercontent.com/roddysmith23-stack/click-ia-app/main/IMG_8399.jpg'; 
         const JORDAN_DESPUES_URL = 'https://raw.githubusercontent.com/roddysmith23-stack/click-ia-app/main/IMG_8401.jpg';
         
-        // Configuración de Imágenes de Comparación
+        // Configuración de Imágenes de Comparación (ADIÓS HAMBURGUESAS)
         const MAGIC_RESULT_IMAGE_DEFAULT = JORDAN_DESPUES_URL; 
         const UGLY_BURGER_IMAGE = JORDAN_ANTES_URL; 
         
@@ -167,7 +168,6 @@
 
         // --- ICONOS ---
         const Icons = {
-            // SOL REBRANDING MAG.IA (Golden Glow)
             SunLogo: () => (
                 <svg className={`sun-icon w-20 h-20 md:w-24 md:h-24`} viewBox="0 0 24 24" fill="currentColor" stroke="none">
                     <circle cx="12" cy="12" r="6" />
@@ -198,14 +198,9 @@
             Image: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>,
             Trash: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
             Download: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
-            Clock: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
-            Music: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>,
             X: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
             ChevronDown: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>,
             Sliders: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>,
-            Instagram: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>,
-            Tiktok: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>,
-            Facebook: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>,
             Undo: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>,
             Redo: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/></svg>,
             Star: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
@@ -259,7 +254,7 @@
                 credits: "CRÉDITOS", color_n: "NEUTROS", color_nu: "NUDE", color_p: "PRIMARIOS", color_s: "SECUNDARIOS", color_t: "TERCIARIOS", color_q: "CUATERNARIOS",
                 loading_steps: ["BUSCANDO EN LA WEB...", "ANALIZANDO TENDENCIAS...", "ESTRUCTURANDO ESTRATEGIA...", "GENERANDO IMAGEN 8K...", "REDACTANDO COPY VIRAL..."],
                 
-                // ✅ REBRANDING: FRASE DE RODDY SMITH
+                // ✅ REBRANDING: FRASE DE RODDY SMITH ACTUALIZADA
                 credit_text: '"Si para el universo no existen límites, no debería haber límites para la mente humana” — Roddy Smith',
                 
                 creator_title: "NUESTRO CREADOR", creator_role: "CEO & FOUNDER", creator_bio: "Roddy Smith, visionario estratégico. Dominio total de la IA para cambiar el marketing global.",
@@ -485,7 +480,7 @@
             </div>
         );
 
-        // --- NEW MAG.IA HEADER - REBRANDING APPLIED ---
+        // --- NEW MAG.IA HEADER - REBRANDING APPLIED (FIXED STACKING) ---
         const HeaderInternal = ({ credits, setView, t, theme }) => (
             <div className="absolute top-0 left-0 w-full p-4 md:p-6 flex justify-center items-start gap-6 z-50 pointer-events-none">
                 {/* Créditos Flotantes */}
@@ -497,14 +492,13 @@
                     </button>
                 </div>
 
-                {/* ✅ LOGO CENTRAL MAG.IA - FLEX COL STRICT MODE - FIXED OVERLAPPING ✅ */}
-                <div className="pointer-events-auto flex flex-col items-center cursor-pointer group mt-2 gap-2" onClick={() => setView('landing')}>
-                    <div className="flex flex-col items-center"> 
-                        <Icons.SunLogo />
-                        <h1 className="text-3xl font-black font-brand tracking-tighter text-white drop-shadow-[0_0_40px_rgba(6, 182, 212, 0.5)] leading-none mt-2">MAG.IA</h1>
-                    </div>
+                {/* ✅ LOGO CENTRAL MAG.IA - FLEX COL STRICT WITH GAPS - NO OVERLAPPING ✅ */}
+                <div className="pointer-events-auto flex flex-col items-center justify-center cursor-pointer group mt-2 gap-2" onClick={() => setView('landing')}>
+                    <Icons.SunLogo />
+                    {/* TIPOGRAFÍA ELEGANTE APLICADA */}
+                    <h1 className="text-3xl font-brand font-black tracking-tighter text-white drop-shadow-[0_0_40px_rgba(6, 182, 212, 0.5)] leading-none mt-1">MAG.IA</h1>
                     <div className="flex items-center gap-1 text-[8px] text-white/70 font-bold uppercase tracking-[0.1em]">
-                        <Icons.Google /> {t.powered}
+                        {t.powered}
                     </div>
                 </div>
             </div>
@@ -631,14 +625,14 @@
                         {/* ✅ HEADER DINÁMICO REBRANDING - FLEX COLUMN ESTRICTO CON GAP POSITIVO ✅ */}
                         <div className="flex flex-col items-center justify-center gap-4 mb-10 animate-pulse-fast cursor-pointer select-none">
                              <Icons.SunLogo />
-                             <h1 className="text-6xl md:text-8xl font-black font-brand tracking-tighter text-white drop-shadow-[0_0_40px_rgba(6, 182, 212, 0.5)]">MAG.IA</h1>
-                             <div className="inline-flex items-center gap-2 px-4 py-1 glass rounded-full text-white text-[10px] font-bold uppercase tracking-[0.2em]"><Icons.Google /> {t.powered}</div>
+                             <h1 className="text-6xl md:text-8xl font-brand font-black tracking-tighter text-white drop-shadow-[0_0_40px_rgba(6, 182, 212, 0.5)]">MAG.IA</h1>
+                             <div className="inline-flex items-center gap-2 px-4 py-1 glass rounded-full text-white text-[10px] font-bold uppercase tracking-[0.2em]">{t.powered}</div>
                         </div>
 
                         <h2 className="text-3xl md:text-5xl font-bold font-tech mb-8 leading-tight tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50">{t.hero_mk} <br/><span className="text-white">{t.hero_auto}</span></h2>
                         <div className="flex flex-wrap justify-center gap-4 mb-12 text-xs font-bold uppercase tracking-widest text-white/70">{t.bullets.map(b => (<div key={b} className="flex items-center gap-2 bg-white/5 px-3 py-1 rounded-full border border-white/10"><Icons.Check /> {b}</div>))}</div>
                         
-                        {/* Comparison Slider with updated images */}
+                        {/* Comparison Slider with updated images (BURGER REMOVED) */}
                         <div className="w-full max-w-4xl h-96 mb-12 shadow-2xl rounded-2xl overflow-hidden border border-white/20 glass"><ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} /></div>
                         
                         <div className="flex flex-col items-center gap-4 mb-12">
