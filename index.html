@@ -6,7 +6,7 @@
     <title>MAG.IA - The Future of Marketing</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=Chakra+Petch:wght@400;600;700&family=Oswald:wght@500&family=Playfair+Display:wght@600&family=Montserrat:wght@700&family=Roboto+Mono:wght@400;500&family=Bebas+Neue&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=Chakra+Petch:wght@400;600;700&family=Oswald:wght@500&family=Playfair+Display:ital,wght@0,600;1,600&family=Montserrat:wght@700&family=Roboto+Mono:wght@400;500&family=Bebas+Neue&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
     
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -14,14 +14,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     
     <style>
-        /* --- MAG.IA CORE STYLES (NO TOCAR - CYBERPUNK AESTHETIC) --- */
+        /* --- MAG.IA CORE STYLES (DARK LIQUID GLASS AESTHETIC) --- */
         body { margin: 0; overflow-x: hidden; font-family: 'Inter', sans-serif; background: #000; color: white; transition: none; }
         h1, h2, h3, .font-tech { font-family: 'Chakra Petch', sans-serif; }
+        
+        /* FUENTE ESTILIZADA PARA LA MARCA */
+        .font-brand { font-family: 'Playfair Display', serif; font-style: italic; }
 
-        /* FONDO UNIFICADO (Azul/Morado Profundo - Mantiene estética oscura) */
+        /* FONDO DEEP MIDNIGHT (Oscuro Profundo) */
         .liquid-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
-            background-image: linear-gradient(-45deg, #020617, #1e1b4b, #312e81, #000000);
+            /* Gradiente profundo: Azul medianoche, Violeta oscuro, Negro */
+            background-image: linear-gradient(-45deg, #020617, #0f172a, #1e1b4b, #000000);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             transition: none;
@@ -33,21 +37,21 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* GLASSMORPHISM AVANZADO - Consistent Cyan Glow */
+        /* DARK LIQUID GLASS (Cristal Oscuro Líquido) */
         .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 30px rgba(6, 182, 212, 0.3); 
+            background: rgba(20, 20, 30, 0.4); /* Mucho más transparente y oscuro */
+            backdrop-filter: blur(20px); /* Desenfoque intenso */
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08); /* Borde sutil */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.05); 
             border-radius: 24px;
         }
         
-        /* Sol Dinámico - UNIFIED CYAN GLOW */
+        /* Sol Dinámico */
         .sun-icon { 
             transition: all 1s ease; 
-            color: #06b6d4; /* Cyan Color */
-            filter: drop-shadow(0 0 15px #06b6d4);
+            color: #fbbf24; /* Gold/Sun Color */
+            filter: drop-shadow(0 0 25px #fbbf24);
         }
 
         /* Avatar Adaptativo */
@@ -59,11 +63,23 @@
         }
 
         /* UI Elements & Buttons */
-        .tech-btn { background: rgba(255,255,255,0.9); color: black; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 12px; padding: 16px 32px; transition: all 0.3s; cursor: pointer; border: 1px solid white; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
-        .tech-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 0 40px rgba(255, 255, 255, 0.5); }
+        .tech-btn { 
+            background: rgba(255,255,255,0.1); 
+            color: white; 
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; 
+            border-radius: 12px; padding: 16px 32px; transition: all 0.3s; cursor: pointer; 
+            border: 1px solid rgba(255,255,255,0.3); 
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); 
+        }
+        .tech-btn:hover { 
+            background: rgba(255,255,255,0.9); color: black;
+            transform: translateY(-3px) scale(1.02); 
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.5); 
+        }
         
         .glass-card { 
-            background: rgba(255, 255, 255, 0.05); 
+            background: rgba(255, 255, 255, 0.03); 
             border: 1px solid rgba(255, 255, 255, 0.1); 
             transition: all 0.3s ease; 
             cursor: pointer; 
@@ -92,14 +108,14 @@
         /* Inputs */
         .quiz-input { background: transparent; border: none; border-bottom: 2px solid rgba(6, 182, 212, 0.5); width: 100%; padding: 20px; font-size: 1.5rem; color: white; text-align: center; font-family: 'Chakra Petch'; transition: all 0.3s; }
         .quiz-input:focus { outline: none; border-color: #06b6d4; background: rgba(6, 182, 212, 0.05); }
-        .glass-input { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-family: 'Chakra Petch'; padding: 14px; width: 100%; border-radius: 12px; backdrop-filter: blur(5px); }
-        .glass-input:focus { outline: none; border-color: #06b6d4; background: rgba(255, 255, 255, 0.2); }
+        .glass-input { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-family: 'Chakra Petch'; padding: 14px; width: 100%; border-radius: 12px; backdrop-filter: blur(5px); }
+        .glass-input:focus { outline: none; border-color: #06b6d4; background: rgba(255, 255, 255, 0.1); }
 
         /* Footer Credit */
         .floating-credit { 
             position: relative; margin-top: 50px; padding-bottom: 30px; width: 100%; 
             text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; 
-            color: rgba(255,255,255,0.6); font-family: 'Chakra Petch'; pointer-events: none;
+            color: rgba(255,255,255,0.4); font-family: 'Chakra Petch'; pointer-events: none;
             text-shadow: 0 2px 10px rgba(0,0,0,0.5); 
             max-width: 800px; margin-left: auto; margin-right: auto;
             line-height: 1.6;
@@ -137,12 +153,12 @@
         const useTimeTheme = () => 'night'; 
         
         // ==============================================================================
-        // ✅ CONFIGURACIÓN CRÍTICA DE URLS - MODIFICACIÓN QUIRÚRGICA (JORDAN 1s) ✅
+        // ✅ CONFIGURACIÓN DE ACTIVOS (HARDCODED JORDAN 1s & RODDY)
         // ==============================================================================
         const JORDAN_ANTES_URL = 'https://raw.githubusercontent.com/roddysmith23-stack/click-ia-app/main/IMG_8399.jpg'; 
         const JORDAN_DESPUES_URL = 'https://raw.githubusercontent.com/roddysmith23-stack/click-ia-app/main/IMG_8401.jpg';
         
-        // Asignación directa para asegurar que NO aparezcan las hamburguesas
+        // Configuración de Imágenes de Comparación
         const MAGIC_RESULT_IMAGE_DEFAULT = JORDAN_DESPUES_URL; 
         const UGLY_BURGER_IMAGE = JORDAN_ANTES_URL; 
         
@@ -151,9 +167,9 @@
 
         // --- ICONOS ---
         const Icons = {
-            // SOL REBRANDING MAG.IA (CYAN GLOW)
+            // SOL REBRANDING MAG.IA (Golden Glow)
             SunLogo: () => (
-                <svg className={`sun-icon w-16 h-16 md:w-20 md:h-20 mb-2`} viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                <svg className={`sun-icon w-20 h-20 md:w-24 md:h-24`} viewBox="0 0 24 24" fill="currentColor" stroke="none">
                     <circle cx="12" cy="12" r="6" />
                     <g stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                         <line x1="12" y1="1" x2="12" y2="4" />
@@ -243,7 +259,7 @@
                 credits: "CRÉDITOS", color_n: "NEUTROS", color_nu: "NUDE", color_p: "PRIMARIOS", color_s: "SECUNDARIOS", color_t: "TERCIARIOS", color_q: "CUATERNARIOS",
                 loading_steps: ["BUSCANDO EN LA WEB...", "ANALIZANDO TENDENCIAS...", "ESTRUCTURANDO ESTRATEGIA...", "GENERANDO IMAGEN 8K...", "REDACTANDO COPY VIRAL..."],
                 
-                // ✅ REBRANDING: FRASE ACTUALIZADA
+                // ✅ REBRANDING: FRASE DE RODDY SMITH
                 credit_text: '"Si para el universo no existen límites, no debería haber límites para la mente humana” — Roddy Smith',
                 
                 creator_title: "NUESTRO CREADOR", creator_role: "CEO & FOUNDER", creator_bio: "Roddy Smith, visionario estratégico. Dominio total de la IA para cambiar el marketing global.",
@@ -481,11 +497,11 @@
                     </button>
                 </div>
 
-                {/* ✅ LOGO CENTRAL MAG.IA - FLEX COL STRICT MODE ✅ */}
-                <div className="pointer-events-auto flex flex-col items-center cursor-pointer group mt-2" onClick={() => setView('landing')}>
-                    <div className="flex flex-col items-center mb-1"> 
+                {/* ✅ LOGO CENTRAL MAG.IA - FLEX COL STRICT MODE - FIXED OVERLAPPING ✅ */}
+                <div className="pointer-events-auto flex flex-col items-center cursor-pointer group mt-2 gap-2" onClick={() => setView('landing')}>
+                    <div className="flex flex-col items-center"> 
                         <Icons.SunLogo />
-                        <h1 className="text-3xl font-black font-tech tracking-tighter text-white drop-shadow-[0_0_40px_rgba(6, 182, 212, 0.5)] leading-none -mt-4">MAG.IA</h1>
+                        <h1 className="text-3xl font-black font-brand tracking-tighter text-white drop-shadow-[0_0_40px_rgba(6, 182, 212, 0.5)] leading-none mt-2">MAG.IA</h1>
                     </div>
                     <div className="flex items-center gap-1 text-[8px] text-white/70 font-bold uppercase tracking-[0.1em]">
                         <Icons.Google /> {t.powered}
@@ -612,10 +628,10 @@
                     </nav>
                     
                     <div className="z-10 max-w-6xl w-full flex flex-col items-center mt-32">
-                        {/* ✅ HEADER DINÁMICO REBRANDING - FLEX COLUMN ESTRICTO ✅ */}
-                        <div className="flex flex-col items-center justify-center gap-2 mb-10 animate-pulse-fast cursor-pointer select-none">
+                        {/* ✅ HEADER DINÁMICO REBRANDING - FLEX COLUMN ESTRICTO CON GAP POSITIVO ✅ */}
+                        <div className="flex flex-col items-center justify-center gap-4 mb-10 animate-pulse-fast cursor-pointer select-none">
                              <Icons.SunLogo />
-                             <h1 className="text-6xl md:text-8xl font-black font-tech tracking-tighter text-white drop-shadow-[0_0_40px_rgba(6, 182, 212, 0.5)]">MAG.IA</h1>
+                             <h1 className="text-6xl md:text-8xl font-black font-brand tracking-tighter text-white drop-shadow-[0_0_40px_rgba(6, 182, 212, 0.5)]">MAG.IA</h1>
                              <div className="inline-flex items-center gap-2 px-4 py-1 glass rounded-full text-white text-[10px] font-bold uppercase tracking-[0.2em]"><Icons.Google /> {t.powered}</div>
                         </div>
 
