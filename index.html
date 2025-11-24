@@ -6,120 +6,120 @@
     <title>MAG.IA SKY - Crystal Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- FUENTES IMPORTADAS -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=Chakra+Petch:wght@400;600;700&family=Oswald:wght@500&family=Playfair+Display:ital,wght@0,600;1,800&family=Montserrat:wght@700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     
-    <!-- LIBRERÍAS REACT Y FABRIC -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     
     <style>
-        /* --- MAG.IA SKY AESTHETIC (CRYSTAL PROTOCOL) --- */
+        /* --- MAG.IA SKY AESTHETIC (CRYSTAL PROTOCOL v2.5) --- */
         body { 
             margin: 0; 
             overflow-x: hidden; 
             font-family: 'Inter', sans-serif; 
-            /* CORRECCIÓN 1: FONDO DEGRADADO CIELO INMERSIVO */
-            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
+            /* MANDATO CEO: FONDO DEGRADADO CIELO LUMINOSO Y ETÉREO */
+            background: linear-gradient(135deg, #A1C4FD 0%, #C2E9FB 100%);
             background-attachment: fixed;
-            color: #0f172a; 
+            color: #1e293b; /* Slate 800 para contraste máximo */
             transition: none; 
         }
         
         h1, h2, h3, .font-tech { font-family: 'Chakra Petch', sans-serif; }
         .font-brand { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 800; }
 
-        /* Decoración de Nubes (Opcional pero inmersivo) */
+        /* Decoración de Nubes Sutil */
         .cloud-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background-image: url('https://raw.githubusercontent.com/roddysmith23-stack/click-ia-app/main/IMG_8333.jpg');
-            opacity: 0.15;
+            background-image: url('https://raw.githubusercontent.com/roddysmith23-stack/click-ia-app/main/roddy-ceo.jpg'); /* Usamos una textura suave o la img del CEO muy difusa como 'alma' del sistema */
+            opacity: 0.05;
             background-size: cover;
             background-position: center;
             mix-blend-mode: overlay;
             pointer-events: none;
         }
 
-        /* CORRECCIÓN 2: HEADER STACK (NO SUPERPOSICIÓN) */
+        /* CORRECCIÓN: HEADER STACK VERTICAL (GAP 20px) */
         .header-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px; /* Espacio vital */
+            justify-content: center;
+            gap: 20px; /* MANDATO: 20px de separación */
             margin-bottom: 40px;
             cursor: pointer;
             user-select: none;
+            position: relative;
+            z-index: 20;
         }
         
-        /* Sol Dinámico con Margen */
         .sun-icon { 
             transition: all 1s ease; 
-            color: #f59e0b; /* Amber 500 */
-            filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.8));
-            margin-bottom: 5px; /* Margen extra de seguridad */
+            color: #f59e0b; 
+            filter: drop-shadow(0 0 25px rgba(245, 158, 11, 0.6));
         }
 
-        /* CORRECCIÓN 3: CRYSTAL TALLADO (GLOBAL UPGRADE) */
+        /* --- THE CRYSTAL CARD (MANDATO ARQUITECTO) --- */
         .crystal-card {
-            background: rgba(255, 255, 255, 0.25); /* Más transparente para ver el cielo */
-            backdrop-filter: blur(30px) saturate(120%); /* Blur fuerte y colores vivos */
-            -webkit-backdrop-filter: blur(30px) saturate(120%);
+            background: rgba(255, 255, 255, 0.15); /* Opacidad reducida para efecto cristal puro */
+            backdrop-filter: blur(40px) saturate(140%); /* Blur extremo y saturación */
+            -webkit-backdrop-filter: blur(40px) saturate(140%);
             
-            /* Bordes y Sombras de Cristal Premium */
-            border: 1px solid rgba(255, 255, 255, 0.8); /* Borde blanco brillante */
+            /* Bordes de Cristal Pulido */
+            border: 1px solid rgba(255, 255, 255, 0.6); 
             box-shadow: 
-                0 15px 40px 0 rgba(31, 38, 135, 0.15), /* Sombra flotante */
-                inset 0 0 20px rgba(255, 255, 255, 0.5); /* Reflejo interno (Inset Glow) */
+                0 15px 35px rgba(0, 90, 160, 0.15), /* Sombra azulada etérea */
+                inset 0 0 20px rgba(255, 255, 255, 0.3); /* Brillo interior */
             
-            border-radius: 24px;
+            border-radius: 30px; /* Redondeado moderno */
+            color: #1e293b; /* Texto oscuro obligatorio para legibilidad */
         }
 
         /* UI Elements */
         .tech-btn { 
             background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
             color: white; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; 
-            border-radius: 12px; padding: 16px 32px; transition: all 0.3s; cursor: pointer; 
+            border-radius: 16px; padding: 18px 36px; transition: all 0.3s; cursor: pointer; 
             border: 1px solid rgba(255,255,255,0.4); 
-            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3), inset 0 0 10px rgba(255,255,255,0.2); 
+            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3), inset 0 0 10px rgba(255,255,255,0.2); 
         }
         .tech-btn:hover { 
             background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
             transform: translateY(-3px) scale(1.02); 
-            box-shadow: 0 10px 25px rgba(2, 132, 199, 0.5); 
+            box-shadow: 0 15px 30px rgba(2, 132, 199, 0.4); 
         }
         
         .glass-card { 
-            background: rgba(255, 255, 255, 0.4); 
-            border: 1px solid rgba(255, 255, 255, 0.6); 
+            background: rgba(255, 255, 255, 0.3); 
+            border: 1px solid rgba(255, 255, 255, 0.5); 
             transition: all 0.3s ease; cursor: pointer; overflow: hidden; position: relative; 
-            border-radius: 20px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05), inset 0 0 15px rgba(255,255,255,0.3);
+            border-radius: 24px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
         .glass-card:hover { border-color: #0ea5e9; transform: translateY(-5px); box-shadow: 0 20px 40px rgba(14, 165, 233, 0.2); }
-        .glass-card.selected { border-color: #0ea5e9; background: rgba(224, 242, 254, 0.6); box-shadow: 0 0 0 2px #0ea5e9, inset 0 0 20px rgba(255,255,255,0.5); transform: scale(1.02); }
+        .glass-card.selected { border-color: #0ea5e9; background: rgba(224, 242, 254, 0.5); box-shadow: 0 0 0 2px #0ea5e9; transform: scale(1.02); }
         
         .card-label { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, rgba(255,255,255,0.95), rgba(255,255,255,0)); padding: 20px 10px 15px 10px; text-align: center; font-family: 'Chakra Petch'; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; color: #0f172a; }
 
-        .quiz-input { background: transparent; border: none; border-bottom: 2px solid rgba(14, 165, 233, 0.5); width: 100%; padding: 20px; font-size: 1.5rem; color: #0f172a; text-align: center; font-family: 'Chakra Petch'; transition: all 0.3s; font-weight: 600; text-shadow: 0 1px 0 rgba(255,255,255,0.5); }
+        .quiz-input { background: transparent; border: none; border-bottom: 2px solid rgba(14, 165, 233, 0.5); width: 100%; padding: 20px; font-size: 1.5rem; color: #0f172a; text-align: center; font-family: 'Chakra Petch'; transition: all 0.3s; font-weight: 600; placeholder-color: #64748b; }
         .quiz-input:focus { outline: none; border-color: #0ea5e9; background: rgba(14, 165, 233, 0.05); }
-        .glass-input { background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(255, 255, 255, 0.8); color: #0f172a; font-family: 'Chakra Petch'; padding: 14px; width: 100%; border-radius: 12px; backdrop-filter: blur(5px); }
-        .glass-input:focus { outline: none; border-color: #0ea5e9; background: rgba(255, 255, 255, 0.8); }
+        .glass-input { background: rgba(255, 255, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.6); color: #0f172a; font-family: 'Chakra Petch'; padding: 14px; width: 100%; border-radius: 12px; backdrop-filter: blur(5px); }
+        .glass-input:focus { outline: none; border-color: #0ea5e9; background: rgba(255, 255, 255, 0.7); }
 
-        .floating-credit { position: relative; margin-top: 60px; padding-bottom: 40px; width: 100%; text-align: center; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: #475569; font-family: 'Chakra Petch'; pointer-events: none; max-width: 90%; margin-left: auto; margin-right: auto; line-height: 1.6; font-weight: 600; }
+        .floating-credit { position: relative; margin-top: 60px; padding-bottom: 40px; width: 100%; text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #475569; font-family: 'Chakra Petch'; pointer-events: none; max-width: 90%; margin-left: auto; margin-right: auto; line-height: 1.6; font-weight: 600; text-shadow: 0 1px 0 rgba(255,255,255,0.5); }
 
         .fade-enter { animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.5); border-radius: 4px; }
         
-        .gold-btn { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 12px; padding: 14px 20px; transition: all 0.2s; cursor: pointer; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3), inset 0 0 10px rgba(255,255,255,0.3); border: 1px solid #fcd34d; position: relative; overflow: hidden; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+        .gold-btn { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 12px; padding: 14px 20px; transition: all 0.2s; cursor: pointer; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); border: 1px solid #fcd34d; position: relative; overflow: hidden; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
         .gold-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(245, 158, 11, 0.5); }
 
-        .editor-btn { background: rgba(255,255,255,0.7); color: #0f172a; border: 1px solid rgba(255,255,255,0.9); font-weight: 700; }
+        .editor-btn { background: rgba(255,255,255,0.6); color: #0f172a; border: 1px solid rgba(255,255,255,0.7); font-weight: 700; backdrop-filter: blur(5px); }
         .editor-btn:hover { background: #0ea5e9; color: white; border-color: #0ea5e9; }
-        .avatar-wrapper { position: relative; overflow: hidden; border-radius: 999px; transition: all 0.5s ease; border: 4px solid rgba(255,255,255,0.8); }
+        .avatar-wrapper { position: relative; overflow: hidden; border-radius: 999px; transition: all 0.5s ease; border: 4px solid rgba(255,255,255,0.9); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(14, 165, 233, 0.1), transparent); background-size: 100% 30%; animation: scan 3s linear infinite; pointer-events: none; z-index: 20; opacity: 0.5; }
         @keyframes scan { 0% { background-position: 0% -30%; } 100% { background-position: 0% 130%; } }
 
@@ -128,6 +128,10 @@
         .dropdown-item { padding: 10px 12px; border-radius: 10px; font-size: 12px; font-weight: 600; color: #334155; cursor: pointer; transition: all 0.2s; display: flex; items-center; gap: 8px; }
         .dropdown-item:hover { background: #e0f2fe; color: #0284c7; }
         .dropdown-divider { height: 1px; background: rgba(0,0,0,0.05); margin: 6px 0; }
+        
+        /* Floating Chat Button */
+        .chat-float { position: fixed; bottom: 20px; right: 80px; z-index: 90; animation: bounceIn 1s; }
+        @keyframes bounceIn { 0% { transform: scale(0); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -142,6 +146,7 @@
 
         const useTimeTheme = () => 'sky'; 
         
+        // --- ASSETS ACTUALIZADOS (JORDAN 1s) ---
         const JORDAN_ANTES_URL = 'https://raw.githubusercontent.com/roddysmith23-stack/click-ia-app/main/IMG_8399.jpg'; 
         const JORDAN_DESPUES_URL = 'https://raw.githubusercontent.com/roddysmith23-stack/click-ia-app/main/IMG_8401.jpg';
         const MAGIC_RESULT_IMAGE_DEFAULT = JORDAN_DESPUES_URL; 
@@ -188,7 +193,8 @@
             Star: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>,
             Clock: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
             User: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
-            Logout: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Logout: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>,
+            Message: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
         };
 
         const STYLES_DATA = [
@@ -244,7 +250,7 @@
                 download: "DESCARGAR IMAGEN", premium_download: "DESCARGAR 8K ULTRA (Valla) - $0.99",
                 copy_clipboard: "COPIAR TEXTO",
                 cloud_welcome: "BIENVENIDO A TU NUBE", cloud_desc: "Aquí guardamos todas tus campañas.",
-                // REBRANDING EDITOR:
+                // REBRANDING MAGIC STUDIO:
                 edit_design: "🛠️ ABRIR MAGIC STUDIO", editor_title: "MAGIC STUDIO", save_design: "GUARDAR DISEÑO", close_editor: "CERRAR",
                 edit_text_1: "Texto Principal", edit_text_2: "Subtítulo", edit_size: "Tamaño Logo",
                 default_promo: "Por tiempo limitado",
@@ -253,10 +259,8 @@
                 s_realistic: 'Fotorealismo', s_cinematic: 'Cinemático', s_luxury: 'Lujo Minimal', s_neon: 'Neon Pop', s_3d: '3D Pixar', s_cyber: 'Cyberpunk',
                 l_studio: 'Luz de Estudio', l_studio_desc: 'Frontal Suave', l_neon: 'Neón', l_neon_desc: 'Lateral Color', l_golden: 'Hora Dorada', l_golden_desc: 'Trasera Solar', l_dramatic: 'Cinemático', l_dramatic_desc: 'Contraste Alto',
                 txt_top: 'TU MARCA', txt_bot: 'OFERTA LIMITADA',
-                // Profile Menu
                 login_google: "Iniciar con Google", profile: "Mi Perfil", switch_user: "Cambiar Usuario", sub: "Suscripción", logout: "Cerrar Sesión"
             },
-            // ADDED ENGLISH FOR DEMONSTRATION
             EN: {
                 enter: "ENTER", prices: "PRICING", faq: "FAQ", powered: "POWERED BY GOOGLE GEMINI",
                 hero_mk: "THE FUTURE OF MARKETING", hero_auto: "FOR BUSINESS.",
@@ -278,13 +282,12 @@
                 trends: "Detected Trends", publish: "PUBLISH NOW", new_btn: "NEW", ready: "READY",
                 credits: "CREDITS", color_n: "NEUTRALS", color_nu: "NUDE", color_p: "PRIMARY", color_s: "SECONDARY", color_t: "TERTIARY", color_q: "QUATERNARY",
                 loading_steps: ["SEARCHING WEB...", "ANALYZING TRENDS...", "STRUCTURING STRATEGY...", "GENERATING 8K IMAGE...", "WRITING VIRAL COPY..."],
-                credit_text: '"If there are no limits for the universe, there should be no limits for the human mind" — Roddy Smith',
+                credit_text: '"Si para el universo no existen límites, no debería haber límites para la mente humana” — Roddy Smith', // Mandato CEO: Quote in Spanish always
                 creator_title: "OUR CREATOR", creator_role: "CEO & FOUNDER", creator_bio: "Roddy Smith, strategic visionary. Total mastery of AI to change global marketing.",
                 creator_mission: "Our mission is to break entry barriers. MAG.IA was born to change the world.",
                 download: "DOWNLOAD IMAGE", premium_download: "DOWNLOAD 8K ULTRA (Billboard) - $0.99",
                 copy_clipboard: "COPY TEXT",
                 cloud_welcome: "WELCOME TO CLOUD", cloud_desc: "We save your campaigns here.",
-                // REBRANDING EDITOR EN:
                 edit_design: "🛠️ OPEN MAGIC STUDIO", editor_title: "MAGIC STUDIO", save_design: "SAVE DESIGN", close_editor: "CLOSE",
                 edit_text_1: "Main Text", edit_text_2: "Subtitle", edit_size: "Logo Size",
                 default_promo: "Limited time",
@@ -473,7 +476,10 @@
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-sky-900/40 p-4 fade-enter backdrop-blur-md">
                     <div className="w-[95%] h-[90%] flex border border-white/40 rounded-2xl overflow-hidden bg-white/80 shadow-2xl">
                         <div className="w-80 crystal-card border-r-0 p-6 flex flex-col gap-6 overflow-y-auto custom-scroll bg-white/50">
-                             <h3 className="font-tech text-slate-800 text-2xl mb-2">{tLang.editor_title}</h3>
+                             <h3 className="font-tech text-slate-800 text-2xl mb-2 flex items-center gap-2">
+                                {tLang.editor_title}
+                                <span className="bg-yellow-400 text-yellow-900 text-[10px] px-2 py-1 rounded-full font-bold shadow-sm">PRO</span>
+                             </h3>
                              <div className="flex gap-2 mb-2"><button onClick={undo} className="editor-btn flex-1 py-2 text-xs rounded-lg" title="Deshacer"><Icons.Undo /> UNDO</button><button onClick={redo} className="editor-btn flex-1 py-2 text-xs rounded-lg" title="Rehacer"><Icons.Redo /> REDO</button></div>
                              <button onClick={duplicate} className="editor-btn w-full py-3 text-xs flex gap-2 justify-center mb-2 rounded-lg" title="Duplicar"><Icons.Copy /> DUPLICAR</button>
                              <div className="grid grid-cols-2 gap-2"><button onClick={addNewText} className="editor-btn text-xs flex-col py-3 rounded-lg"><Icons.Text /> TEXTO</button><label className="editor-btn text-xs flex-col py-3 cursor-pointer rounded-lg"><Icons.Image /> IMAGEN <input type="file" hidden onChange={handleImageUpload} /></label></div>
@@ -494,6 +500,32 @@
                         </div>
                         <div className="flex-1 bg-slate-200 canvas-container flex items-center justify-center relative overflow-hidden p-10"><canvas ref={canvasRef} /></div>
                     </div>
+                </div>
+            );
+        };
+
+        const ChatBot = () => {
+            const [open, setOpen] = useState(false);
+            return (
+                <div className="fixed bottom-5 right-5 z-[80] flex flex-col items-end">
+                    {open && (
+                         <div className="mb-4 w-72 crystal-card p-4 fade-enter shadow-2xl border-[#0ea5e9]">
+                            <div className="flex justify-between items-center mb-3 pb-2 border-b border-slate-200">
+                                <h4 className="font-bold font-tech text-slate-800 text-sm flex items-center gap-2"><Icons.Message /> SOPORTE MAG.IA</h4>
+                                <button onClick={() => setOpen(false)} className="text-slate-400 hover:text-red-500"><Icons.X /></button>
+                            </div>
+                            <div className="h-32 bg-white/50 rounded-lg mb-3 p-3 text-xs text-slate-600 overflow-y-auto border border-white font-mono">
+                                <p className="mb-2"><strong>IA:</strong> ¡Hola! Soy el asistente virtual de Roddy. ¿En qué puedo ayudarte hoy?</p>
+                            </div>
+                            <div className="flex gap-2">
+                                <input className="glass-input text-xs" placeholder="Escribe..." />
+                                <button className="bg-[#0ea5e9] text-white p-2 rounded-lg"><Icons.Zap /></button>
+                            </div>
+                        </div>
+                    )}
+                    <button onClick={() => setOpen(!open)} className="chat-float tech-btn w-14 h-14 rounded-full flex items-center justify-center p-0 shadow-xl">
+                        <Icons.Message />
+                    </button>
                 </div>
             );
         };
@@ -537,7 +569,7 @@
             const [user, setUser] = useState(null); 
             const [userCloud, setUserCloud] = useState([]);
             const [isEditing, setIsEditing] = useState(false);
-            const [menuOpen, setMenuOpen] = useState(false); // Profile dropdown
+            const [menuOpen, setMenuOpen] = useState(false); 
             const timeTheme = useTimeTheme(); 
 
             const initialForm = { image: null, logo: null, inspirationImg: null, target: '', company: '', whatsapp: '', product: { name: '', price: '', promo: '' }, textOnImage: '', style: '', light: '', colors: [], googleData: false, inspiration: '', connected: { fb: false, ig: false, tk: false }, format: 'post' };
@@ -583,7 +615,6 @@
                 if(confirm) { setTimeout(() => { alert("✅ ¡PAGO EXITOSO!\n\nDescargando activo..."); handleDownloadImage(); }, 1500); }
             };
 
-            // Fake Google Login for Landing
             const fakeGoogleLogin = () => {
                 playSound('click');
                 const mockUser = { name: "Roddy Smith", email: "ceo@magia.app", avatar: CREATOR_IMAGE };
@@ -613,13 +644,13 @@
             const restoreCampaign = (item) => { setResultImage(item.image); setGeneratedCopy(item.copy); setFormData(prev => ({...prev, logo: item.logo || null })); setView('result'); };
             const runEngine = async () => { try { if(!formData.style) return alert("Elige un estilo"); if(credits <= 0) return alert("¡Te has quedado sin créditos!"); playSound('process'); setView('processing'); const promptBase = formData.product.name || "luxury product"; const colorsStr = formData.colors ? formData.colors.join(", ") : ""; const magicPrompt = `Hyper-ultra-realistic 8k commercial photography of ${promptBase}, ${formData.style} aesthetic, ${formData.light}. EXTREMELY IMPORTANT: Clean image, NO TEXT. Perfect composition, vivid colors ${colorsStr}, 8k render, unreal engine 5 style, cinematic lighting, bright airy background.`; const newImageURL = generateImageURL(magicPrompt); let finalCopy = ""; let copyPromise = null; if (apiKey) { const textPrompt = `Act as a marketing expert. Viral caption for ${promptBase}. Company: ${formData.company}. Lang: ${lang}. 5 hashtags.`; copyPromise = callGeminiAPI(textPrompt); } const steps = t.loading_steps || ["Processing..."]; for(let i=0; i<steps.length; i++) { setLoadingText(steps[i]); setProgress(((i+1)/steps.length)*100); await new Promise(r => setTimeout(r, 800)); } if (copyPromise) { const res = await copyPromise; finalCopy = res || generateDynamicCopy(); } else { finalCopy = generateDynamicCopy(); } const imgLoader = new Image(); imgLoader.onload = () => { setResultImage(newImageURL); setGeneratedCopy(finalCopy); setCredits(prev => prev - 1); const newItem = { id: Date.now(), image: newImageURL, copy: finalCopy, logo: formData.logo, date: new Date().toLocaleDateString() }; const updatedCloud = [newItem, ...userCloud]; setUserCloud(updatedCloud); localStorage.setItem('clickia_cloud', JSON.stringify(updatedCloud)); playSound('success'); setView('result'); }; imgLoader.onerror = () => { alert("Error loading image."); setView('upload'); }; imgLoader.src = newImageURL; } catch (e) { console.error("FATAL ERROR:", e); alert("Error inesperado."); setView('upload'); } };
 
-            // --- LANDING VIEW (UPDATED WITH LOGIN) ---
+            // --- LANDING VIEW ---
             const landingView = (
                 <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center relative fade-enter z-10">
                     <nav className="absolute top-0 w-full p-6 flex justify-between items-center z-50">
                         {/* Languages */}
                         <div className="flex flex-wrap justify-center gap-4 items-center crystal-card px-4 py-2 rounded-full">
-                            <div className="flex items-center gap-3 border-r border-slate-300 pr-4">{['ES', 'EN', 'FR', 'ZH'].map(l => (<button key={l} onClick={() => { playSound('click'); setLang(l); }} className={`text-[10px] font-bold font-tech transition-all hover:scale-110 ${lang === l ? 'text-sky-600 scale-110' : 'text-slate-400 hover:text-sky-600'}`}>{l}</button>))}</div>
+                            <div className="flex items-center gap-3 border-r border-slate-300 pr-4">{['ES', 'EN', 'FR', 'ZH'].map(l => (<button key={l} onClick={() => { playSound('click'); setLang(l); }} className={`text-[10px] font-bold font-tech transition-all hover:scale-110 ${lang === l ? 'text-sky-600 scale-110' : 'text-slate-500 hover:text-sky-600'}`}>{l}</button>))}</div>
                             <div className="flex items-center gap-2"><button onClick={() => {playSound('click'); setView('setup')}} className="text-xs font-bold text-slate-700 hover:text-sky-600 font-tech uppercase tracking-widest px-2 py-1 hover:bg-white/40 rounded-full transition-all">{t.enter}</button><button onClick={() => {playSound('click'); setView('pricing')}} className="text-xs font-bold text-slate-500 hover:text-slate-800 font-tech uppercase tracking-widest px-2 py-1 hover:bg-white/40 rounded-full transition-all">{t.prices}</button></div>
                         </div>
                         
@@ -715,7 +746,7 @@
             if (view === 'style') return <div className="min-h-screen p-6 fade-enter flex flex-col relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => setView('q5')} className="p-2 rounded-full bg-white/40 hover:bg-white/60 text-slate-700"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech text-slate-800">{t.style_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto w-full">{STYLES_DATA.map(s => (<div key={s.id} onClick={() => {playSound('click'); setFormData({...formData, style: t[`s_${s.id}`]}); changeView('light')}} className="glass-card rounded-xl h-64 group cursor-pointer"><img src={s.img} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" /><div className="card-label">{t[`s_${s.id}`]}</div></div>))}</div><div className="floating-credit">{t.credit_text}</div></div>;
             if (view === 'light') return <div className="min-h-screen p-6 fade-enter flex flex-col relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => changeView('style')} className="p-2 rounded-full bg-white/40 hover:bg-white/60 text-slate-700"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech text-slate-800">{t.light_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-7xl mx-auto w-full mb-12">{LIGHTING_DATA.map(l => (<div key={l.id} onClick={() => {playSound('click'); setFormData({...formData, light: t[`l_${l.id}`]}); }} className={`glass-card rounded-xl h-64 group cursor-pointer ${formData.light === t[`l_${l.id}`] ? 'selected' : ''}`}><img src={l.img} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all" /><div className="card-label">{t[`l_${l.id}`]} <br/><span className="text-[9px] text-slate-500 font-normal">{t[`l_${l.id}_desc`]}</span></div></div>))}</div><div onClick={() => {playSound('click'); setFormData(prev => ({...prev, googleData: !prev.googleData}));}} className={`crystal-card p-6 flex justify-between items-center border transition-all cursor-pointer mb-8 max-w-2xl mx-auto w-full ${formData.googleData ? 'border-[#0ea5e9] bg-[#0ea5e9]/10' : 'border-white/60 hover:border-[#0ea5e9]'}`}><div className="flex items-center gap-4"><div className="bg-white/60 p-3 rounded-full text-slate-700 shadow-sm"><Icons.Google /></div><div><h3 className="font-bold text-slate-800">{t.google_data}</h3><p className="text-xs text-slate-500">{t.google_desc}</p></div></div><div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${formData.googleData ? 'bg-[#0ea5e9] border-[#0ea5e9]' : 'border-slate-300'}`}>{formData.googleData && <Icons.Check />}</div></div><div className="max-w-7xl mx-auto w-full text-center"><button onClick={runEngine} className="tech-btn px-20 py-6 text-2xl rounded-2xl shadow-xl">{t.gen_btn}</button></div><div className="floating-credit">{t.credit_text}</div></div>;
 
-            if (view === 'pricing') return <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter"><button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all text-xl font-bold text-slate-700"><Icons.X /></button><h2 className="text-5xl font-black font-tech text-center mb-10 text-slate-900">{t.plans}</h2><div className="grid md:grid-cols-3 gap-8 w-full max-w-6xl pb-10 items-center"><PricingCard title={t.p_names[0]} price="99" features={t.f_1} onSelect={() => {}} sub={t.p_subs[0]} tLang={t} /><PricingCard title={t.p_names[1]} price="297" strike="1200" recommended={true} features={t.f_2} onSelect={() => {}} sub={t.p_subs[1]} tLang={t} /><PricingCard title={t.p_names[2]} price="997" features={t.f_3} onSelect={() => {}} sub={t.p_subs[2]} tLang={t} /></div><div className="floating-credit">{t.credit_text}</div></div>;
+            if (view === 'pricing') return <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter"><button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all text-xl font-bold text-slate-700"><Icons.X /></button><h2 className="text-5xl font-black font-tech text-center mb-10 text-slate-900">{t.plans}</h2><div className="w-full max-w-md mb-8 crystal-card p-4 flex flex-col items-center bg-white/30"><input placeholder="Ingresa Código de Promotor (Opcional)" className="glass-input text-center mb-2" /><p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest">Usa un código para obtener un 20% de descuento.</p></div><div className="grid md:grid-cols-3 gap-8 w-full max-w-6xl pb-10 items-center"><PricingCard title={t.p_names[0]} price="99" features={t.f_1} onSelect={() => {}} sub={t.p_subs[0]} tLang={t} /><PricingCard title={t.p_names[1]} price="297" strike="1200" recommended={true} features={t.f_2} onSelect={() => {}} sub={t.p_subs[1]} tLang={t} /><PricingCard title={t.p_names[2]} price="997" features={t.f_3} onSelect={() => {}} sub={t.p_subs[2]} tLang={t} /></div><div className="floating-credit">{t.credit_text}</div></div>;
             if (view === 'faq') return <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter"><button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all text-xl font-bold text-slate-700"><Icons.X /></button><h2 className="text-5xl font-black font-tech text-center mb-16 text-slate-900">{t.faq_title}</h2><div className="max-w-3xl w-full space-y-6"> {[{q: t.q1, a: t.a1}, {q: t.q2, a: t.a2}, {q: t.q3, a: t.a3}].map((item, i) => (<details key={i} className="crystal-card p-6 group cursor-pointer open:bg-white/60 shadow-sm"><summary className="font-bold text-lg flex justify-between items-center outline-none list-none uppercase font-tech text-slate-800">{item.q} <span className="text-slate-500 transition-transform group-open:rotate-180"><Icons.ChevronDown /></span></summary><p className="text-slate-600 text-sm mt-4 leading-relaxed pl-4 border-l-2 border-sky-300">{item.a}</p></details>))} </div><div className="floating-credit">{t.credit_text}</div></div>;
 
             return (
@@ -738,6 +769,7 @@
                     {view === 'result' && resultView}
                     {view === 'pricing' && pricingView}
                     {view === 'faq' && faqView}
+                    <ChatBot />
                 </div>
             );
         };
