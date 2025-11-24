@@ -1,372 +1,329 @@
-<script type="text/babel">
-    const { useState, useEffect, useRef } = React;
-
-    // --- CONFIGURACIÓN ---
-    const apiKey = ""; // ⚠️ PON TU API KEY AQUÍ O ÚSALA DESDE ENV
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAG.IA - Marketing Studio</title>
     
-    // --- 1. EL PROMPT MAESTRO (EL PUENTE) ---
-    // Este es el cerebro de la operación. No lo modifiques.
-    const MOTHER_PROMPT_INSTRUCTION = `Actúa como un Director Creativo de Élite Mundial y Experto en Marketing. Tu objetivo es recibir datos de un cliente y devolver un OBJETO JSON para ejecutar una campaña.
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;700;900&display=swap" rel="stylesheet">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
 
-TUS REGLAS DE GENERACIÓN DE IMAGEN (Campo 'image_prompt'):
-1. FIDELIDAD: Analiza qué vende el cliente ({{PRODUCT_DESC}}). Si es 'Hamburguesa', el prompt debe describir una hamburguesa. NO cambies la naturaleza del objeto.
-2. ESTILO: Aplica el estilo visual solicitado ({{STYLE}}). Usa términos de fotografía profesional (8k, octane render, studio lighting).
-3. LIMPIEZA: ¡PROHIBIDO TEXTO! Añade al final del prompt: '--no text, no watermark, no letters'. La imagen debe ser limpia para editarla después.
-
-TUS REGLAS DE COPYWRITING (Campo 'viral_copy'):
-1. Escribe un texto para redes sociales (Instagram/TikTok) altamente persuasivo.
-2. OBLIGATORIO: Debes incluir el PRECIO ({{PRICE}}) y la PROMOCIÓN ({{PROMO}}) en el texto de forma natural.
-3. Usa emojis y hashtags relevantes.
-
-FORMATO DE RESPUESTA (JSON ESTRICTO):
-{
-  "image_prompt": "A hyper-realistic photo of {{PRODUCT_DESC}}, {{STYLE}} lighting, professional photography, 8k resolution, --no text, no watermark",
-  "viral_copy": "¡Oferta increíble! Solo hoy {{PRICE}}...",
-  "viral_score": 9.5
-}
-INPUT DEL USUARIO:
-Empresa: {{COMPANY_NAME}}
-Producto: {{PRODUCT_DESC}}
-Target: {{TARGET}}
-Estilo: {{STYLE}}
-Precio: {{PRICE}}
-Promo: {{PROMO}}
-`;
-
-    // --- UTILS: GEMINI API CALL ---
-    const callGemini = async (fullPrompt) => {
-        try {
-            console.log("Enviando a Gemini...", fullPrompt);
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    contents: [{ parts: [{ text: fullPrompt }] }],
-                    generationConfig: { responseMimeType: "application/json" }
-                })
-            });
-            const data = await response.json();
-            const text = data.candidates[0].content.parts[0].text;
-            return JSON.parse(text); // Retorna el objeto JSON listo
-        } catch (e) {
-            console.error("Error Critical en Gemini:", e);
-            // Fallback en caso de error para no romper la app
-            return {
-                image_prompt: "High quality product photography, 8k, studio lighting --no text",
-                viral_copy: "Error de conexión. Pero tu producto se ve genial.",
-                viral_score: 5.0
-            };
+    <style>
+        /* --- ESTILOS VISUALES (MAG.IA ORIGINAL) --- */
+        :root {
+            --bg-gradient: linear-gradient(180deg, #0f172a 0%, #312e81 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --accent: #38bdf8;
         }
-    };
+        body { 
+            margin: 0; font-family: 'Inter', sans-serif; 
+            background: var(--bg-gradient); color: white; min-height: 100vh; 
+        }
+        h1, h2, h3, .font-display { font-family: 'Outfit', sans-serif; }
+        
+        .crystal-card {
+            background: var(--glass-bg); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            border-radius: 24px; 
+        }
+        
+        .glass-input { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.2); 
+            color: #fff; padding: 12px; width: 100%; border-radius: 12px; margin-bottom: 10px;
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-input:focus { outline: none; border-color: var(--accent); background: rgba(0,0,0,0.5); }
+        
+        .tech-btn { 
+            background: white; color: black; font-family: 'Outfit', sans-serif; font-weight: 800; 
+            border-radius: 99px; padding: 14px 30px; border: none; cursor: pointer;
+            transition: transform 0.2s; text-transform: uppercase; letter-spacing: 1px;
+            width: 100%; margin-top: 10px;
+        }
+        .tech-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(255,255,255,0.4); }
 
-    // --- COMPONENTES UI (Simplificados para el ejemplo) ---
-    const Icons = {
-        ArrowLeft: () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>,
-        Sparkle: () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>,
-        Upload: () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-    };
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Carga */
+        .loader { border: 4px solid rgba(255,255,255,0.1); border-left-color: #38bdf8; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
 
-    // --- VISTAS DEL SISTEMA ---
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
 
-    // 1. QUESTION VIEW (INPUTS)
-    const QuestionView = ({ onNext, setUserData }) => {
-        // Estado local para el formulario completo
-        const [formData, setFormData] = useState({
-            companyName: "",
-            productDesc: "",
-            target: "",
-            style: "Cinematic",
-            price: "",
-            promo: "",
-            logoFile: null // Guardaremos el archivo o la URL data
-        });
+        // ---------------------------------------------------------
+        // ⚠️ CONFIGURACIÓN: PEGA TU API KEY AQUÍ
+        // ---------------------------------------------------------
+        const apiKey = ""; 
+        // ---------------------------------------------------------
 
-        const handleChange = (e) => {
-            const { name, value } = e.target;
-            setFormData(prev => ({ ...prev, [name]: value }));
+        // --- ICONOS ---
+        const Icons = {
+            ArrowLeft: () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>,
+            Upload: () => <svg className="w-8 h-8 mx-auto opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
         };
 
-        const handleLogoUpload = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    setFormData(prev => ({ ...prev, logoFile: ev.target.result }));
+        // --- PROMPT MAESTRO (Lógica de Negocio) ---
+        const MOTHER_PROMPT_INSTRUCTION = `Actúa como un Director Creativo de Élite.
+OBJETIVO: Recibir datos y generar un JSON para una campaña visual.
+
+INPUTS:
+- Producto: {{PRODUCT_DESC}}
+- Estilo: {{STYLE}}
+- Target: {{TARGET}}
+
+REGLAS IMAGEN ('image_prompt'):
+1. Describe fielmente el producto.
+2. Aplica el estilo visual {{STYLE}}.
+3. IMPERATIVO: Agrega '--no text, no watermark, no letters' al final.
+
+REGLAS COPY ('viral_copy'):
+1. Texto persuasivo para redes.
+2. INCLUIR PRECIO: {{PRICE}} y PROMO: {{PROMO}} obligatoriamente.
+
+FORMATO JSON ESPERADO:
+{
+  "image_prompt": "Description in English of {{PRODUCT_DESC}}, {{STYLE}} style, 8k, professional lighting --no text",
+  "viral_copy": "Texto en español con emojis...",
+  "viral_score": 9.5
+}`;
+
+        // --- SERVICIO GEMINI ---
+        const callGemini = async (prompt) => {
+            if (!apiKey) throw new Error("Falta la API Key en el código");
+            
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { responseMimeType: "application/json" }
+                    })
+                });
+                
+                if (!response.ok) throw new Error("Error en API Gemini");
+                
+                const data = await response.json();
+                const text = data.candidates[0].content.parts[0].text;
+                return JSON.parse(text);
+            } catch (e) {
+                console.error(e);
+                // Fallback de emergencia para no romper la app
+                return {
+                    image_prompt: "High quality product photography, cinematic lighting, 8k --no text",
+                    viral_copy: "¡Descubre nuestro nuevo producto! Calidad increíble al mejor precio. #Lanzamiento",
+                    viral_score: 5.0
                 };
-                reader.readAsDataURL(file);
             }
         };
 
-        const handleSubmit = () => {
-            if(!formData.productDesc) return alert("¡Describe tu producto!");
-            setUserData(formData); // Guardamos todo en el estado global
-            onNext();
-        };
+        // --- VISTA 1: FORMULARIO (INPUTS) ---
+        const QuestionView = ({ onNext, setUserData }) => {
+            const [formData, setFormData] = useState({
+                companyName: "", productDesc: "", target: "", 
+                style: "Cinematic", price: "", promo: "", logoFile: null
+            });
 
-        return (
-            <div className="fixed inset-0 z-40 flex items-center justify-center p-4 fade-in bg-black/80 backdrop-blur-md overflow-y-auto">
-                <div className="crystal-card p-8 max-w-2xl w-full relative my-10">
-                    <h2 className="text-3xl font-display font-bold mb-6 text-shadow text-center">Diseña tu Campaña</h2>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-                        {/* INPUTS BÁSICOS */}
-                        <div className="col-span-2">
-                            <label className="text-xs font-bold ml-2">Nombre Empresa</label>
-                            <input name="companyName" className="glass-input" placeholder="Ej: Burger King" onChange={handleChange} />
-                        </div>
-                        
-                        <div className="col-span-2">
-                            <label className="text-xs font-bold ml-2">¿Qué vendes? (Descripción del Producto)</label>
-                            <textarea name="productDesc" className="glass-input h-24" placeholder="Ej: Una hamburguesa doble con queso derretido y tocino crujiente..." onChange={handleChange} />
-                        </div>
+            const handleChange = (e) => setFormData({...formData, [e.target.name]: e.target.value});
+            
+            const handleLogo = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => setFormData(prev => ({ ...prev, logoFile: ev.target.result }));
+                    reader.readAsDataURL(file);
+                }
+            };
 
-                        <div>
-                            <label className="text-xs font-bold ml-2">Público Objetivo</label>
-                            <input name="target" className="glass-input" placeholder="Ej: Jóvenes hambrientos" onChange={handleChange} />
-                        </div>
+            const handleSubmit = () => {
+                if(!formData.productDesc) return alert("Por favor describe el producto");
+                setUserData(formData);
+                onNext();
+            };
 
-                        <div>
-                            <label className="text-xs font-bold ml-2">Estilo Visual</label>
-                            <select name="style" className="glass-input text-black" onChange={handleChange}>
-                                <option value="Cinematic">Cinematográfico (Cine)</option>
-                                <option value="Neon Cyberpunk">Neon Cyberpunk</option>
-                                <option value="Minimalist Luxury">Lujo Minimalista</option>
-                                <option value="Studio Photography">Estudio Profesional</option>
+            return (
+                <div className="flex items-center justify-center min-h-screen p-4 fade-in">
+                    <div className="crystal-card p-8 max-w-2xl w-full">
+                        <h2 className="text-3xl font-display font-bold mb-6 text-center">Configura tu Campaña</h2>
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <input name="companyName" placeholder="Nombre Empresa" className="glass-input" onChange={handleChange} />
+                            <input name="target" placeholder="Público Objetivo" className="glass-input" onChange={handleChange} />
+                            <textarea name="productDesc" placeholder="Describe tu Producto (Ej: Hamburguesa doble queso...)" className="glass-input h-32 md:col-span-2" onChange={handleChange}></textarea>
+                            
+                            <select name="style" className="glass-input text-gray-300" onChange={handleChange}>
+                                <option value="Cinematic">Estilo: Cinematográfico</option>
+                                <option value="Minimalist">Estilo: Minimalista</option>
+                                <option value="Neon">Estilo: Neon Cyberpunk</option>
+                                <option value="Studio">Estilo: Estudio Fotográfico</option>
                             </select>
-                        </div>
-
-                        <div>
-                            <label className="text-xs font-bold ml-2">Precio</label>
-                            <input name="price" className="glass-input" placeholder="Ej: $9.99" onChange={handleChange} />
-                        </div>
-
-                        <div>
-                            <label className="text-xs font-bold ml-2">Promoción</label>
-                            <input name="promo" className="glass-input" placeholder="Ej: 2x1 Solo Hoy" onChange={handleChange} />
-                        </div>
-
-                        {/* INPUT DE LOGO */}
-                        <div className="col-span-2 mt-2">
-                            <label className="block text-xs font-bold ml-2 mb-2">Sube tu Logotipo (Para Magic Studio)</label>
-                            <div className="relative border-2 border-dashed border-white/30 rounded-xl p-6 text-center hover:bg-white/10 transition">
-                                <input type="file" accept="image/*" onChange={handleLogoUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
-                                <div className="flex flex-col items-center">
-                                    {formData.logoFile ? (
-                                        <img src={formData.logoFile} className="h-16 object-contain" />
-                                    ) : (
-                                        <>
-                                            <Icons.Upload />
-                                            <span className="text-xs mt-2">Click para subir PNG/JPG</span>
-                                        </>
-                                    )}
+                            
+                            <input name="price" placeholder="Precio (Ej: $9.99)" className="glass-input" onChange={handleChange} />
+                            <input name="promo" placeholder="Promo (Ej: 2x1)" className="glass-input" onChange={handleChange} />
+                            
+                            <div className="md:col-span-2 border border-dashed border-white/30 rounded-xl p-4 text-center relative hover:bg-white/5 cursor-pointer">
+                                <input type="file" accept="image/*" onChange={handleLogo} className="absolute inset-0 opacity-0 cursor-pointer" />
+                                <div className="pointer-events-none">
+                                    {formData.logoFile ? <p className="text-green-400 font-bold">¡Logo Cargado!</p> : <><Icons.Upload /><span className="text-xs">Sube tu Logo (Opcional)</span></>}
                                 </div>
                             </div>
                         </div>
+                        <button onClick={handleSubmit} className="tech-btn mt-6">GENERAR CAMPAÑA</button>
                     </div>
-
-                    <button onClick={handleSubmit} className="tech-btn w-full mt-8 text-lg shadow-lg">
-                        GENERAR CAMPAÑA CON IA
-                    </button>
                 </div>
-            </div>
-        );
-    };
-
-    // 2. PROCESSING VIEW (EL MOTOR LÓGICO "runEngine")
-    const ProcessingView = ({ onFinish, t, userData }) => {
-        const [status, setStatus] = useState("Conectando con Director Creativo...");
-
-        useEffect(() => {
-            const runEngine = async () => {
-                // 1. PREPARAR EL PROMPT CON LOS DATOS DEL USUARIO
-                let prompt = MOTHER_PROMPT_INSTRUCTION;
-                prompt = prompt.replace('{{COMPANY_NAME}}', userData.companyName || "Marca");
-                prompt = prompt.replace(/{{PRODUCT_DESC}}/g, userData.productDesc); // Reemplaza todas las ocurrencias
-                prompt = prompt.replace('{{TARGET}}', userData.target || "General");
-                prompt = prompt.replace(/{{STYLE}}/g, userData.style);
-                prompt = prompt.replace(/{{PRICE}}/g, userData.price || "");
-                prompt = prompt.replace(/{{PROMO}}/g, userData.promo || "");
-
-                // 2. LLAMADA AL PUENTE (GEMINI)
-                setStatus("Analizando estrategia de Neuromarketing...");
-                const jsonResponse = await callGemini(prompt);
-
-                setStatus("Generando activos visuales...");
-                // Esperamos un poco para simular proceso (o validamos el JSON)
-                setTimeout(() => {
-                    // 3. PASAMOS LA DATA LIMPIA A LA SIGUIENTE FASE
-                    onFinish(jsonResponse);
-                }, 1000);
-            };
-
-            runEngine();
-        }, []);
-
-        return (
-            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90 backdrop-blur-xl fade-in text-center">
-                <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500 mb-6"></div>
-                <h2 className="text-3xl font-display font-bold animate-pulse text-white">{t.processing}</h2>
-                <p className="text-sm opacity-80 mt-4 font-mono text-blue-300">{status}</p>
-            </div>
-        );
-    };
-
-    // 3. MAGIC STUDIO (EL OUTPUT FINAL + FABRIC.JS)
-    const MagicStudio = ({ t, onClose, aiData, userData }) => {
-        const canvasRef = useRef(null);
-        const fabricCanvasRef = useRef(null);
-        
-        // URL de Generación de Imagen (Pollinations)
-        // Usamos el prompt generado por Gemini en el paso anterior
-        const generatedImageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(aiData.image_prompt)}?width=1080&height=1080&nologo=true&seed=${Math.floor(Math.random()*1000)}`;
-
-        useEffect(() => {
-            if (!canvasRef.current) return;
-
-            // Inicializar Canvas
-            const canvas = new fabric.Canvas(canvasRef.current, { 
-                width: 600, 
-                height: 600,
-                backgroundColor: '#111' 
-            });
-            fabricCanvasRef.current = canvas;
-
-            // CAPA 1: FONDO (IMAGEN GENERADA POR IA)
-            fabric.Image.fromURL(generatedImageUrl, (img) => {
-                img.set({ scaleX: 600/img.width, scaleY: 600/img.height, selectable: false });
-                canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
-            }, { crossOrigin: 'anonymous' });
-
-            // CAPA 2: LOGOTIPO DEL USUARIO (Si lo subió)
-            if (userData.logoFile) {
-                fabric.Image.fromURL(userData.logoFile, (img) => {
-                    img.scaleToWidth(150);
-                    img.set({ left: 430, top: 20 });
-                    canvas.add(img);
-                    canvas.setActiveObject(img);
-                });
-            } else {
-                // Fallback si no hay logo: Texto de la empresa
-                const text = new fabric.Text(userData.companyName || "TU MARCA", {
-                    left: 20, top: 20, fontSize: 40, fill: 'white', fontFamily: 'Impact',
-                    shadow: 'rgba(0,0,0,0.8) 2px 2px 4px'
-                });
-                canvas.add(text);
-            }
-
-        }, []);
-
-        const downloadImage = () => {
-            const dataURL = fabricCanvasRef.current.toDataURL({ format: 'png', multiplier: 2 });
-            const link = document.createElement('a');
-            link.download = 'click-ia-campaign.png';
-            link.href = dataURL;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            );
         };
 
-        return (
-            <div className="fixed inset-0 z-40 flex items-center justify-center p-4 fade-in bg-black/80">
-                <div className="crystal-card w-full h-[90vh] max-w-7xl flex overflow-hidden relative border border-white/20">
-                    <div className="absolute top-4 left-4 z-50 cursor-pointer bg-white/20 p-2 rounded-full" onClick={onClose}><Icons.ArrowLeft /></div>
+        // --- VISTA 2: PROCESAMIENTO (MOTOR) ---
+        const ProcessingView = ({ onFinish, userData }) => {
+            const [status, setStatus] = useState("Conectando Neural Engine...");
+
+            useEffect(() => {
+                const run = async () => {
+                    // 1. Reemplazo de variables en el prompt
+                    let prompt = MOTHER_PROMPT_INSTRUCTION
+                        .replace('{{PRODUCT_DESC}}', userData.productDesc)
+                        .replace(/{{PRODUCT_DESC}}/g, userData.productDesc) // Repetir para asegurar
+                        .replace(/{{STYLE}}/g, userData.style)
+                        .replace('{{TARGET}}', userData.target)
+                        .replace('{{PRICE}}', userData.price)
+                        .replace('{{PROMO}}', userData.promo);
+
+                    setStatus("Diseñando Estrategia Visual...");
+                    const data = await callGemini(prompt);
                     
-                    {/* ÁREA DE CANVAS */}
-                    <div className="flex-1 bg-gradient-to-br from-gray-900 to-black flex items-center justify-center p-4">
-                        <div className="shadow-2xl border-4 border-white/10 rounded-lg overflow-hidden">
-                            <canvas ref={canvasRef} />
-                        </div>
-                    </div>
+                    setStatus("Generando Activos...");
+                    setTimeout(() => onFinish(data), 1000);
+                };
+                run();
+            }, []);
 
-                    {/* BARRA LATERAL DE RESULTADOS */}
-                    <div className="w-96 bg-gray-900/90 backdrop-blur-xl border-l border-white/10 p-6 flex flex-col gap-6 overflow-y-auto">
-                        <div>
-                            <h3 className="text-xl font-display font-bold text-white mb-1">MAGIC STUDIO</h3>
-                            <p className="text-xs text-white/50">Editor de Capas en Tiempo Real</p>
-                        </div>
+            return (
+                <div className="flex flex-col items-center justify-center min-h-screen fade-in text-center p-4">
+                    <div className="loader mb-6"></div>
+                    <h2 className="text-2xl font-bold mb-2">PROCESANDO</h2>
+                    <p className="text-blue-300 font-mono text-sm">{status}</p>
+                </div>
+            );
+        };
 
-                        {/* TARJETA: COPYWRITING VIRAL */}
-                        <div className="bg-blue-600/20 border border-blue-500/30 p-4 rounded-xl">
-                            <div className="flex justify-between items-center mb-2">
-                                <span className="text-xs font-bold text-blue-400">COPY VIRAL (IA)</span>
-                                <span className="text-[10px] bg-blue-500 text-white px-2 rounded-full">{aiData.viral_score}/10</span>
+        // --- VISTA 3: MAGIC STUDIO (RESULTADO) ---
+        const MagicStudio = ({ onClose, aiData, userData }) => {
+            const canvasRef = useRef(null);
+            const fabricRef = useRef(null);
+
+            useEffect(() => {
+                if(!canvasRef.current || !aiData) return;
+
+                // URL de Pollinations con el prompt de Gemini
+                const bgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(aiData.image_prompt)}?width=1080&height=1080&nologo=true&seed=${Math.random()}`;
+
+                const canvas = new fabric.Canvas(canvasRef.current, { width: 600, height: 600, backgroundColor: '#000' });
+                fabricRef.current = canvas;
+
+                // Cargar Fondo
+                fabric.Image.fromURL(bgUrl, (img) => {
+                    img.scaleToWidth(600);
+                    canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+                }, { crossOrigin: 'anonymous' });
+
+                // Cargar Logo del Usuario
+                if(userData.logoFile) {
+                    fabric.Image.fromURL(userData.logoFile, (img) => {
+                        img.scaleToWidth(120);
+                        img.set({ left: 460, top: 20 });
+                        canvas.add(img);
+                    });
+                } else {
+                    // Texto por defecto si no hay logo
+                    const text = new fabric.Text(userData.companyName || "TU MARCA", { 
+                        left: 20, top: 20, fontSize: 30, fill: 'white', fontFamily: 'Outfit', fontWeight: 'bold',
+                        shadow: 'rgba(0,0,0,0.8) 2px 2px 5px'
+                    });
+                    canvas.add(text);
+                }
+            }, []);
+
+            const download = () => {
+                const link = document.createElement('a');
+                link.download = 'campaña-magia.png';
+                link.href = fabricRef.current.toDataURL({ format: 'png', multiplier: 2 });
+                link.click();
+            };
+
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 fade-in">
+                    <div className="w-full max-w-6xl h-[90vh] crystal-card flex flex-col md:flex-row overflow-hidden border border-white/20">
+                        {/* ÁREA VISUAL */}
+                        <div className="flex-1 bg-gray-900 flex items-center justify-center p-4 relative">
+                            <button onClick={onClose} className="absolute top-4 left-4 bg-white/10 p-2 rounded-full hover:bg-white/20"><Icons.ArrowLeft /></button>
+                            <div className="shadow-2xl border-4 border-white/5 rounded-lg overflow-hidden">
+                                <canvas ref={canvasRef} />
                             </div>
-                            <p className="text-sm text-white italic leading-relaxed">
-                                {aiData.viral_copy}
-                            </p>
-                            <button className="text-[10px] text-blue-300 mt-2 hover:underline" onClick={() => navigator.clipboard.writeText(aiData.viral_copy)}>Copiar Texto</button>
                         </div>
 
-                        {/* CONTROLES */}
-                        <div className="space-y-3">
-                            <div className="text-xs text-white/50 font-bold">CAPAS ACTIVAS</div>
-                            <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
-                                <span className="text-sm text-white">Fondo Generado (IA)</span>
-                                <span className="text-[10px] bg-green-500/50 text-green-100 px-2 rounded">Locked</span>
+                        {/* BARRA LATERAL */}
+                        <div className="w-full md:w-96 bg-gray-900/50 backdrop-blur-md p-6 flex flex-col gap-6 border-l border-white/10 overflow-y-auto">
+                            <div>
+                                <h3 className="text-2xl font-display font-bold">MAGIC STUDIO</h3>
+                                <p className="text-xs opacity-50">Editor & Generador IA</p>
                             </div>
-                            <div className="flex items-center justify-between p-3 bg-white/10 rounded-lg border border-white/20">
-                                <span className="text-sm text-white">Tu Logotipo</span>
-                                <span className="text-[10px] text-white/50">Arrastrable</span>
-                            </div>
-                        </div>
 
-                        <div className="mt-auto">
-                            <button onClick={downloadImage} className="tech-btn w-full">DESCARGAR ARTE FINAL (HD)</button>
+                            <div className="bg-blue-900/30 border border-blue-500/30 p-4 rounded-xl">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="text-xs font-bold text-blue-300">COPY VIRAL GENERADO</span>
+                                    <span className="text-[10px] bg-blue-500 px-2 py-0.5 rounded-full">{aiData?.viral_score}/10</span>
+                                </div>
+                                <p className="text-sm italic opacity-90">{aiData?.viral_copy || "Generando..."}</p>
+                            </div>
+
+                            <div className="mt-auto space-y-3">
+                                <button onClick={download} className="tech-btn bg-blue-500 text-white hover:bg-blue-600">DESCARGAR ARTE</button>
+                                <button onClick={onClose} className="text-xs text-center w-full opacity-50 hover:opacity-100">VOLVER AL INICIO</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        );
-    };
+            );
+        };
 
-    // --- MAIN APP ---
-    const App = () => {
-        const [view, setView] = useState('landing');
-        const [userData, setUserData] = useState({});
-        const [aiData, setAiData] = useState(null);
+        // --- APP PRINCIPAL ---
+        const App = () => {
+            const [view, setView] = useState('landing');
+            const [userData, setUserData] = useState({});
+            const [aiData, setAiData] = useState(null);
 
-        // Traducciones básicas simuladas
-        const t = { processing: "PROCESANDO...", hero_title: "MAG.IA", hero_subtitle: "Marketing Studio" }; 
+            return (
+                <React.StrictMode>
+                    {view === 'landing' && (
+                        <div className="flex flex-col items-center justify-center min-h-screen text-center p-4 fade-in">
+                            <h1 className="text-7xl md:text-9xl font-black font-display mb-4 tracking-tighter">MAG.IA</h1>
+                            <p className="mb-8 font-light text-xl opacity-80">El futuro del Marketing Automatizado</p>
+                            <button onClick={() => setView('questions')} className="tech-btn max-w-xs text-lg shadow-xl">INICIAR PROYECTO</button>
+                            {!apiKey && <p className="text-red-400 mt-4 font-bold bg-red-900/20 px-4 py-2 rounded">⚠️ FALTA API KEY EN EL CÓDIGO</p>}
+                        </div>
+                    )}
+                    {view === 'questions' && <QuestionView onNext={() => setView('processing')} setUserData={setUserData} />}
+                    {view === 'processing' && <ProcessingView userData={userData} onFinish={(data) => { setAiData(data); setView('studio'); }} />}
+                    {view === 'studio' && <MagicStudio onClose={() => setView('landing')} aiData={aiData} userData={userData} />}
+                </React.StrictMode>
+            );
+        };
 
-        return (
-            <div className="App">
-                {view === 'landing' && (
-                   <div className="h-screen flex flex-col items-center justify-center text-white">
-                       <h1 className="text-8xl font-display font-black mb-4">MAG.IA</h1>
-                       <button onClick={() => setView('questions')} className="tech-btn text-xl px-12 py-4">INICIAR PROYECTO</button>
-                   </div>
-                )}
-                
-                {view === 'questions' && (
-                    <QuestionView 
-                        onNext={() => setView('processing')} 
-                        setUserData={setUserData} 
-                    />
-                )}
-                
-                {view === 'processing' && (
-                    <ProcessingView 
-                        t={t} 
-                        userData={userData} 
-                        onFinish={(data) => { 
-                            setAiData(data); 
-                            setView('studio'); 
-                        }} 
-                    />
-                )}
-                
-                {view === 'studio' && (
-                    <MagicStudio 
-                        t={t} 
-                        aiData={aiData} 
-                        userData={userData} 
-                        onClose={() => setView('landing')} 
-                    />
-                )}
-            </div>
-        );
-    };
-
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
-</script>
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
