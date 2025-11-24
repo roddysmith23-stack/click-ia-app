@@ -3,774 +3,812 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAG.IA SKY - Crystal Edition</title>
+    <title>MAG.IA - Transformation Gallery</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&family=Chakra+Petch:wght@400;600;700&family=Oswald:wght@500&family=Playfair+Display:ital,wght@0,600;1,800&family=Montserrat:wght@700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- FUENTES PREMIUM -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     
+    <!-- LIBRERÍAS -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     
     <style>
-        /* --- MAG.IA SKY AESTHETIC (CRYSTAL PROTOCOL v2.5) --- */
+        /* --- SISTEMA ATMOSFÉRICO DINÁMICO (CEO SKY) --- */
+        :root {
+            --bg-gradient: linear-gradient(180deg, #0072ff 0%, #00c6ff 100%);
+            --orb-color: rgba(255, 223, 0, 0.9); 
+            --orb-shadow: 0 0 50px rgba(255, 200, 0, 0.8);
+            --cloud-color: #FFFFFF;
+            --cloud-shadow: rgba(255, 255, 255, 0.4);
+            --star-opacity: 0;
+            
+            /* CRISTAL IOS REAL */
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-blur: 50px;
+            --glass-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            
+            --text-main: #FFFFFF;
+            --text-contrast-bg: rgba(0, 0, 0, 0.25); 
+            --accent: #38bdf8;
+        }
+
+        [data-theme='night'] {
+            --bg-gradient: linear-gradient(180deg, #0f172a 0%, #312e81 100%);
+            --orb-color: rgba(200, 200, 200, 0.3);
+            --orb-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+            --cloud-color: #64748b;
+            --cloud-shadow: rgba(0, 0, 0, 0.5);
+            --star-opacity: 1;
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #F8FAFC;
+            --text-contrast-bg: rgba(0, 0, 0, 0.4);
+        }
+
         body { 
-            margin: 0; 
-            overflow-x: hidden; 
-            font-family: 'Inter', sans-serif; 
-            /* MANDATO CEO: FONDO DEGRADADO CIELO LUMINOSO Y ETÉREO */
-            background: linear-gradient(135deg, #A1C4FD 0%, #C2E9FB 100%);
-            background-attachment: fixed;
-            color: #1e293b; /* Slate 800 para contraste máximo */
-            transition: none; 
+            margin: 0; overflow-x: hidden; font-family: 'Inter', sans-serif; 
+            background: var(--bg-gradient); color: var(--text-main); 
+            transition: background 1.5s ease; 
+            min-height: 100vh; cursor: none; 
         }
         
-        h1, h2, h3, .font-tech { font-family: 'Chakra Petch', sans-serif; }
-        .font-brand { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 800; }
-
-        /* Decoración de Nubes Sutil */
-        .cloud-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background-image: url('https://raw.githubusercontent.com/roddysmith23-stack/click-ia-app/main/roddy-ceo.jpg'); /* Usamos una textura suave o la img del CEO muy difusa como 'alma' del sistema */
-            opacity: 0.05;
-            background-size: cover;
-            background-position: center;
-            mix-blend-mode: overlay;
-            pointer-events: none;
+        /* CURSOR */
+        .cursor-orb {
+            position: fixed; top: 0; left: 0; width: 40px; height: 40px;
+            background: var(--orb-color); border-radius: 50%;
+            transform: translate(-50%, -50%); pointer-events: none; z-index: 9999;
+            box-shadow: var(--orb-shadow); filter: blur(8px);
+            transition: background 0.5s ease; mix-blend-mode: screen;
+        }
+        .cursor-dot {
+            position: fixed; top: 0; left: 0; width: 6px; height: 6px;
+            background: white; border-radius: 50%;
+            transform: translate(-50%, -50%); pointer-events: none; z-index: 10000;
         }
 
-        /* CORRECCIÓN: HEADER STACK VERTICAL (GAP 20px) */
-        .header-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 20px; /* MANDATO: 20px de separación */
-            margin-bottom: 40px;
-            cursor: pointer;
-            user-select: none;
-            position: relative;
-            z-index: 20;
-        }
-        
-        .sun-icon { 
-            transition: all 1s ease; 
-            color: #f59e0b; 
-            filter: drop-shadow(0 0 25px rgba(245, 158, 11, 0.6));
-        }
+        /* UTILS */
+        h1, h2, h3, .font-display { font-family: 'Outfit', sans-serif; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .font-body { font-family: 'Inter', sans-serif; }
+        .readable-text { background: var(--text-contrast-bg); backdrop-filter: blur(4px); padding: 2px 8px; border-radius: 6px; display: inline-block; }
+        .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
-        /* --- THE CRYSTAL CARD (MANDATO ARQUITECTO) --- */
+        /* CLOUDS */
+        .sky-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; pointer-events: none; }
+        .cloud { position: absolute; background: var(--cloud-color); border-radius: 100px; filter: blur(25px); opacity: 0.8; transition: background 1.5s ease; box-shadow: inset -10px -10px 30px var(--cloud-shadow); }
+        .cloud::after, .cloud::before { content: ''; position: absolute; background: inherit; border-radius: 50%; }
+        .cloud::after { width: 100px; height: 100px; top: -50px; left: 50px; }
+        .cloud::before { width: 120px; height: 120px; top: -70px; right: 50px; }
+        @keyframes floatCloud { 0% { transform: translateX(-120%); } 100% { transform: translateX(120vw); } }
+        .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(white 2px, transparent 2px); background-size: 50px 50px; opacity: var(--star-opacity); transition: opacity 1.5s ease; z-index: -2; }
+
+        /* CRYSTAL UI */
         .crystal-card {
-            background: rgba(255, 255, 255, 0.15); /* Opacidad reducida para efecto cristal puro */
-            backdrop-filter: blur(40px) saturate(140%); /* Blur extremo y saturación */
-            -webkit-backdrop-filter: blur(40px) saturate(140%);
-            
-            /* Bordes de Cristal Pulido */
-            border: 1px solid rgba(255, 255, 255, 0.6); 
-            box-shadow: 
-                0 15px 35px rgba(0, 90, 160, 0.15), /* Sombra azulada etérea */
-                inset 0 0 20px rgba(255, 255, 255, 0.3); /* Brillo interior */
-            
-            border-radius: 30px; /* Redondeado moderno */
-            color: #1e293b; /* Texto oscuro obligatorio para legibilidad */
+            background: var(--glass-bg); 
+            backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border); 
+            box-shadow: var(--glass-shadow);
+            border-radius: 32px; 
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
-        /* UI Elements */
+        
+        .glass-input { 
+            background: rgba(0, 0, 0, 0.15); border: 1px solid rgba(255,255,255,0.25); 
+            color: #fff; font-family: 'Outfit', sans-serif; padding: 16px; width: 100%; border-radius: 16px; 
+            transition: all 0.3s; backdrop-filter: blur(10px); font-weight: 500; text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        .glass-input:focus { outline: none; background: rgba(0, 0, 0, 0.3); border-color: rgba(255,255,255,0.6); }
+        .glass-input::placeholder { color: rgba(255,255,255,0.7); }
+        .glass-input.area { height: 100px; resize: none; }
+        
         .tech-btn { 
-            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-            color: white; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; 
-            border-radius: 16px; padding: 18px 36px; transition: all 0.3s; cursor: pointer; 
-            border: 1px solid rgba(255,255,255,0.4); 
-            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3), inset 0 0 10px rgba(255,255,255,0.2); 
+            background: rgba(255, 255, 255, 0.95); color: #0f172a; font-family: 'Outfit', sans-serif; font-weight: 800; 
+            border-radius: 99px; padding: 18px 40px; transition: all 0.3s; border: none; cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
         }
-        .tech-btn:hover { 
-            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-            transform: translateY(-3px) scale(1.02); 
-            box-shadow: 0 15px 30px rgba(2, 132, 199, 0.4); 
+        .tech-btn:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(0,0,0,0.3); background: #ffffff; }
+
+        /* Golden Button */
+        .gold-btn {
+            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
+            color: #5e4606; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); border: 1px solid #FFF;
+            animation: pulseGold 3s infinite;
         }
+        .gold-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
+        @keyframes pulseGold { 0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); } 50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.9); } 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); } }
+
+        .header-stack { position: absolute; left: 50%; transform: translateX(-50%); top: 20px; display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 30; width: max-content; }
         
-        .glass-card { 
-            background: rgba(255, 255, 255, 0.3); 
-            border: 1px solid rgba(255, 255, 255, 0.5); 
-            transition: all 0.3s ease; cursor: pointer; overflow: hidden; position: relative; 
-            border-radius: 24px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        .glass-card:hover { border-color: #0ea5e9; transform: translateY(-5px); box-shadow: 0 20px 40px rgba(14, 165, 233, 0.2); }
-        .glass-card.selected { border-color: #0ea5e9; background: rgba(224, 242, 254, 0.5); box-shadow: 0 0 0 2px #0ea5e9; transform: scale(1.02); }
-        
-        .card-label { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, rgba(255,255,255,0.95), rgba(255,255,255,0)); padding: 20px 10px 15px 10px; text-align: center; font-family: 'Chakra Petch'; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; color: #0f172a; }
-
-        .quiz-input { background: transparent; border: none; border-bottom: 2px solid rgba(14, 165, 233, 0.5); width: 100%; padding: 20px; font-size: 1.5rem; color: #0f172a; text-align: center; font-family: 'Chakra Petch'; transition: all 0.3s; font-weight: 600; placeholder-color: #64748b; }
-        .quiz-input:focus { outline: none; border-color: #0ea5e9; background: rgba(14, 165, 233, 0.05); }
-        .glass-input { background: rgba(255, 255, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.6); color: #0f172a; font-family: 'Chakra Petch'; padding: 14px; width: 100%; border-radius: 12px; backdrop-filter: blur(5px); }
-        .glass-input:focus { outline: none; border-color: #0ea5e9; background: rgba(255, 255, 255, 0.7); }
-
-        .floating-credit { position: relative; margin-top: 60px; padding-bottom: 40px; width: 100%; text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #475569; font-family: 'Chakra Petch'; pointer-events: none; max-width: 90%; margin-left: auto; margin-right: auto; line-height: 1.6; font-weight: 600; text-shadow: 0 1px 0 rgba(255,255,255,0.5); }
-
-        .fade-enter { animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .custom-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.5); border-radius: 4px; }
-        
-        .gold-btn { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; border-radius: 12px; padding: 14px 20px; transition: all 0.2s; cursor: pointer; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); border: 1px solid #fcd34d; position: relative; overflow: hidden; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
-        .gold-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(245, 158, 11, 0.5); }
 
-        .editor-btn { background: rgba(255,255,255,0.6); color: #0f172a; border: 1px solid rgba(255,255,255,0.7); font-weight: 700; backdrop-filter: blur(5px); }
-        .editor-btn:hover { background: #0ea5e9; color: white; border-color: #0ea5e9; }
-        .avatar-wrapper { position: relative; overflow: hidden; border-radius: 999px; transition: all 0.5s ease; border: 4px solid rgba(255,255,255,0.9); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(14, 165, 233, 0.1), transparent); background-size: 100% 30%; animation: scan 3s linear infinite; pointer-events: none; z-index: 20; opacity: 0.5; }
-        @keyframes scan { 0% { background-position: 0% -30%; } 100% { background-position: 0% 130%; } }
+        .back-arrow-btn {
+            position: absolute; top: 24px; left: 24px; 
+            width: 44px; height: 44px; border-radius: 50%;
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(15px);
+            display: flex; items-center; justify-center;
+            cursor: pointer; transition: all 0.2s;
+            border: 1px solid rgba(255,255,255,0.3);
+            z-index: 60;
+        }
+        .back-arrow-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.1); }
 
-        .dropdown-menu { position: absolute; top: 120%; right: 0; width: 220px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: 0 10px 40px rgba(0,0,0,0.1); border-radius: 16px; padding: 8px; z-index: 100; animation: slideDown 0.2s ease-out; transform-origin: top right; }
-        @keyframes slideDown { from { opacity: 0; transform: scale(0.95) translateY(-10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        .dropdown-item { padding: 10px 12px; border-radius: 10px; font-size: 12px; font-weight: 600; color: #334155; cursor: pointer; transition: all 0.2s; display: flex; items-center; gap: 8px; }
-        .dropdown-item:hover { background: #e0f2fe; color: #0284c7; }
-        .dropdown-divider { height: 1px; background: rgba(0,0,0,0.05); margin: 6px 0; }
+        .god-badge { background: linear-gradient(45deg, #FFD700, #FFA500); color: white; font-weight: 900; font-size: 10px; padding: 2px 8px; border-radius: 99px; box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); animation: pulseGod 2s infinite; }
         
-        /* Floating Chat Button */
-        .chat-float { position: fixed; bottom: 20px; right: 80px; z-index: 90; animation: bounceIn 1s; }
-        @keyframes bounceIn { 0% { transform: scale(0); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .slider-container { position: relative; width: 100%; height: 500px; border-radius: 32px; overflow: hidden; cursor: ew-resize; box-shadow: 0 25px 60px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.4); transition: transform 0.3s; }
+        .slider-container:hover { transform: scale(1.01); }
+
+        /* Sparkle Button */
+        .sparkle-btn { position: absolute; right: 10px; top: 10px; background: linear-gradient(135deg, #FFD700, #FFA500); color: #fff; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,0,0.5); animation: pulse 2s infinite; z-index: 10; border: none; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
-    <audio id="sfx-click" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a7346b.mp3"></audio>
-    <audio id="sfx-process" src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_c2b3b469b7.mp3"></audio>
-    <audio id="sfx-success" src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_1728e273c4.mp3"></audio>
-
     <div id="root"></div>
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        const useTimeTheme = () => 'sky'; 
+        // --- ASSETS & DATA ---
+        const CEO_PHOTO = "roddy-ceo.jpg";
+        const CEO_EMAIL = "roddysmith23@hotmail.com";
+        const CEO_PASS = "Yosoyarca1721383220*";
         
-        // --- ASSETS ACTUALIZADOS (JORDAN 1s) ---
-        const JORDAN_ANTES_URL = 'https://raw.githubusercontent.com/roddysmith23-stack/click-ia-app/main/IMG_8399.jpg'; 
-        const JORDAN_DESPUES_URL = 'https://raw.githubusercontent.com/roddysmith23-stack/click-ia-app/main/IMG_8401.jpg';
-        const MAGIC_RESULT_IMAGE_DEFAULT = JORDAN_DESPUES_URL; 
-        const UGLY_BURGER_IMAGE = JORDAN_ANTES_URL; 
-        const CREATOR_IMAGE = "./roddy-ceo.jpg"; 
-        const INITIAL_CREDITS = 3;
+        const apiKey = ""; // Provided by environment
 
-        const Icons = {
-            SunLogo: () => (
-                <svg className={`sun-icon w-20 h-20 md:w-24 md:h-24`} viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                    <circle cx="12" cy="12" r="6" />
-                    <g stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                        <line x1="12" y1="1" x2="12" y2="4" />
-                        <line x1="12" y1="20" x2="12" y2="23" />
-                        <line x1="4.22" y1="4.22" x2="6.34" y2="6.34" />
-                        <line x1="17.66" y1="17.66" x2="19.78" y2="19.78" />
-                        <line x1="1" y1="12" x2="4" y2="12" />
-                        <line x1="20" y1="12" x2="23" y2="12" />
-                        <line x1="4.22" y1="19.78" x2="6.34" y2="17.66" />
-                        <line x1="17.66" y1="6.34" x2="19.78" y2="4.22" />
-                    </g>
-                </svg>
-            ),
-            Google: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"/></svg>,
-            Upload: () => <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>,
-            Zap: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>,
-            Check: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>,
-            ChevronLeft: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>,
-            Volume2: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>,
-            VolumeX: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>,
-            Credit: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.15-1.46-3.27-3.4h1.96c.1 1.05 1.18 1.91 2.53 1.91 1.38 0 2.36-.83 2.36-1.9 0-1.07-.69-1.58-2.61-2.17-2.24-.68-3.37-1.62-3.37-3.43 0-1.73 1.37-3.1 3.07-3.44V3.98h2.67v1.96c1.56.35 2.76 1.54 2.91 3.14h-1.98c-.13-1.01-1.02-1.68-2.18-1.68-1.24 0-2.15.79-2.15 1.8 0 .95.63 1.46 2.36 2.01 2.43.77 3.62 1.74 3.62 3.62 0 1.9-1.42 3.09-3.23 3.26z"/></svg>,
-            Copy: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>,
-            Edit: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
-            Key: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>,
-            Text: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>,
-            Image: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>,
-            Trash: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
-            Download: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
-            X: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
-            ChevronDown: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>,
-            Sliders: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>,
-            Undo: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>,
-            Redo: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/></svg>,
-            Star: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>,
-            Clock: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
-            User: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
-            Logout: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>,
-            Message: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        };
-
-        const STYLES_DATA = [
-            { id: 'realistic', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400' },
-            { id: 'cinematic', img: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=400' }, 
-            { id: 'luxury', img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400' },
-            { id: 'neon', img: 'https://images.unsplash.com/photo-1555212697-194d092e3b8f?q=80&w=400' },
-            { id: '3d', img: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=400' },
-            { id: 'cyber', img: 'https://images.unsplash.com/photo-1515630278258-407f66498911?q=80&w=400' }
+        // --- NUEVA DATA: GALERÍA DE TRANSFORMACIONES ---
+        const TRANSFORMATIONS = [
+            {
+                id: 'jordan',
+                title: "Air Jordan 1 High",
+                desc: "De foto casera a estudio profesional 8K con iluminación dramática.",
+                before: 'IMG_8399.jpg', // Usando las imágenes locales subidas
+                after: 'IMG_8401.jpg',
+                tag: "CALZADO"
+            },
+            {
+                id: 'burger',
+                title: "Hamburguesa Gourmet",
+                desc: "Transformación a fotografía culinaria editorial con fondo rústico.",
+                // Placeholder de alta calidad para ejemplo
+                before: 'https://image.pollinations.ai/prompt/A%20simple%20photo%20of%20a%20burger%20on%20a%20plain%20white%20plate%20on%20a%20kitchen%20counter?width=800&height=800&nologo=true&seed=101',
+                after: 'https://image.pollinations.ai/prompt/A%20gourmet%20burger%20with%20melting%20cheese%20and%20bacon,%20cinematic%20lighting,%20dark%20rustic%20wood%20background,%20smoke,%208k%20food%20photography?width=800&height=800&nologo=true&seed=101',
+                tag: "GASTRONOMÍA"
+            },
+            {
+                id: 'watch',
+                title: "Reloj Minimalista",
+                desc: "Integración de producto en un entorno de lujo y sofisticación.",
+                // Placeholder de alta calidad para ejemplo
+                before: 'https://image.pollinations.ai/prompt/A%20simple%20product%20shot%20of%20a%20silver%20minimalist%20watch%20on%20a%20grey%20background?width=800&height=800&nologo=true&seed=202',
+                after: 'https://image.pollinations.ai/prompt/A%20silver%20minimalist%20watch%20resting%20on%20dark%20marble,%20next%20to%20a%20glass%20of%20whiskey,%20soft%20warm%20luxury%20lighting,%20shallow%20depth%20of%20field?width=800&height=800&nologo=true&seed=202',
+                tag: "LUJO"
+            }
         ];
 
-        const LIGHTING_DATA = [
-            { id: 'studio', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400' },
-            { id: 'neon', img: 'https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=400' },
-            { id: 'golden', img: 'https://images.unsplash.com/photo-1477346611705-65d1883cee1e?q=80&w=400' },
-            { id: 'dramatic', img: 'https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?q=80&w=400' }
-        ];
+        // --- PROMPT MAESTRO ---
+        const MOTHER_PROMPT_INSTRUCTION = `Actúa como un Director Creativo de Élite Mundial y Experto en Marketing. Tu objetivo es recibir datos de un cliente y devolver un OBJETO JSON para ejecutar una campaña.
+REGLAS DE GENERACIÓN DE IMAGEN:
+1. FIDELIDAD: Analiza qué vende el cliente. Si es 'Hamburguesa', el prompt debe describir una hamburguesa. NO cambies la naturaleza del objeto.
+2. ESTILO: Aplica el estilo visual solicitado. Usa términos de fotografía profesional (8k, octane render, studio lighting).
+3. LIMPIEZA: ¡PROHIBIDO TEXTO! Añade '--no text, no watermark, no letters'.
+4. CAPAS: Separa el prompt del fondo para poder generar capas.
 
-        const COLOR_GROUPS = {
-            "NEUTROS": ["#FFFFFF", "#000000", "#F5F5F5", "#D3D3D3", "#808080", "#333333"],
-            "NUDE": ["#E3D1C4", "#D7B8A3", "#C7A188", "#B88E76", "#A87F63", "#8D6E55", "#6F4F1D", "#5D4037", "#3E2723"],
-            "PRIMARIOS": ["#FF0000", "#0000FF", "#FFFF00"],
-            "SECUNDARIOS": ["#00FF00", "#FFA500", "#800080"],
-            "TERCIARIOS": ["#FF4500", "#FFD700", "#ADFF2F", "#00CED1", "#8A2BE2", "#C71585"],
-            "CUATERNARIOS": ["#800000", "#808000", "#008080", "#000080"]
-        };
+FORMATO DE RESPUESTA (JSON ESTRICTO):
+{
+  "full_image_prompt": "Prompt completo técnico en inglés...",
+  "background_prompt": "Descripción SOLO del entorno/fondo (sin el producto), desenfocado, iluminación perfecta, en inglés...",
+  "viral_copy": "Texto persuasivo para redes sociales (con precio y promo si hay)...",
+  "viral_score": 9.8,
+  "lighting_instructions": "Instrucciones breves de iluminación en español"
+}
+INPUT DEL USUARIO: `;
 
+        // --- TRADUCCIONES ---
         const TRANSLATIONS = {
             ES: {
-                enter: "INGRESAR", prices: "VER PRECIOS", faq: "PREGUNTAS", powered: "POTENCIADO POR GOOGLE GEMINI",
-                hero_mk: "EL FUTURO DEL MARKETING", hero_auto: "PARA EMPRESAS.",
-                bullets: ['Última Tecnología', 'Velocidad Luz', 'Neuromarketing', 'Ahorro Total', 'Experto en Ventas'],
-                cta_trial: "RECIBE UNA PRUEBA GRATIS", cta_posts: "GENERA 50 POST AL MES",
-                setup_title: "IDENTIFICACIÓN", setup_desc: "Ingresa tus datos para conectar tu cuenta.", setup_btn: "CONECTAR Y ENTRAR",
-                lbl_email: "TU CORREO ELECTRÓNICO", ph_email: "ejemplo@empresa.com",
-                lbl_api: "TU GOOGLE GEMINI API KEY", ph_api: "Pega tu clave AIza...",
-                upload_title: "Fase 1: Carga de Activos", upload_prod: "PRODUCTO", upload_logo: "LOGOTIPO", next: "SIGUIENTE",
-                q1_title: "¿QUIÉN ES TU CLIENTE?", q1_ph: "Ej: Mujeres jóvenes, deportistas...",
-                q2_title: "DETALLES DEL PRODUCTO", q2_p1: "¿Qué vendes? (Ej: Hamburguesa)", q2_p2: "Precio ($)", q2_p3: "Promoción (Opcional)",
-                q3_title: "DATOS DE EMPRESA", q3_p1: "Nombre de tu empresa...", q3_p2: "WhatsApp (593...)",
-                q4_title: "TU INSPIRACIÓN", q4_ph1: "Ej: Apple, Nike...", q4_upload: "O Sube una foto de referencia", q4_change: "Cambiar Imagen",
-                q5_title: "PALETA DE COLORES", style_title: "ELIGE EL ESTILO", light_title: "ILUMINACIÓN",
-                google_data: "Google Data Pro", google_desc: "Usar datos reales de búsqueda",
-                gen_btn: "GENERAR CAMPAÑA", processing: "PROCESANDO DATOS...", result_title: "RESULTADOS",
-                viral_score: "Viral Score", viral_desc: "Alto potencial de alcance orgánico detectado.",
-                schedule: "Cronograma IA", copy_viral: "Copy Viral", star_text: "TEXTO ESTRELLA ★",
-                trends: "Tendencias Detectadas", publish: "PUBLICAR AHORA", new_btn: "NUEVO", ready: "LISTO",
-                credits: "CRÉDITOS", color_n: "NEUTROS", color_nu: "NUDE", color_p: "PRIMARIOS", color_s: "SECUNDARIOS", color_t: "TERCIARIOS", color_q: "CUATERNARIOS",
-                loading_steps: ["BUSCANDO EN LA WEB...", "ANALIZANDO TENDENCIAS...", "ESTRUCTURANDO ESTRATEGIA...", "GENERANDO IMAGEN 8K...", "REDACTANDO COPY VIRAL..."],
-                credit_text: '"Si para el universo no existen límites, no debería haber límites para la mente humana” — Roddy Smith',
-                creator_title: "NUESTRO CREADOR", creator_role: "CEO & FOUNDER", creator_bio: "Roddy Smith, visionario estratégico. Dominio total de la IA para cambiar el marketing global.",
-                creator_mission: "Nuestra misión es romper las barreras de entrada. MAG.IA nació para cambiar el mundo.",
-                download: "DESCARGAR IMAGEN", premium_download: "DESCARGAR 8K ULTRA (Valla) - $0.99",
-                copy_clipboard: "COPIAR TEXTO",
-                cloud_welcome: "BIENVENIDO A TU NUBE", cloud_desc: "Aquí guardamos todas tus campañas.",
-                // REBRANDING MAGIC STUDIO:
-                edit_design: "🛠️ ABRIR MAGIC STUDIO", editor_title: "MAGIC STUDIO", save_design: "GUARDAR DISEÑO", close_editor: "CERRAR",
-                edit_text_1: "Texto Principal", edit_text_2: "Subtítulo", edit_size: "Tamaño Logo",
-                default_promo: "Por tiempo limitado",
-                copy_headline: "¿Listo para el siguiente nivel?", copy_body_1: "No es solo", copy_body_2: "Es una experiencia.", copy_offer: "Oferta exclusiva:", copy_cta: "📲 Haz tu pedido aquí:",
-                plans: "PLANES", p_names: ["PRINCIPIANTE", "EMPRESA", "AGENCIA"], p_subs: ["MENSUAL", "PAGO ÚNICO 1 AÑO", "PAGO ÚNICO"], rec: "RECOMENDADO", buy: "COMPRAR AHORA", sel: "SELECCIONAR", f_1: ["1 Mes de Servicio", "4K High Definition", "50 Post Mensuales"], f_2: ["1 AÑO de Servicio", "8K High Definition", "100 Post Mensuales", "Soporte VIP"], f_3: ["1 Mes de Servicio", "8K High Definition", "Ilimitado", "Marca Blanca"], faq_title: "PREGUNTAS FRECUENTES", q1: "¿QUÉ ES MARKETING?", a1: "El Marketing no es vender. Es que te elijan.", q2: "¿PARA QUE SIRVE LA APP?", a2: "MAG.IA clona el cerebro de los mejores publicistas.", q3: "¿QUÉ GANO CON LA APP?", a3: "Ganas tiempo y calidad mundial.", before: "Antes", after: "Después",
-                s_realistic: 'Fotorealismo', s_cinematic: 'Cinemático', s_luxury: 'Lujo Minimal', s_neon: 'Neon Pop', s_3d: '3D Pixar', s_cyber: 'Cyberpunk',
-                l_studio: 'Luz de Estudio', l_studio_desc: 'Frontal Suave', l_neon: 'Neón', l_neon_desc: 'Lateral Color', l_golden: 'Hora Dorada', l_golden_desc: 'Trasera Solar', l_dramatic: 'Cinemático', l_dramatic_desc: 'Contraste Alto',
-                txt_top: 'TU MARCA', txt_bot: 'OFERTA LIMITADA',
-                login_google: "Iniciar con Google", profile: "Mi Perfil", switch_user: "Cambiar Usuario", sub: "Suscripción", logout: "Cerrar Sesión"
+                nav_prices: "Precios", nav_login: "Ingresar", 
+                hero_title: "El Futuro", hero_subtitle: "del Marketing", 
+                hero_desc: "Calidad Profesional • Neuromarketing IA • Velocidad Luz", 
+                cta_trial: "Prueba Gratis", cta_studio: "Abrir Magic Studio", swipe_hint: "Desliza para transformar",
+                ceo_quote: '"Si para el universo no existen límites, no debería haber límites para la mente humana"',
+                ceo_bio: "Roddy Smith, visionario estratégico. Dominio total de la IA para cambiar el marketing global.",
+                plan_basic_title: "Plan Básico", plan_basic_price: "$99", plan_basic_feat: "Solo Generación de Imágenes",
+                plan_pro_title: "Plan Pro", plan_pro_price: "$399", plan_pro_feat: "Suite Completa + Magic Studio",
+                plan_period: "/ mes", plan_year: "/ año",
+                empresa_btn: "Para Empresas", empresa_msg: "Deja tu contacto, Ventas te llamará.",
+                studio_lock_msg: "Magic Studio (Capas) es solo para PRO.",
+                promo_label: "Código Promotor", promo_ph: "EJ: RODDY20", pay_btn: "Confirmar Suscripción",
+                trial_error: "¡Ya usaste tus 3 créditos gratis!", trial_cta: "Suscríbete para continuar.",
+                login_title: "Acceso Seguro", login_btn: "Entrar",
+                processing: "ANALIZANDO...", processing_step1: "Estructurando Neuromarketing...", processing_step2: "Aplicando Filtros Pro...",
+                q_title: "Diseña tu Campaña", q_prod: "Producto", q_prod_ph: "Ej: Zapatillas deportivas", q_target: "Público", q_target_ph: "Ej: Jóvenes urbanos", q_wish: "Tarjeta de Deseos (Opcional)", q_wish_ph: "Ej: Que esté flotando en el espacio con luces neón", q_next: "Generar con IA",
+                res_title: "Resultado IA", res_down: "Descargar HD",
+                ai_suggestion: "✨ Idea Viral", ai_analyzing: "✨ Pensando...", chat_welcome: "Hola, soy ChatBoy. Pregúntame sobre marketing o la app.",
+                studio_title: "MAGIC STUDIO", studio_layer_bg: "Fondo (IA)", studio_layer_prod: "Producto (Tu Foto)", studio_layer_txt: "Texto/Overlay", studio_upscale: "UPSCALE 8K - $0.99",
+                gallery_title: "Galería de Transformaciones"
             },
             EN: {
-                enter: "ENTER", prices: "PRICING", faq: "FAQ", powered: "POWERED BY GOOGLE GEMINI",
-                hero_mk: "THE FUTURE OF MARKETING", hero_auto: "FOR BUSINESS.",
-                bullets: ['Latest Tech', 'Light Speed', 'Neuromarketing', 'Total Savings', 'Sales Expert'],
-                cta_trial: "GET FREE TRIAL", cta_posts: "GENERATE 50 POSTS/MO",
-                setup_title: "IDENTIFICATION", setup_desc: "Enter details to connect account.", setup_btn: "CONNECT & ENTER",
-                lbl_email: "YOUR EMAIL", ph_email: "example@company.com",
-                lbl_api: "YOUR GOOGLE GEMINI API KEY", ph_api: "Paste your AIza key...",
-                upload_title: "Phase 1: Asset Upload", upload_prod: "PRODUCT", upload_logo: "LOGO", next: "NEXT",
-                q1_title: "WHO IS YOUR CLIENT?", q1_ph: "Ex: Young women, athletes...",
-                q2_title: "PRODUCT DETAILS", q2_p1: "What do you sell? (Ex: Burger)", q2_p2: "Price ($)", q2_p3: "Promo (Optional)",
-                q3_title: "COMPANY DATA", q3_p1: "Company Name...", q3_p2: "WhatsApp...",
-                q4_title: "YOUR INSPIRATION", q4_ph1: "Ex: Apple, Nike...", q4_upload: "Or Upload Reference", q4_change: "Change Image",
-                q5_title: "COLOR PALETTE", style_title: "CHOOSE STYLE", light_title: "LIGHTING",
-                google_data: "Google Data Pro", google_desc: "Use real search data",
-                gen_btn: "GENERATE CAMPAIGN", processing: "PROCESSING DATA...", result_title: "RESULTS",
-                viral_score: "Viral Score", viral_desc: "High organic reach potential detected.",
-                schedule: "AI Schedule", copy_viral: "Viral Copy", star_text: "STAR TEXT ★",
-                trends: "Detected Trends", publish: "PUBLISH NOW", new_btn: "NEW", ready: "READY",
-                credits: "CREDITS", color_n: "NEUTRALS", color_nu: "NUDE", color_p: "PRIMARY", color_s: "SECONDARY", color_t: "TERTIARY", color_q: "QUATERNARY",
-                loading_steps: ["SEARCHING WEB...", "ANALYZING TRENDS...", "STRUCTURING STRATEGY...", "GENERATING 8K IMAGE...", "WRITING VIRAL COPY..."],
-                credit_text: '"Si para el universo no existen límites, no debería haber límites para la mente humana” — Roddy Smith', // Mandato CEO: Quote in Spanish always
-                creator_title: "OUR CREATOR", creator_role: "CEO & FOUNDER", creator_bio: "Roddy Smith, strategic visionary. Total mastery of AI to change global marketing.",
-                creator_mission: "Our mission is to break entry barriers. MAG.IA was born to change the world.",
-                download: "DOWNLOAD IMAGE", premium_download: "DOWNLOAD 8K ULTRA (Billboard) - $0.99",
-                copy_clipboard: "COPY TEXT",
-                cloud_welcome: "WELCOME TO CLOUD", cloud_desc: "We save your campaigns here.",
-                edit_design: "🛠️ OPEN MAGIC STUDIO", editor_title: "MAGIC STUDIO", save_design: "SAVE DESIGN", close_editor: "CLOSE",
-                edit_text_1: "Main Text", edit_text_2: "Subtitle", edit_size: "Logo Size",
-                default_promo: "Limited time",
-                copy_headline: "Ready for the next level?", copy_body_1: "It's not just", copy_body_2: "It's an experience.", copy_offer: "Exclusive offer:", copy_cta: "📲 Order here:",
-                plans: "PLANS", p_names: ["STARTER", "BUSINESS", "AGENCY"], p_subs: ["MONTHLY", "1 YEAR ONE-OFF", "ONE-OFF"], rec: "RECOMMENDED", buy: "BUY NOW", sel: "SELECT", f_1: ["1 Month Service", "4K High Definition", "50 Posts Monthly"], f_2: ["1 YEAR Service", "8K High Definition", "100 Posts Monthly", "VIP Support"], f_3: ["1 Month Service", "8K High Definition", "Unlimited", "White Label"], faq_title: "FAQ", q1: "WHAT IS MARKETING?", a1: "Marketing isn't selling. It's being chosen.", q2: "WHAT IS THIS APP?", a2: "MAG.IA clones top advertisers' brains.", q3: "BENEFITS?", a3: "Gain time and world-class quality.", before: "Before", after: "After",
-                s_realistic: 'Photorealism', s_cinematic: 'Cinematic', s_luxury: 'Minimal Luxury', s_neon: 'Neon Pop', s_3d: '3D Pixar', s_cyber: 'Cyberpunk',
-                l_studio: 'Studio Light', l_studio_desc: 'Soft Front', l_neon: 'Neon', l_neon_desc: 'Side Color', l_golden: 'Golden Hour', l_golden_desc: 'Back Sun', l_dramatic: 'Cinematic', l_dramatic_desc: 'High Contrast',
-                txt_top: 'YOUR BRAND', txt_bot: 'LIMITED OFFER',
-                login_google: "Login with Google", profile: "My Profile", switch_user: "Switch User", sub: "Subscription", logout: "Logout"
+                nav_prices: "Pricing", nav_login: "Login", 
+                hero_title: "The Future", hero_subtitle: "of Marketing", 
+                hero_desc: "Professional Quality • AI Neuromarketing • Light Speed", 
+                cta_trial: "Free Trial", cta_studio: "Open Magic Studio", swipe_hint: "Swipe to transform",
+                ceo_quote: '"If there are no limits for the universe, there should be no limits for the human mind"',
+                ceo_bio: "Roddy Smith, strategic visionary. Total mastery of AI to change global marketing.",
+                plan_basic_title: "Basic Plan", plan_basic_price: "$99", plan_basic_feat: "Image Generation Only",
+                plan_pro_title: "Pro Plan", plan_pro_price: "$399", plan_pro_feat: "Full Suite + Magic Studio",
+                plan_period: "/ mo", plan_year: "/ year",
+                empresa_btn: "For Enterprise", empresa_msg: "Leave contact, Sales will call.",
+                studio_lock_msg: "Magic Studio (Layers) is for PRO only.",
+                promo_label: "Promoter Code", promo_ph: "EX: RODDY20", pay_btn: "Confirm Subscription",
+                trial_error: "Free credits used!", trial_cta: "Subscribe to continue.",
+                login_title: "Secure Access", login_btn: "Login",
+                processing: "ANALYZING...", processing_step1: "Structuring Neuromarketing...", processing_step2: "Applying Pro Filters...",
+                q_title: "Design Campaign", q_prod: "Product", q_prod_ph: "Ex: Sports sneakers", q_target: "Audience", q_target_ph: "Ex: Urban youth", q_wish: "Wish Card (Optional)", q_wish_ph: "Ex: Floating in space with neon lights", q_next: "Generate with AI",
+                res_title: "AI Result", res_down: "Download HD",
+                ai_suggestion: "✨ Viral Idea", ai_analyzing: "✨ Thinking...", chat_welcome: "Hi, I'm ChatBoy. Ask me about marketing or the app.",
+                studio_title: "MAGIC STUDIO", studio_layer_bg: "Background (AI)", studio_layer_prod: "Product (Your Photo)", studio_layer_txt: "Text/Overlay", studio_upscale: "UPSCALE 8K - $0.99",
+                gallery_title: "Transformation Gallery"
+            },
+            FR: {
+                nav_prices: "Tarifs", nav_login: "Connexion", 
+                hero_title: "Le Futur", hero_subtitle: "du Marketing", 
+                hero_desc: "Qualité Professionnelle • Neuromarketing IA • Vitesse Lumière", 
+                cta_trial: "Essai Gratuit", cta_studio: "Ouvrir Magic Studio", swipe_hint: "Glissez pour transformer",
+                ceo_quote: '"S\'il n\'y a pas de limites pour l\'univers, il ne devrait pas y avoir de limites pour l\'esprit humain"',
+                ceo_bio: "Roddy Smith, visionnaire stratégique. Maîtrise totale de l'IA pour changer le marketing mondial.",
+                plan_basic_title: "Plan Basique", plan_basic_price: "99$", plan_basic_feat: "Génération d'Images Seule",
+                plan_pro_title: "Plan Pro", plan_pro_price: "399$", plan_pro_feat: "Suite Complète + Magic Studio",
+                plan_period: "/ mois", plan_year: "/ an",
+                empresa_btn: "Pour Entreprises", empresa_msg: "Laissez contact, Ventes appellera.",
+                studio_lock_msg: "Magic Studio (Calques) est exclusif aux membres PRO.",
+                promo_label: "Code Promoteur", promo_ph: "EX: RODDY20", pay_btn: "Confirmer l'abonnement",
+                trial_error: "Crédits gratuits épuisés !", trial_cta: "Abonnez-vous pour continuer.",
+                login_title: "Accès Sécurisé", login_btn: "Entrer",
+                processing: "ANALYSE...", processing_step1: "Structuration Neuromarketing...", processing_step2: "Filtres Pro...",
+                q_title: "Détails Campagne", q_prod: "Que vendez-vous?", q_prod_ph: "Ex: Baskets de sport", q_target: "Cible", q_target_ph: "Ex: Jeunes urbains", q_wish: "Carte de Vœux (Optionnel)", q_wish_ph: "Ex: Flottant dans l'espace avec néons", q_next: "Générer avec IA",
+                res_title: "Résultat IA", res_down: "Télécharger HD",
+                ai_suggestion: "✨ Idée Virale", ai_analyzing: "✨ Pensée...", chat_welcome: "Bonjour, je suis ChatBoy. Posez-moi vos questions.",
+                studio_title: "MAGIC STUDIO", studio_layer_bg: "Fond (IA)", studio_layer_prod: "Produit", studio_layer_txt: "Texte/Overlay", studio_upscale: "UPSCALE 8K - $0.99",
+                gallery_title: "Galerie de Transformation"
             }
         };
 
-        // --- COMPONENTES AUXILIARES ---
-        const AdBanner = () => {
-            const [adIndex, setAdIndex] = useState(0);
-            const ads = [
-                { bg: 'bg-gradient-to-r from-blue-100 to-white', text: 'ANÚNCIATE AQUÍ - GOOGLE ADS' },
-                { bg: 'bg-gradient-to-r from-yellow-100 to-white', text: 'TU MARCA ANTE MILLONES' },
-                { bg: 'bg-gradient-to-r from-green-100 to-white', text: 'OPTIMIZA TUS VENTAS HOY' }
-            ];
+        const Icons = {
+            Sun: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>,
+            Moon: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>,
+            Message: () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>,
+            Magic: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
+            Check: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>,
+            Close: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>,
+            User: () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>,
+            ArrowLeft: () => <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>,
+            Lock: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>,
+            Sparkle: () => <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>,
+            Layers: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+        };
 
+        // --- GEMINI API ---
+        const callGemini = async (prompt, isJson = false) => {
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { responseMimeType: isJson ? "application/json" : "text/plain" }
+                    })
+                });
+                const data = await response.json();
+                const text = data.candidates[0].content.parts[0].text;
+                return isJson ? JSON.parse(text) : text;
+            } catch (e) {
+                console.error("Gemini Error", e);
+                return null;
+            }
+        };
+
+        // --- COMPONENTES VISUALES ---
+        const CelestialCursor = () => {
+            const [pos, setPos] = useState({ x: -100, y: -100 });
             useEffect(() => {
-                const interval = setInterval(() => {
-                    setAdIndex(prev => (prev + 1) % ads.length);
-                }, 5000);
-                return () => clearInterval(interval);
+                const move = (e) => {
+                    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                    const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                    if (clientX) setPos({ x: clientX, y: clientY });
+                };
+                window.addEventListener('mousemove', move); window.addEventListener('touchmove', move);
+                return () => { window.removeEventListener('mousemove', move); window.removeEventListener('touchmove', move); }
             }, []);
-
             return (
-                <div className={`w-full max-w-lg h-24 rounded-xl border border-white/50 flex items-center justify-center mb-8 relative overflow-hidden transition-all duration-1000 ${ads[adIndex].bg} backdrop-blur-sm shadow-lg`}>
-                    <div className="absolute top-2 right-2 text-[8px] bg-black/10 text-black px-1 rounded">PUBLICIDAD</div>
-                    <p className="font-tech text-slate-600 text-xl tracking-widest animate-pulse">{ads[adIndex].text}</p>
-                    <div className="scan-line opacity-20"></div>
-                </div>
+                <>
+                    <div className="cursor-orb" style={{ left: pos.x, top: pos.y }}></div>
+                    <div className="cursor-dot" style={{ left: pos.x, top: pos.y }}></div>
+                </>
             );
+        };
+
+        const PixarSky = () => {
+            const clouds = useRef([...Array(5)].map((_, i) => ({
+                id: i, top: Math.random() * 50 + '%', width: 300 + Math.random() * 300 + 'px', height: 150 + Math.random() * 100 + 'px', duration: 60 + Math.random() * 40 + 's', delay: -Math.random() * 40 + 's', opacity: 0.8 + Math.random() * 0.2, scale: 0.8 + Math.random() * 0.6
+            })));
+            return (<div className="sky-container"><div className="stars"></div>{clouds.current.map(c => (<div key={c.id} className="cloud" style={{ top: c.top, width: c.width, height: c.height, left: '-20%', animation: `floatCloud ${c.duration} linear infinite`, animationDelay: c.delay, opacity: c.opacity, transform: `scale(${c.scale})` }}></div>))}</div>);
         };
 
         const NeuralBrain = () => {
             const canvasRef = useRef(null);
             useEffect(() => {
-                const canvas = canvasRef.current;
-                if (!canvas) return;
+                const canvas = canvasRef.current; if (!canvas) return;
                 const ctx = canvas.getContext('2d');
                 let width = canvas.width = 300; let height = canvas.height = 300;
                 let particles = [];
-                for(let i=0; i<60; i++) particles.push({x: Math.random()*width, y: Math.random()*height, vx: (Math.random()-0.5), vy: (Math.random()-0.5)});
+                for(let i=0; i<60; i++) particles.push({x: Math.random()*width, y: Math.random()*height, vx: (Math.random()-0.5)*2, vy: (Math.random()-0.5)*2});
                 const animate = () => {
                     ctx.clearRect(0,0,width,height);
                     particles.forEach((p, i) => {
                         p.x += p.vx; p.y += p.vy;
                         if(p.x < 0 || p.x > width) p.vx *= -1; if(p.y < 0 || p.y > height) p.vy *= -1;
-                        ctx.fillStyle = '#0ea5e9'; 
-                        ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
+                        ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fill();
                         particles.slice(i+1).forEach(p2 => {
                             let d = Math.hypot(p.x-p2.x, p.y-p2.y);
-                            if(d < 70) { 
-                                ctx.beginPath(); 
-                                ctx.strokeStyle = `rgba(14, 165, 233, ${0.4 * (1 - d/70)})`; 
-                                ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); 
-                            }
+                            if(d < 100) { ctx.beginPath(); ctx.strokeStyle = `rgba(255,255,255,${1 - d/100})`; ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); }
                         });
                     });
                     requestAnimationFrame(animate);
                 };
                 animate();
             }, []);
-            return <canvas ref={canvasRef} className="w-40 h-40 mx-auto mb-6 rounded-full bg-white/50 border border-white shadow-[0_0_40px_rgba(14,165,233,0.3)] backdrop-blur-md" />;
+            return <canvas ref={canvasRef} className="w-48 h-48 mx-auto mb-6 bg-white/5 rounded-full backdrop-blur-md border border-white/20 shadow-2xl" />;
         };
 
-        const ScheduleDisplay = ({ copy }) => (
-            <div className="crystal-card p-6 mt-6 border-l-4 border-[#0ea5e9]">
-                <h3 className="font-bold text-slate-800 uppercase mb-4 flex gap-2 items-center"><Icons.Clock /> Cronograma IA (Semanal)</h3>
-                <div className="space-y-3">
-                    <div className="flex gap-4 items-center bg-white/60 p-3 rounded-lg border border-white shadow-sm">
-                        <div className="font-black text-[#0ea5e9] text-sm min-w-[50px]">DÍA 1</div>
-                        <div className="text-xs text-slate-700">Video Viral (Hook Visual) - "{copy.substring(0,25)}..."</div>
-                    </div>
-                    <div className="flex gap-4 items-center bg-white/60 p-3 rounded-lg border border-white shadow-sm">
-                        <div className="font-black text-[#0ea5e9] text-sm min-w-[50px]">DÍA 3</div>
-                        <div className="text-xs text-slate-700">Carrusel Educativo - "Beneficios del Producto"</div>
-                    </div>
-                    <div className="flex gap-4 items-center bg-white/60 p-3 rounded-lg border border-white shadow-sm">
-                        <div className="font-black text-[#0ea5e9] text-sm min-w-[50px]">DÍA 5</div>
-                        <div className="text-xs text-slate-700">Meme/Relatable Content - Humor de nicho.</div>
-                    </div>
-                </div>
-            </div>
-        );
-
-        const ComparisonSlider = ({ beforeImage, afterImage, tLang }) => {
+        // --- COMPONENTES UI ---
+        // Slider genérico reutilizable
+        const ComparisonSlider = ({ beforeImg, afterImg }) => {
             const [sliderPos, setSliderPos] = useState(50);
             const containerRef = useRef(null);
             const handleMove = (e) => {
                 if (!containerRef.current) return;
                 const rect = containerRef.current.getBoundingClientRect();
-                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-                if (clientX === undefined) return;
-                const x = (clientX - rect.left) / rect.width * 100;
-                setSliderPos(Math.min(100, Math.max(0, x)));
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX); if (clientX === undefined) return;
+                const x = (clientX - rect.left) / rect.width * 100; setSliderPos(Math.min(100, Math.max(0, x)));
             };
             return (
-                <div className="relative w-full h-full overflow-hidden cursor-ew-resize select-none rounded-xl border border-white shadow-2xl bg-slate-100" ref={containerRef} onMouseMove={handleMove} onTouchMove={handleMove}>
-                    <img src={afterImage} id="despues" alt="After" className="absolute top-0 left-0 w-full h-full object-cover" />
-                    <div className="absolute top-0 left-0 h-full overflow-hidden border-r-2 border-[#0ea5e9]" style={{ width: `${sliderPos}%` }}><img src={beforeImage} id="antes" alt="Before" className="absolute top-0 left-0 h-full max-w-none object-cover" style={{ width: containerRef.current ? containerRef.current.offsetWidth : '100%' }} /></div>
-                    <div className="absolute top-1/2 w-10 h-10 bg-[#0ea5e9] rounded-full flex items-center justify-center text-white shadow-lg transform -translate-y-1/2 -translate-x-1/2 pointer-events-none" style={{ left: `${sliderPos}%` }}><Icons.Sliders /></div>
-                    <div className="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded uppercase shadow-md">{tLang.before}</div>
-                    <div className="absolute bottom-4 right-4 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded uppercase shadow-md">{tLang.after}</div>
+                <div className="slider-container" ref={containerRef} onMouseMove={handleMove} onTouchMove={handleMove}>
+                    <img src={afterImg} className="absolute inset-0 w-full h-full object-cover" alt="Después" />
+                    <div className="absolute inset-0 w-full h-full overflow-hidden border-r-4 border-white shadow-[0_0_30px_rgba(255,255,255,0.8)]" style={{ width: `${sliderPos}%` }}>
+                        <img src={beforeImg} className="absolute inset-0 w-full h-full object-cover max-w-none" style={{ width: containerRef.current?.offsetWidth }} alt="Antes" />
+                    </div>
+                    <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-14 h-14 bg-white rounded-full shadow-2xl flex items-center justify-center text-slate-900 z-10 hover:scale-110 transition-transform" style={{ left: `${sliderPos}%` }}>
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                    </div>
+                    <div className="absolute bottom-6 right-6 bg-black/60 backdrop-blur-md text-white px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase border border-white/20 pointer-events-none">AFTER</div>
+                    <div className="absolute bottom-6 left-6 bg-white/80 backdrop-blur-md text-black px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase border border-white/20 pointer-events-none">BEFORE</div>
                 </div>
             );
         };
 
-        const PricingCard = ({ title, price, features, recommended, onSelect, strike, sub, tLang }) => (
-            <div className={`relative p-6 md:p-8 rounded-2xl flex flex-col gap-6 transition-transform duration-300 hover:scale-105 ${recommended ? 'crystal-card border-[#0ea5e9] shadow-[0_20px_40px_rgba(14,165,233,0.15)] transform scale-105 z-10' : 'crystal-card opacity-90 hover:opacity-100'}`}>
-                {recommended && <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#0ea5e9] text-white font-black text-[10px] uppercase tracking-widest py-1 px-4 clip-path-slanted animate-pulse">{tLang.rec}</div>}
-                <div><h3 className="text-slate-500 font-bold uppercase tracking-widest text-xs mb-2 font-tech">{title}</h3><div className="flex items-baseline gap-1 justify-center md:justify-start"><span className="text-5xl font-black text-slate-800 font-tech">${price}</span>{strike && <span className="text-sm text-red-400 line-through font-bold">${strike}</span>}</div><p className="text-xs text-slate-400 mt-2 font-mono uppercase">{sub}</p></div>
-                <ul className="space-y-3 flex-1 my-6">{features.map((f, i) => (<li key={i} className="flex items-start gap-3 text-xs text-slate-600 font-tech"><div className={`mt-0.5 ${recommended ? 'text-[#0ea5e9]' : 'text-slate-400'}`}><Icons.Check /></div><span>{f}</span></li>))}</ul>
-                <button onClick={onSelect} className={`w-full py-4 font-black uppercase tracking-widest text-xs transition-all ${recommended ? 'tech-btn' : 'border border-slate-300 text-slate-600 hover:bg-slate-100 rounded-xl'}`}>{recommended ? tLang.buy : tLang.sel}</button>
-            </div>
-        );
+        const PricingModal = ({ onClose, t, forcedMessage }) => {
+            const [enterpriseMode, setEnterpriseMode] = useState(false);
+            const [contactEmail, setContactEmail] = useState("");
 
-        // --- MAGIC STUDIO 2.0 ---
-        const DesignEditor = ({ image, logo, initialText, onSave, onClose, tLang }) => {
-            const canvasRef = useRef(null);
-            const fabricCanvasRef = useRef(null);
-            const [selectedObj, setSelectedObj] = useState(null);
-            const historyRef = useRef([]);
-            const historyStepRef = useRef(-1);
-            const isTrackingRef = useRef(true);
-
-            useEffect(() => {
-                let timer;
-                const initCanvas = () => {
-                    const canvasElement = canvasRef.current;
-                    if (!canvasElement) return;
-                    if (fabricCanvasRef.current) { try { fabricCanvasRef.current.dispose(); } catch(e) {} fabricCanvasRef.current = null; }
-                    try {
-                        const canvas = new fabric.Canvas(canvasElement, { width: 800, height: 800, backgroundColor: '#f0f9ff' });
-                        fabricCanvasRef.current = canvas;
-                        canvas.on('selection:created', (e) => setSelectedObj(e.selected[0]));
-                        canvas.on('selection:updated', (e) => setSelectedObj(e.selected[0]));
-                        canvas.on('selection:cleared', () => setSelectedObj(null));
-                        canvas.on('object:modified', saveHistory);
-                        canvas.on('object:added', saveHistory);
-                        canvas.on('object:removed', saveHistory);
-                        if (image) {
-                            fabric.Image.fromURL(image, (img) => {
-                                if(!img || !fabricCanvasRef.current) return; 
-                                const maxWidth = 800;
-                                const scale = maxWidth / img.width;
-                                canvas.setWidth(img.width * scale);
-                                canvas.setHeight(img.height * scale);
-                                img.set({ originX: 'left', originY: 'top', scaleX: scale, scaleY: scale, selectable: false, evented: false });
-                                canvas.setBackgroundImage(img, () => { canvas.renderAll(); saveHistory(); });
-                                addTextToCanvas(canvas, initialText.top || "YOUR BRAND", 50, 50, initialText.colorTop || "#FFF");
-                                addTextToCanvas(canvas, initialText.bottom || "OFFER", 50, canvas.height - 100, initialText.colorBot || "#0ea5e9");
-                                if(logo) {
-                                    fabric.Image.fromURL(logo, (logoImg) => {
-                                        if(logoImg && fabricCanvasRef.current) {
-                                            logoImg.scaleToWidth(150);
-                                            logoImg.set({ left: canvas.width / 2 - 75, top: canvas.height / 2 - 75 });
-                                            canvas.add(logoImg);
-                                            canvas.setActiveObject(logoImg);
-                                        }
-                                    }, { crossOrigin: 'anonymous' });
-                                }
-                            }, { crossOrigin: 'anonymous' });
-                        }
-                    } catch (err) { console.error("Error initializing Fabric:", err); }
-                };
-                timer = setTimeout(initCanvas, 300);
-                return () => { clearTimeout(timer); if (fabricCanvasRef.current) { try { fabricCanvasRef.current.dispose(); } catch (e) {} fabricCanvasRef.current = null; } };
-            }, [image]); 
-
-            const saveHistory = () => { if(!isTrackingRef.current || !fabricCanvasRef.current) return; const json = JSON.stringify(fabricCanvasRef.current.toJSON()); if (historyStepRef.current < historyRef.current.length - 1) { historyRef.current = historyRef.current.slice(0, historyStepRef.current + 1); } historyRef.current.push(json); historyStepRef.current = historyRef.current.length - 1; };
-            const undo = () => { if (historyStepRef.current > 0 && fabricCanvasRef.current) { isTrackingRef.current = false; historyStepRef.current -= 1; const previousState = historyRef.current[historyStepRef.current]; fabricCanvasRef.current.loadFromJSON(previousState, () => { fabricCanvasRef.current.renderAll(); isTrackingRef.current = true; }); } };
-            const redo = () => { if (historyStepRef.current < historyRef.current.length - 1 && fabricCanvasRef.current) { isTrackingRef.current = false; historyStepRef.current += 1; const nextState = historyRef.current[historyStepRef.current]; fabricCanvasRef.current.loadFromJSON(nextState, () => { fabricCanvasRef.current.renderAll(); isTrackingRef.current = true; }); } };
-            const duplicate = () => { if(!fabricCanvasRef.current) return; const activeObj = fabricCanvasRef.current.getActiveObject(); if(activeObj) { activeObj.clone((cloned) => { fabricCanvasRef.current.discardActiveObject(); cloned.set({ left: cloned.left + 20, top: cloned.top + 20, evented: true }); fabricCanvasRef.current.add(cloned); fabricCanvasRef.current.setActiveObject(cloned); fabricCanvasRef.current.requestRenderAll(); saveHistory(); }); } };
-            const addTextToCanvas = (canvas, text, x, y, color) => { if(!canvas) return; const t = new fabric.IText(text, { left: x, top: y, fontFamily: 'Chakra Petch', fill: color, fontSize: 40, fontWeight: 'bold', shadow: 'rgba(0,0,0,0.8) 2px 2px 5px' }); canvas.add(t); canvas.setActiveObject(t); saveHistory(); };
-            const addNewText = () => { if(fabricCanvasRef.current) addTextToCanvas(fabricCanvasRef.current, "TEXTO NUEVO", 100, 100, "#FFFFFF"); };
-            const handleImageUpload = (e) => { const file = e.target.files[0]; if(file && fabricCanvasRef.current) { const reader = new FileReader(); reader.onload = (f) => { fabric.Image.fromURL(f.target.result, (img) => { img.scaleToWidth(200); img.set({ left: 100, top: 100 }); fabricCanvasRef.current.add(img); fabricCanvasRef.current.setActiveObject(img); saveHistory(); }); }; reader.readAsDataURL(file); } };
-            const updateSelected = (prop, value) => { if(fabricCanvasRef.current && selectedObj) { selectedObj.set(prop, value); fabricCanvasRef.current.requestRenderAll(); saveHistory(); } };
-            const deleteSelected = () => { if(fabricCanvasRef.current && selectedObj) { fabricCanvasRef.current.remove(selectedObj); setSelectedObj(null); saveHistory(); } };
-            const download = () => { if(fabricCanvasRef.current) { const dataURL = fabricCanvasRef.current.toDataURL({ format: 'jpeg', quality: 0.9, multiplier: 2 }); const link = document.createElement('a'); link.download = `MAGIA_DESIGN_${Date.now()}.jpg`; link.href = dataURL; link.click(); } };
+            const handleEnterpriseSubmit = () => {
+                if(contactEmail) {
+                    alert(`Gracias. Hemos enviado tu solicitud a ${CEO_EMAIL}. Nuestro equipo de ventas te contactará pronto.`);
+                    onClose();
+                }
+            };
 
             return (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-sky-900/40 p-4 fade-enter backdrop-blur-md">
-                    <div className="w-[95%] h-[90%] flex border border-white/40 rounded-2xl overflow-hidden bg-white/80 shadow-2xl">
-                        <div className="w-80 crystal-card border-r-0 p-6 flex flex-col gap-6 overflow-y-auto custom-scroll bg-white/50">
-                             <h3 className="font-tech text-slate-800 text-2xl mb-2 flex items-center gap-2">
-                                {tLang.editor_title}
-                                <span className="bg-yellow-400 text-yellow-900 text-[10px] px-2 py-1 rounded-full font-bold shadow-sm">PRO</span>
-                             </h3>
-                             <div className="flex gap-2 mb-2"><button onClick={undo} className="editor-btn flex-1 py-2 text-xs rounded-lg" title="Deshacer"><Icons.Undo /> UNDO</button><button onClick={redo} className="editor-btn flex-1 py-2 text-xs rounded-lg" title="Rehacer"><Icons.Redo /> REDO</button></div>
-                             <button onClick={duplicate} className="editor-btn w-full py-3 text-xs flex gap-2 justify-center mb-2 rounded-lg" title="Duplicar"><Icons.Copy /> DUPLICAR</button>
-                             <div className="grid grid-cols-2 gap-2"><button onClick={addNewText} className="editor-btn text-xs flex-col py-3 rounded-lg"><Icons.Text /> TEXTO</button><label className="editor-btn text-xs flex-col py-3 cursor-pointer rounded-lg"><Icons.Image /> IMAGEN <input type="file" hidden onChange={handleImageUpload} /></label></div>
-                             {selectedObj ? (
-                                 <div className="space-y-4 animate-pulse-fast bg-white/80 p-4 rounded-xl border border-white">
-                                     <p className="text-[10px] font-bold text-slate-400 uppercase">EDITANDO: {selectedObj.type}</p>
-                                     {selectedObj.type === 'i-text' && (
-                                         <>
-                                            <div className="flex gap-2"><input type="color" className="h-8 w-8 bg-transparent cursor-pointer rounded" onChange={e => updateSelected('fill', e.target.value)} /><input type="range" className="flex-1 accent-[#0ea5e9]" min="10" max="200" value={selectedObj.fontSize} onChange={e => updateSelected('fontSize', parseInt(e.target.value))} /></div>
-                                            <select className="glass-input text-xs" onChange={e => updateSelected('fontFamily', e.target.value)} value={selectedObj.fontFamily}><option value="Chakra Petch">Tech (Chakra)</option><option value="Inter">Modern (Inter)</option><option value="Oswald">Impact (Oswald)</option><option value="Playfair Display">Luxury (Serif)</option><option value="Montserrat">Clean (Montserrat)</option><option value="Roboto Mono">Code (Mono)</option><option value="Bebas Neue">Bebas (Condensed)</option><option value="Roboto Slab">Slab (Geometric)</option></select>
-                                         </>
-                                     )}
-                                     <div className="flex gap-2 items-center"><span className="text-xs text-slate-500">Opacidad</span><input type="range" className="accent-[#0ea5e9]" min="0" max="1" step="0.1" value={selectedObj.opacity} onChange={e => updateSelected('opacity', parseFloat(e.target.value))} /></div>
-                                     <button onClick={deleteSelected} className="w-full py-2 bg-red-100 text-red-600 rounded text-xs flex items-center justify-center gap-2 hover:bg-red-200"><Icons.Trash /> ELIMINAR</button>
-                                 </div>
-                             ) : <div className="text-center py-10 text-slate-500 text-xs">Selecciona un elemento.</div>}
-                             <div className="mt-auto flex flex-col gap-2"><button onClick={download} className="tech-btn w-full flex justify-center gap-2 text-xs"><Icons.Download /> EXPORTAR HD</button><button onClick={onClose} className="w-full py-3 border border-slate-300 rounded-lg text-xs hover:bg-slate-100 text-slate-600">{tLang.close_editor}</button></div>
-                        </div>
-                        <div className="flex-1 bg-slate-200 canvas-container flex items-center justify-center relative overflow-hidden p-10"><canvas ref={canvasRef} /></div>
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-lg p-4 fade-in">
+                    <div className="crystal-card p-10 max-w-2xl w-full relative">
+                        <div className="back-arrow-btn" onClick={onClose}><Icons.ArrowLeft /></div>
+                        
+                        {enterpriseMode ? (
+                            <>
+                                <h2 className="text-4xl font-display font-bold mb-4 text-center mt-4 text-shadow">{t.empresa_btn}</h2>
+                                <p className="text-center text-sm mb-8 font-body opacity-90 text-shadow">{t.empresa_msg}</p>
+                                <div className="space-y-4">
+                                    <input className="glass-input" placeholder="Tu Correo Corporativo" value={contactEmail} onChange={e => setContactEmail(e.target.value)} />
+                                    <textarea className="glass-input h-32" placeholder="Mensaje (Opcional)"></textarea>
+                                    <button className="tech-btn w-full mt-4" onClick={handleEnterpriseSubmit}>ENVIAR A VENTAS</button>
+                                    <button className="text-xs text-white/70 underline w-full text-center mt-2" onClick={() => setEnterpriseMode(false)}>Volver a Planes</button>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <h2 className="text-4xl font-display font-bold mb-2 text-center mt-4 text-shadow">{t.nav_prices}</h2>
+                                <p className="text-center text-sm mb-8 font-body opacity-90 text-shadow">{forcedMessage || "Elige tu poder."}</p>
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    {/* PLAN BÁSICO */}
+                                    <div className="bg-white/20 p-6 rounded-3xl border border-white/30 flex flex-col items-center backdrop-blur-md hover:scale-105 transition-transform">
+                                        <h3 className="font-bold text-lg mb-2">{t.plan_basic_title}</h3>
+                                        <span className="font-display font-bold text-4xl text-shadow">{t.plan_basic_price}</span>
+                                        <span className="text-xs font-label opacity-80 mt-1 text-shadow">{t.plan_period}</span>
+                                        <p className="text-xs mt-4 text-center opacity-90">{t.plan_basic_feat}</p>
+                                        <button className="tech-btn w-full mt-4 text-xs">ELEGIR</button>
+                                    </div>
+                                    {/* PLAN PRO */}
+                                    <div className="bg-blue-600/40 p-6 rounded-3xl border border-blue-400/50 flex flex-col items-center backdrop-blur-md hover:scale-105 transition-transform relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 bg-yellow-400 text-black text-[10px] font-bold px-3 py-1 rounded-bl-xl">RECOMENDADO</div>
+                                        <h3 className="font-bold text-lg mb-2">{t.plan_pro_title}</h3>
+                                        <span className="font-display font-bold text-4xl text-shadow">{t.plan_pro_price}</span>
+                                        <span className="text-xs font-label opacity-80 mt-1 text-shadow">{t.plan_period}</span>
+                                        <p className="text-xs mt-4 text-center opacity-90">{t.plan_pro_feat}</p>
+                                        <button className="tech-btn w-full mt-4 text-xs bg-white text-blue-900">ELEGIR PRO</button>
+                                    </div>
+                                </div>
+                                <div className="mt-6 pt-6 border-t border-white/20">
+                                    <button onClick={() => setEnterpriseMode(true)} className="w-full glass-input text-center font-bold hover:bg-white/20 cursor-pointer">{t.empresa_btn}</button>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             );
         };
 
-        const ChatBot = () => {
-            const [open, setOpen] = useState(false);
+        const LoginModal = ({ onClose, onLoginSuccess, t }) => {
+            const [email, setEmail] = useState("");
+            const [pass, setPass] = useState("");
+            const handleSubmit = () => {
+                if (email === CEO_EMAIL && pass === CEO_PASS) onLoginSuccess(true); else onLoginSuccess(false);
+                onClose();
+            };
             return (
-                <div className="fixed bottom-5 right-5 z-[80] flex flex-col items-end">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-lg p-4 fade-in">
+                    <div className="crystal-card p-10 max-w-sm w-full relative">
+                        <div className="back-arrow-btn" onClick={onClose}><Icons.ArrowLeft /></div>
+                        <h2 className="text-3xl font-display font-bold mb-8 text-center mt-4 text-shadow flex justify-center items-center gap-2"><Icons.Lock /> {t.login_title}</h2>
+                        <div className="space-y-5">
+                            <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="glass-input" />
+                            <input type="password" placeholder="Password" value={pass} onChange={e => setPass(e.target.value)} className="glass-input" />
+                            <button onClick={handleSubmit} className="tech-btn w-full">{t.login_btn}</button>
+                        </div>
+                        <div className="text-center mt-4 text-[10px] opacity-60 font-mono">SECURE ENCLAVE CONNECTION</div>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- CHATBOY (ASISTENTE VIRTUAL CON GEMINI) ---
+        const ChatBoy = ({ t }) => {
+            const [open, setOpen] = useState(false);
+            const [msgs, setMsgs] = useState([{ role: 'bot', text: `🤖 ${t.chat_welcome || "Hola, soy ChatBoy. ¿Dudas sobre precios o funciones?"}` }]);
+            const [input, setInput] = useState("");
+            const [isLoading, setIsLoading] = useState(false);
+
+            const handleSend = async () => {
+                if(!input.trim()) return;
+                const userMsg = { role: 'user', text: input };
+                setMsgs(prev => [...prev, userMsg]);
+                setInput("");
+                setIsLoading(true);
+                
+                const prompt = `Eres ChatBoy, el asistente virtual experto en marketing de la app MAG.IA. Responde de forma breve y útil a: "${input}". Si preguntan precios: Plan Básico $99, Pro $399. Si preguntan funciones: Generación de imágenes con IA, Neuromarketing y Magic Studio.`;
+                const aiReply = await callGemini(prompt);
+                
+                setIsLoading(false);
+                setMsgs(prev => [...prev, { role: 'bot', text: aiReply || "Lo siento, estoy procesando demasiados datos. Intenta de nuevo." }]);
+            };
+
+            return (
+                <div className="fixed bottom-8 right-8 z-[90] flex flex-col items-end">
                     {open && (
-                         <div className="mb-4 w-72 crystal-card p-4 fade-enter shadow-2xl border-[#0ea5e9]">
-                            <div className="flex justify-between items-center mb-3 pb-2 border-b border-slate-200">
-                                <h4 className="font-bold font-tech text-slate-800 text-sm flex items-center gap-2"><Icons.Message /> SOPORTE MAG.IA</h4>
-                                <button onClick={() => setOpen(false)} className="text-slate-400 hover:text-red-500"><Icons.X /></button>
+                        <div className="mb-4 w-80 crystal-card p-5 fade-in origin-bottom-right shadow-2xl bg-black/40 border-white/40 backdrop-blur-xl">
+                            <div className="flex justify-between items-center mb-4 pb-2 border-b border-white/20">
+                                <h4 className="font-bold text-sm flex items-center gap-2 text-shadow">CHATBOY <span className="text-[10px] bg-blue-500 px-1 rounded">AI</span></h4>
+                                <button onClick={() => setOpen(false)}><Icons.Close /></button>
                             </div>
-                            <div className="h-32 bg-white/50 rounded-lg mb-3 p-3 text-xs text-slate-600 overflow-y-auto border border-white font-mono">
-                                <p className="mb-2"><strong>IA:</strong> ¡Hola! Soy el asistente virtual de Roddy. ¿En qué puedo ayudarte hoy?</p>
+                            <div className="h-64 bg-white/10 rounded-xl mb-4 p-4 text-sm font-body overflow-y-auto flex flex-col gap-3">
+                                {msgs.map((m, i) => (
+                                    <div key={i} className={`p-3 rounded-lg max-w-[80%] ${m.role === 'bot' ? 'bg-white/20 self-start rounded-tl-none' : 'bg-blue-500/50 self-end rounded-tr-none'}`}>
+                                        <p className="text-shadow">{m.text}</p>
+                                    </div>
+                                ))}
+                                {isLoading && <div className="text-xs opacity-50 animate-pulse">Escribiendo...</div>}
                             </div>
                             <div className="flex gap-2">
-                                <input className="glass-input text-xs" placeholder="Escribe..." />
-                                <button className="bg-[#0ea5e9] text-white p-2 rounded-lg"><Icons.Zap /></button>
+                                <input className="glass-input py-3 text-sm" placeholder="..." value={input} onChange={e => setInput(e.target.value)} onKeyPress={e => e.key === 'Enter' && handleSend()} />
+                                <button onClick={handleSend} className="p-3 bg-white/20 rounded-xl hover:bg-white/40"><Icons.Message /></button>
                             </div>
                         </div>
                     )}
-                    <button onClick={() => setOpen(!open)} className="chat-float tech-btn w-14 h-14 rounded-full flex items-center justify-center p-0 shadow-xl">
+                    <button onClick={() => setOpen(!open)} className="tech-btn w-16 h-16 rounded-full flex items-center justify-center p-0 shadow-2xl hover:scale-110 transition-transform">
                         <Icons.Message />
                     </button>
                 </div>
             );
         };
 
-        const QuestionScreen = ({ title, color, children, onNext, onPrev, credits, setView, tLang, theme }) => (
-            <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative z-10">
-                <HeaderInternal credits={credits} setView={setView} t={tLang} theme={theme} />
-                <div className="w-full max-w-2xl crystal-card p-12 rounded-3xl text-center relative mt-20">
-                    <div className="absolute top-8 left-8 cursor-pointer text-slate-400 hover:text-slate-900 transition-colors" onClick={onPrev}><Icons.ChevronLeft /></div>
-                    <h2 className={`text-2xl font-bold font-tech mb-8 text-slate-800 drop-shadow-sm`}>{title}</h2>
-                    {children}
-                    <button onClick={onNext} className="tech-btn w-full mt-10 py-4 rounded-xl">{tLang.next}</button>
+        // --- HEADER ---
+        const Header = ({ setView, theme, toggleTheme, user, onOpenLogin, onShowPricing, lang, setLang }) => (
+            <div className="w-full h-28 relative z-50 px-8 flex items-center justify-between">
+                <div className="flex items-center gap-4 w-1/3">
+                    <div className="crystal-card px-2 py-1 flex items-center gap-1 shadow-sm bg-white/20 backdrop-blur-md">
+                        {['ES', 'EN', 'FR'].map(l => ( 
+                            <button key={l} onClick={() => setLang(l)} className={`text-[10px] font-bold font-label px-3 py-1.5 rounded-full transition-all ${lang === l ? 'bg-black text-white' : 'text-white/70 hover:text-white'}`}>{l}</button> 
+                        ))}
+                    </div>
+                    <button onClick={onShowPricing} className="glass-input px-6 py-3 text-xs font-bold w-auto hover:bg-white/30 cursor-pointer text-shadow hidden md:block">PRECIOS</button>
                 </div>
-                <div className="floating-credit">{tLang.credit_text}</div>
-            </div>
-        );
-
-        // --- HEADER INTERNAL (Simple Header for Inner Pages) ---
-        const HeaderInternal = ({ credits, setView, t, theme }) => (
-            <div className="absolute top-0 left-0 w-full p-4 md:p-6 flex justify-center items-start gap-6 z-50 pointer-events-none">
-                <div className="pointer-events-auto absolute left-4 md:left-8 top-6">
-                    <button onClick={() => setView('pricing')} className="flex items-center gap-2 px-4 py-2 bg-white/40 backdrop-blur-md rounded-full border border-white/60 hover:border-white hover:scale-105 transition-all shadow-lg group">
-                        <span className="text-yellow-500 group-hover:rotate-12 transition-transform"><Icons.Credit /></span>
-                        <span className="text-xs font-bold font-tech text-slate-800">{credits} {t.credits}</span>
-                        <span className="w-4 h-4 bg-sky-500 text-white rounded-full flex items-center justify-center text-[10px] font-bold">+</span>
+                <div className="header-stack group w-1/3 flex justify-center" onClick={() => setView('landing')}>
+                    <h1 className="text-6xl font-display font-black tracking-tight text-center leading-none drop-shadow-2xl text-shadow cursor-pointer transform hover:scale-105 transition-transform">MAG.IA</h1>
+                    <div className="readable-text text-[9px] font-label text-center tracking-[0.3em] mt-2 font-bold uppercase">Potenciado por Google Gemini</div>
+                </div>
+                <div className="flex items-center gap-4 w-1/3 justify-end">
+                    <button onClick={toggleTheme} className="w-12 h-12 rounded-full bg-white/10 backdrop-blur flex items-center justify-center border border-white/20 hover:bg-white/30 transition-all">
+                        {theme === 'day' ? <Icons.Sun /> : <Icons.Moon />}
                     </button>
-                </div>
-                <div className="pointer-events-auto header-container" onClick={() => setView('landing')}>
-                    <Icons.SunLogo />
-                    <h1 className="text-3xl font-brand font-black tracking-tighter text-slate-900 drop-shadow-sm leading-none">MAG.IA</h1>
-                    <div className="flex items-center gap-1 text-[8px] text-slate-500 font-bold uppercase tracking-[0.1em]">{t.powered}</div>
+                    {!user ? (
+                        <button onClick={onOpenLogin} className="glass-input px-6 py-3 text-xs font-bold w-auto hover:bg-white/30 cursor-pointer flex gap-2 items-center text-shadow">
+                            <Icons.User /> INGRESAR
+                        </button>
+                    ) : (
+                        <div className="flex items-center gap-2">
+                            <img src={user.avatar} className="w-12 h-12 rounded-full border-2 border-white shadow-lg" />
+                            {user.isGod && <span className="god-badge">GOD</span>}
+                        </div>
+                    )}
                 </div>
             </div>
         );
 
-        // --- APP PRINCIPAL ---
-        const App = () => {
-            const [view, setView] = useState('landing');
-            const [lang, setLang] = useState('ES'); 
-            const [credits, setCredits] = useState(INITIAL_CREDITS);
-            const [user, setUser] = useState(null); 
-            const [userCloud, setUserCloud] = useState([]);
-            const [isEditing, setIsEditing] = useState(false);
-            const [menuOpen, setMenuOpen] = useState(false); 
-            const timeTheme = useTimeTheme(); 
+        // --- VIEWS ---
+        const QuestionView = ({ t, onNext, setUserData }) => {
+            const [prod, setProd] = useState("");
+            const [target, setTarget] = useState("");
+            const [wish, setWish] = useState("");
+            const [suggesting, setSuggesting] = useState(false);
 
-            const initialForm = { image: null, logo: null, inspirationImg: null, target: '', company: '', whatsapp: '', product: { name: '', price: '', promo: '' }, textOnImage: '', style: '', light: '', colors: [], googleData: false, inspiration: '', connected: { fb: false, ig: false, tk: false }, format: 'post' };
-            const [formData, setFormData] = useState(initialForm);
-            const [loadingText, setLoadingText] = useState('');
-            const [progress, setProgress] = useState(0);
-            const [isMuted, setIsMuted] = useState(false);
-            const [textOverlay, setTextOverlay] = useState({ top: "TU MARCA", bottom: "OFERTA LIMITADA" });
-            const [designState, setDesignState] = useState({ top: "TU MARCA", bottom: "OFERTA LIMITADA", logoSize: 24, colorTop: "#FFFFFF", colorBot: "#0ea5e9", posTop: 33, posBot: 66 });
-            const [resultImage, setResultImage] = useState(MAGIC_RESULT_IMAGE_DEFAULT);
-            const [generatedCopy, setGeneratedCopy] = useState("");
-            const [apiKey, setApiKey] = useState('');
-            const [inputEmail, setInputEmail] = useState('');
-            const [inputApiKey, setInputApiKey] = useState('');
-            const fileInputProduct = useRef(null);
-            const fileInputLogo = useRef(null);
-            const fileInputInspiration = useRef(null);
-            
-            const t = TRANSLATIONS[lang] || TRANSLATIONS['ES'];
-
-            useEffect(() => { 
-                const top = t.txt_top || "TU MARCA";
-                const bot = t.txt_bot || "OFERTA";
-                setTextOverlay({ top: top, bottom: bot }); 
-                setDesignState(prev => ({ ...prev, top: top, bottom: bot })); 
-            }, [lang, t]);
-            
-            useEffect(() => { const storedUser = localStorage.getItem('clickia_user'); const storedCloud = JSON.parse(localStorage.getItem('clickia_cloud') || '[]'); const storedKey = localStorage.getItem('clickia_apikey'); if (storedUser) { setUser(JSON.parse(storedUser)); setUserCloud(storedCloud); if(storedKey) setApiKey(storedKey); } }, []);
-
-            const playSound = (type) => { if (isMuted) return; const audio = document.getElementById(`sfx-${type}`); if(audio) { audio.currentTime = 0; audio.play().catch(()=>{}); } };
-            const changeView = (v) => { playSound('click'); setView(v); };
-            const handleUpload = (e, field) => { const file = e.target.files[0]; if(file) { playSound('click'); setFormData(prev => ({...prev, [field]: URL.createObjectURL(file)})); } };
-            const updateProduct = (field, value) => { setFormData(prev => ({ ...prev, product: { ...prev.product, [field]: value } })); };
-            const toggleColor = (color) => { playSound('click'); setFormData(prev => { const newColors = prev.colors.includes(color) ? prev.colors.filter(c => c !== color) : [...prev.colors, color].slice(0, 4); return { ...prev, colors: newColors }; }); };
-            const handleNewGeneration = () => { playSound('click'); setFormData(initialForm); setResultImage(MAGIC_RESULT_IMAGE_DEFAULT); setGeneratedCopy(""); setView('upload'); };
-            const handleLogin = () => { if(!inputEmail) return alert("Email required"); const fakeUser = { name: inputEmail.split('@')[0], email: inputEmail }; setUser(fakeUser); setApiKey(inputApiKey); localStorage.setItem('clickia_user', JSON.stringify(fakeUser)); if(inputApiKey) localStorage.setItem('clickia_apikey', inputApiKey); changeView('upload'); };
-            const handleCopyText = () => { navigator.clipboard.writeText(generatedCopy); alert("Copy copiado!"); };
-            const handleDownloadImage = () => { fetch(resultImage).then(response => response.blob()).then(blob => { const url = window.URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = `MAGIA_${Date.now()}.jpg`; document.body.appendChild(link); link.click(); document.body.removeChild(link); window.URL.revokeObjectURL(url); }).catch(e => { window.open(resultImage, '_blank'); }); };
-            
-            const handlePremiumDownload = () => {
-                playSound('click');
-                const confirm = window.confirm("⚡ MAG.IA PREMIUM GATEWAY ⚡\n\nEstás a punto de descargar la versión 8K ULTRA.\n\nPrecio: $0.99 USD\n\n¿Proceder al pago seguro?");
-                if(confirm) { setTimeout(() => { alert("✅ ¡PAGO EXITOSO!\n\nDescargando activo..."); handleDownloadImage(); }, 1500); }
+            const handleSuggest = async () => {
+                setSuggesting(true);
+                const idea = await callGemini("Eres un experto en tendencias. Dame UNA sola idea de producto viral breve (ej: 'Zapatillas Neón Retro'). Solo el texto.");
+                if(idea) setProd(idea.replace(/"/g, '').trim());
+                setSuggesting(false);
             };
 
-            const fakeGoogleLogin = () => {
-                playSound('click');
-                const mockUser = { name: "Roddy Smith", email: "ceo@magia.app", avatar: CREATOR_IMAGE };
-                setUser(mockUser);
-                localStorage.setItem('clickia_user', JSON.stringify(mockUser));
+            const handleNext = () => {
+                setUserData({ prod, target, wish });
+                onNext();
             };
-            const logout = () => {
-                setUser(null);
-                localStorage.removeItem('clickia_user');
-                setMenuOpen(false);
-            };
-
-            const generateImageURL = (prompt) => { const encodedPrompt = encodeURIComponent(prompt); return `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1080&height=1080&nologo=true&seed=${Math.floor(Math.random() * 10000)}`; };
-            const callGeminiAPI = async (prompt) => { if (!apiKey) return null; try { const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) }); const data = await response.json(); return data.candidates?.[0]?.content?.parts?.[0]?.text; } catch (error) { console.error("Gemini Error:", error); return null; } };
-            
-            const generateDynamicCopy = () => { 
-                const product = formData.product.name || "Producto"; 
-                const price = formData.product.price ? `$${formData.product.price}` : "";
-                const promo = formData.product.promo ? `(${formData.product.promo})` : t.default_promo;
-                const contact = formData.whatsapp || "5939999999"; 
-                const company = formData.company || "Tu Empresa"; 
-                let copy = ""; 
-                if (lang === 'ES') { copy = `🚀 **¡${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${price} ${promo}\n📍 Disponible en: ${company}\n\n👇 **¡No esperes más!** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; } else { copy = `🚀 **${t.copy_headline}** 🚀\n\n${t.copy_body_1} ${product}. ${t.copy_body_2}\n\n🔥 **${t.copy_offer}** ${price} ${promo}\n📍 Available at: ${company}\n\n👇 **Don't wait!** 👇\n${t.copy_cta} wa.me/${contact}\n\n#${product.replace(/\s/g,'')} #Viral #Trending2025 #${company.replace(/\s/g,'')}`; } 
-                return copy; 
-            };
-            
-            const restoreCampaign = (item) => { setResultImage(item.image); setGeneratedCopy(item.copy); setFormData(prev => ({...prev, logo: item.logo || null })); setView('result'); };
-            const runEngine = async () => { try { if(!formData.style) return alert("Elige un estilo"); if(credits <= 0) return alert("¡Te has quedado sin créditos!"); playSound('process'); setView('processing'); const promptBase = formData.product.name || "luxury product"; const colorsStr = formData.colors ? formData.colors.join(", ") : ""; const magicPrompt = `Hyper-ultra-realistic 8k commercial photography of ${promptBase}, ${formData.style} aesthetic, ${formData.light}. EXTREMELY IMPORTANT: Clean image, NO TEXT. Perfect composition, vivid colors ${colorsStr}, 8k render, unreal engine 5 style, cinematic lighting, bright airy background.`; const newImageURL = generateImageURL(magicPrompt); let finalCopy = ""; let copyPromise = null; if (apiKey) { const textPrompt = `Act as a marketing expert. Viral caption for ${promptBase}. Company: ${formData.company}. Lang: ${lang}. 5 hashtags.`; copyPromise = callGeminiAPI(textPrompt); } const steps = t.loading_steps || ["Processing..."]; for(let i=0; i<steps.length; i++) { setLoadingText(steps[i]); setProgress(((i+1)/steps.length)*100); await new Promise(r => setTimeout(r, 800)); } if (copyPromise) { const res = await copyPromise; finalCopy = res || generateDynamicCopy(); } else { finalCopy = generateDynamicCopy(); } const imgLoader = new Image(); imgLoader.onload = () => { setResultImage(newImageURL); setGeneratedCopy(finalCopy); setCredits(prev => prev - 1); const newItem = { id: Date.now(), image: newImageURL, copy: finalCopy, logo: formData.logo, date: new Date().toLocaleDateString() }; const updatedCloud = [newItem, ...userCloud]; setUserCloud(updatedCloud); localStorage.setItem('clickia_cloud', JSON.stringify(updatedCloud)); playSound('success'); setView('result'); }; imgLoader.onerror = () => { alert("Error loading image."); setView('upload'); }; imgLoader.src = newImageURL; } catch (e) { console.error("FATAL ERROR:", e); alert("Error inesperado."); setView('upload'); } };
-
-            // --- LANDING VIEW ---
-            const landingView = (
-                <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center relative fade-enter z-10">
-                    <nav className="absolute top-0 w-full p-6 flex justify-between items-center z-50">
-                        {/* Languages */}
-                        <div className="flex flex-wrap justify-center gap-4 items-center crystal-card px-4 py-2 rounded-full">
-                            <div className="flex items-center gap-3 border-r border-slate-300 pr-4">{['ES', 'EN', 'FR', 'ZH'].map(l => (<button key={l} onClick={() => { playSound('click'); setLang(l); }} className={`text-[10px] font-bold font-tech transition-all hover:scale-110 ${lang === l ? 'text-sky-600 scale-110' : 'text-slate-500 hover:text-sky-600'}`}>{l}</button>))}</div>
-                            <div className="flex items-center gap-2"><button onClick={() => {playSound('click'); setView('setup')}} className="text-xs font-bold text-slate-700 hover:text-sky-600 font-tech uppercase tracking-widest px-2 py-1 hover:bg-white/40 rounded-full transition-all">{t.enter}</button><button onClick={() => {playSound('click'); setView('pricing')}} className="text-xs font-bold text-slate-500 hover:text-slate-800 font-tech uppercase tracking-widest px-2 py-1 hover:bg-white/40 rounded-full transition-all">{t.prices}</button></div>
-                        </div>
-                        
-                        {/* Login / Profile Area */}
-                        <div className="relative">
-                            {!user ? (
-                                <button onClick={fakeGoogleLogin} className="crystal-card px-5 py-2 flex items-center gap-2 hover:bg-white/70 transition-all group">
-                                    <Icons.Google /> <span className="text-xs font-bold text-slate-700 group-hover:text-sky-600">{t.login_google}</span>
-                                </button>
-                            ) : (
-                                <div className="relative">
-                                    <div onClick={() => setMenuOpen(!menuOpen)} className="cursor-pointer flex items-center gap-2 crystal-card px-2 py-1 pr-4 hover:bg-white/80 transition-all">
-                                        <img src={user.avatar} className="w-8 h-8 rounded-full object-cover border border-white shadow-sm" />
-                                        <span className="text-xs font-bold text-slate-700 hidden md:block">{user.name.split(' ')[0]}</span>
-                                        <Icons.ChevronDown />
-                                    </div>
-                                    {menuOpen && (
-                                        <div className="dropdown-menu">
-                                            <div className="dropdown-item"><Icons.User /> {t.profile}</div>
-                                            <div className="dropdown-item"><Icons.Sliders /> {t.switch_user}</div>
-                                            <div className="dropdown-item"><Icons.Credit /> {t.sub}</div>
-                                            <div className="dropdown-divider"></div>
-                                            <div className="dropdown-item text-red-500 hover:text-red-600" onClick={logout}><Icons.Logout /> {t.logout}</div>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    </nav>
-                    
-                    <div className="z-10 max-w-6xl w-full flex flex-col items-center mt-32">
-                        <div className="header-container">
-                             <Icons.SunLogo />
-                             <h1 className="text-6xl md:text-8xl font-brand font-black tracking-tighter text-slate-900 drop-shadow-xl">MAG.IA</h1>
-                             <div className="inline-flex items-center gap-2 px-4 py-1 crystal-card rounded-full text-slate-600 text-[10px] font-bold uppercase tracking-[0.2em]">{t.powered}</div>
-                        </div>
-                        <h2 className="text-3xl md:text-5xl font-bold font-tech mb-8 leading-tight tracking-tight text-slate-800">{t.hero_mk} <br/><span className="text-sky-600">{t.hero_auto}</span></h2>
-                        <div className="flex flex-wrap justify-center gap-4 mb-12 text-xs font-bold uppercase tracking-widest text-slate-500">{t.bullets.map(b => (<div key={b} className="flex items-center gap-2 bg-white/40 px-3 py-1 rounded-full border border-white/60 shadow-sm"><Icons.Check /> {b}</div>))}</div>
-                        <div className="w-full max-w-4xl h-96 mb-12 shadow-2xl rounded-2xl overflow-hidden border border-white/60 crystal-card"><ComparisonSlider beforeImage={UGLY_BURGER_IMAGE} afterImage={MAGIC_RESULT_IMAGE_DEFAULT} tLang={t} /></div>
-                        <div className="flex flex-col items-center gap-4 mb-12">
-                            <button onClick={() => {playSound('click'); setView('setup')}} className="tech-btn px-16 py-6 text-xl rounded-2xl flex items-center gap-4 mx-auto shadow-sky-300/50 shadow-lg">{t.cta_trial}</button>
-                            <div className="flex items-center gap-2 text-slate-600 font-bold text-sm uppercase tracking-widest animate-pulse"><Icons.Zap /> {t.cta_posts}</div>
-                        </div>
-                        <div className="w-full max-w-4xl crystal-card p-8 mb-20 flex flex-col md:flex-row items-center gap-8 text-left relative overflow-hidden group hover:border-sky-300 transition-all shadow-xl">
-                            <div className="absolute -top-20 -right-20 w-64 h-64 bg-sky-200 rounded-full blur-3xl group-hover:bg-sky-300 transition-all opacity-50"></div>
-                            <div className="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-white shadow-2xl flex-shrink-0 overflow-hidden relative z-10 avatar-wrapper"><img src={CREATOR_IMAGE} className="w-full h-full object-cover" /></div>
-                            <div className="flex-1 relative z-10">
-                                <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">{t.creator_title}</div>
-                                <h3 className="text-3xl font-black font-tech mb-1 text-slate-900">RODDY SMITH</h3>
-                                <p className="text-xs font-bold text-sky-600 uppercase tracking-wider mb-4">{t.creator_role}</p>
-                                <p className="text-sm text-slate-700 leading-relaxed mb-4 italic border-l-2 border-sky-400 pl-4">"{t.creator_bio}"</p>
-                                <p className="text-xs text-slate-500 leading-relaxed">{t.creator_mission}</p>
-                            </div>
-                        </div>
-                        <div className="floating-credit">{t.credit_text}</div>
-                    </div>
-                </div>
-            );
-
-            if (view === 'setup') return <div className="min-h-screen flex items-center justify-center p-6 z-10 relative"><div className="w-full max-w-md crystal-card p-10 text-center relative overflow-hidden shadow-2xl"><button onClick={() => changeView('landing')} className="absolute top-4 right-4 text-slate-400 hover:text-slate-800"><Icons.X /></button><h2 className="text-3xl font-bold font-tech mb-2 text-slate-900">{t.setup_title}</h2><p className="text-slate-500 text-sm mb-8">{t.setup_desc}</p>{user ? (<div className="text-center mb-6"><p className="text-slate-800 font-bold mb-4">¡Hola, {user.name}!</p><button onClick={() => changeView('upload')} className="tech-btn w-full mb-4">CREAR CAMPAÑA</button><div className="text-left mt-6"><h4 className="text-xs font-bold text-slate-400 mb-2">{t.cloud_welcome}</h4><div className="h-40 overflow-y-auto custom-scroll bg-white/40 rounded-lg p-2 border border-white/50">{userCloud.length === 0 ? <p className="text-slate-400 text-xs">{t.cloud_desc}</p> : userCloud.map((item, i) => (<div key={i} onClick={() => restoreCampaign(item)} className="flex items-center gap-2 mb-2 p-2 bg-white/60 rounded border border-white/80 cursor-pointer hover:bg-white"><img src={item.image} className="w-10 h-10 rounded object-cover" /><div className="overflow-hidden"><p className="text-[10px] text-slate-800 truncate">{item.date}</p><p className="text-[9px] text-slate-500 truncate w-40">Camp #{i+1}</p></div></div>))}</div></div></div>) : (<div className="space-y-4"><div><label className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1 block">{t.lbl_email}</label><input className="glass-input" placeholder={t.ph_email} value={inputEmail} onChange={e => setInputEmail(e.target.value)} /></div><div><label className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1 block">{t.lbl_api}</label><div className="relative"><input className="glass-input pl-10" type="password" placeholder={t.ph_api} value={inputApiKey} onChange={e => setInputApiKey(e.target.value)} /><div className="absolute left-3 top-3.5 text-slate-400"><Icons.Key /></div></div></div><button onClick={handleLogin} className="tech-btn w-full mt-4 flex items-center justify-center gap-2">{t.setup_btn} <Icons.Google /></button></div>)}</div></div>;
-            if (view === 'upload') return <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="w-full max-w-4xl crystal-card p-12 text-center mt-20 shadow-xl"><div className="absolute top-8 left-8 cursor-pointer text-slate-400 hover:text-slate-900" onClick={() => setView('landing')}><Icons.ChevronLeft /></div><h2 className="text-3xl font-bold font-tech mb-8 uppercase text-slate-900">{t.upload_title}</h2><div className="grid md:grid-cols-2 gap-8 mb-10"><div onClick={() => fileInputProduct.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.image ? 'border-[#0ea5e9] bg-[#0ea5e9]/10' : 'border-slate-300 hover:border-[#0ea5e9] hover:bg-white/50'}`}>{formData.image ? (<><img src={formData.image} className="w-full h-full object-contain p-4" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/60 rounded-full flex items-center justify-center mb-4 shadow-sm"><Icons.Upload /></div><span className="text-xs font-bold uppercase text-slate-400">{t.upload_prod}</span></>}<input type="file" ref={fileInputProduct} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'image')} /></div><div onClick={() => fileInputLogo.current.click()} className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer group overflow-hidden ${formData.logo ? 'border-[#0ea5e9] bg-[#0ea5e9]/10' : 'border-slate-300 hover:border-[#0ea5e9] hover:bg-white/50'}`}>{formData.logo ? (<><img src={formData.logo} className="w-full h-full object-contain p-8" /><div className="scan-line"></div></>) : <><div className="w-16 h-16 bg-white/60 rounded-full flex items-center justify-center mb-4 shadow-sm"><Icons.Zap /></div><span className="text-xs font-bold uppercase text-slate-400">{t.upload_logo}</span></>}<input type="file" ref={fileInputLogo} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'logo')} /></div></div><button onClick={() => { if(!formData.image) return alert("Sube producto"); playSound('click'); changeView('q1'); }} className={`tech-btn w-full py-5 text-xl uppercase tracking-widest ${!formData.image && 'opacity-50 cursor-not-allowed'}`}>{t.next}</button></div><div className="floating-credit">{t.credit_text}</div></div>;
-            if (view === 'processing') return <div className="min-h-screen flex flex-col items-center justify-center p-8 fade-enter relative overflow-hidden z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex flex-col items-center justify-center gap-6 w-full max-w-2xl z-10 mt-32"><AdBanner /><NeuralBrain /><div className="flex flex-col items-center gap-4 w-full"><h2 className="text-3xl md:text-4xl font-black font-tech text-slate-800 tracking-[0.2em] text-center animate-pulse uppercase drop-shadow-sm">{loadingText}</h2><div className="flex flex-col items-center gap-2"><p className="text-slate-600 font-mono text-xs tracking-[0.3em] font-bold">{t.processing}</p><p className="text-sky-600 font-black font-mono text-xl">{Math.round(progress)}%</p></div></div><div className="w-full max-w-md h-1 bg-white/40 rounded-full overflow-hidden border border-white/60"><div className="h-full bg-[#0ea5e9] shadow-[0_0_20px_#0ea5e9]" style={{ width: `${progress}%`, transition: 'width 0.2s ease' }}></div></div></div><div className="floating-credit">{t.credit_text}</div></div>;
-            if (view === 'result') return (
-                <div className="min-h-screen flex flex-col items-center justify-center p-6 fade-enter relative z-10">
-                    <HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} />
-                    <h2 className="text-5xl font-black font-tech text-slate-900 mt-24 mb-8 tracking-widest text-center">{t.result_title}</h2>
-                    <div className="w-full max-w-7xl grid md:grid-cols-2 gap-10 crystal-card p-8 shadow-2xl">
-                        <div className="space-y-4 relative">
-                            <div className="relative group rounded-2xl overflow-hidden border border-white/60 shadow-lg mx-auto transition-all duration-500 h-[500px]"><ComparisonSlider beforeImage={formData.image || UGLY_BURGER_IMAGE} afterImage={resultImage} tLang={t} /></div>
-                            <div className="flex flex-col gap-3">
-                                <div className="flex gap-2"><button onClick={handleDownloadImage} className="flex-1 py-3 bg-white text-slate-800 text-xs font-bold uppercase rounded-xl hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 shadow-md border border-slate-200"><Icons.Download /> {t.download}</button><button onClick={() => setIsEditing(true)} className="flex-1 py-3 border border-slate-400 text-slate-700 text-xs font-bold uppercase rounded-xl hover:bg-white/40 transition-colors flex items-center justify-center gap-2">{t.edit_design}</button></div>
-                                <button onClick={handlePremiumDownload} className="gold-btn w-full text-xs flex items-center justify-center gap-2"><Icons.Star /> {t.premium_download}</button>
-                            </div>
-                        </div>
-                        <div className="flex flex-col space-y-6">
-                            <div className="bg-white/60 backdrop-blur-md p-4 rounded-xl border border-white w-full shadow-sm"><div className="flex items-center justify-between mb-2 px-2"><div className="flex items-center gap-2 text-[#0ea5e9]"><Icons.Zap /><span className="text-xs font-bold text-slate-600 uppercase tracking-widest">{t.viral_score}</span></div><div className="text-2xl font-black font-tech text-slate-800">9.8</div></div><div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden mb-2"><div className="h-full bg-[#0ea5e9] w-[98%] shadow-[0_0_10px_rgba(14,165,233,0.5)]"></div></div><p className="text-[10px] text-slate-500 text-center">{t.viral_desc}</p></div>
-                            <div className="crystal-card p-6 border-l-4 border-[#0ea5e9] bg-white/40"><div className="flex justify-between items-center mb-4"><h3 className="text-xs font-bold text-slate-800 uppercase tracking-widest flex items-center gap-2 text-[#0ea5e9]"><Icons.Zap /> {t.copy_viral}</h3><button onClick={handleCopyText} className="text-[10px] font-bold text-slate-500 hover:text-slate-900 flex items-center gap-1 uppercase border border-slate-300 px-2 py-1 rounded transition-colors"><Icons.Copy /> {t.copy_clipboard}</button></div><div className="copy-area custom-scroll h-32 overflow-y-auto text-sm text-slate-700 font-mono">{generatedCopy}</div></div>
-                            <ScheduleDisplay copy={generatedCopy} />
-                            <div className="flex gap-4 mt-auto"><button onClick={handleNewGeneration} className="w-full py-4 border border-slate-300 rounded-xl text-xs font-bold uppercase hover:bg-white hover:text-black transition-colors text-slate-600">{t.new_btn}</button></div>
-                        </div>
-                    </div>
-                    {isEditing && <DesignEditor image={resultImage} logo={formData.logo} initialText={designState} onSave={() => setIsEditing(false)} onClose={() => setIsEditing(false)} tLang={t} />}
-                    <div className="floating-credit">{t.credit_text}</div>
-                </div>
-            );
-
-            if (view === 'q1') return <QuestionScreen title={t.q1_title} nextView="q2" prevView="upload" onNext={() => changeView('q2')} onPrev={() => changeView('upload')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><input className="quiz-input" placeholder={t.q1_ph} autoFocus value={formData.target} onChange={e => setFormData({...formData, target: e.target.value})} /></QuestionScreen>;
-            if (view === 'q2') return <QuestionScreen title={t.q2_title} nextView="q3" prevView="q1" onNext={() => changeView('q3')} onPrev={() => changeView('q1')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-4"><input className="quiz-input" placeholder={t.q2_p1} value={formData.product.name} onChange={e => updateProduct('name', e.target.value)} /><div className="grid grid-cols-2 gap-4"><input className="quiz-input" placeholder={t.q2_p2} value={formData.product.price} onChange={e => updateProduct('price', e.target.value)} /><input className="quiz-input" placeholder={t.q2_p3} value={formData.product.promo} onChange={e => updateProduct('promo', e.target.value)} /></div></div></QuestionScreen>;
-            if (view === 'q3') return <QuestionScreen title={t.q3_title} nextView="q4" prevView="q2" onNext={() => changeView('q4')} onPrev={() => changeView('q2')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-4"><input className="quiz-input" placeholder={t.q3_p1} value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} /><div className="relative"><input className="quiz-input pl-10" placeholder={t.q3_p2} value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} /><div className="absolute left-2 top-4 text-slate-500 font-bold">WA</div></div></div></QuestionScreen>;
-            if (view === 'q4') return <QuestionScreen title={t.q4_title} nextView="q5" prevView="q3" onNext={() => changeView('q5')} onPrev={() => changeView('q3')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="space-y-6"><input className="quiz-input" placeholder={t.q4_ph1} value={formData.inspiration} onChange={e => setFormData({...formData, inspiration: e.target.value})} /><div onClick={() => fileInputInspiration.current.click()} className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all text-center relative h-48 flex items-center justify-center overflow-hidden ${formData.inspirationImg ? 'border-[#0ea5e9]' : 'border-slate-300 hover:border-[#0ea5e9] hover:bg-white/50'}`}>{formData.inspirationImg ? (<><img src={formData.inspirationImg} className="w-full h-full object-cover absolute top-0 left-0 opacity-60" /><div className={`scan-line opacity-100`}></div><div className="relative z-10 bg-black/50 px-4 py-2 rounded-full text-xs font-bold text-white border border-white uppercase">{t.q4_change}</div></>) : (<div className="text-slate-400 text-xs uppercase">{t.q4_upload}</div>)}<input type="file" ref={fileInputInspiration} className="hidden" accept="image/*" onChange={(e) => handleUpload(e, 'inspirationImg')} /></div></div></QuestionScreen>;
-            if (view === 'q5') return <QuestionScreen title={t.q5_title} nextView="style" prevView="q4" onNext={() => changeView('style')} onPrev={() => changeView('q4')} credits={credits} setView={setView} tLang={t} theme={timeTheme}><div className="h-64 overflow-y-auto pr-2 custom-scroll">{Object.entries(COLOR_GROUPS).map(([group, colors]) => (<div key={group} className="mb-6"><p className="text-[10px] font-bold text-slate-500 uppercase mb-3 tracking-widest text-left">{group === "NEUTROS" ? t.color_n : group === "NUDE" ? t.color_nu : group === "PRIMARIOS" ? t.color_p : group === "SECUNDARIOS" ? t.color_s : group === "TERCIARIOS" ? t.color_t : t.color_q}</p><div className="flex flex-wrap gap-3">{colors.map(c => (<div key={c} onClick={() => toggleColor(c)} className={`w-10 h-10 rounded-lg cursor-pointer border-2 border-white/60 transition-transform ${formData.colors.includes(c) ? 'scale-110 border-[#0ea5e9] shadow-md' : ''}`} style={{backgroundColor: c}}></div>))}</div></div>))}</div></QuestionScreen>;
-
-            if (view === 'style') return <div className="min-h-screen p-6 fade-enter flex flex-col relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => setView('q5')} className="p-2 rounded-full bg-white/40 hover:bg-white/60 text-slate-700"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech text-slate-800">{t.style_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto w-full">{STYLES_DATA.map(s => (<div key={s.id} onClick={() => {playSound('click'); setFormData({...formData, style: t[`s_${s.id}`]}); changeView('light')}} className="glass-card rounded-xl h-64 group cursor-pointer"><img src={s.img} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" /><div className="card-label">{t[`s_${s.id}`]}</div></div>))}</div><div className="floating-credit">{t.credit_text}</div></div>;
-            if (view === 'light') return <div className="min-h-screen p-6 fade-enter flex flex-col relative z-10"><HeaderInternal credits={credits} setView={setView} t={t} theme={timeTheme} /><div className="flex items-center gap-4 mb-8 max-w-7xl mx-auto w-full mt-20"><button onClick={() => changeView('style')} className="p-2 rounded-full bg-white/40 hover:bg-white/60 text-slate-700"><Icons.ChevronLeft /></button><h2 className="text-3xl font-bold font-tech text-slate-800">{t.light_title}</h2></div><div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-7xl mx-auto w-full mb-12">{LIGHTING_DATA.map(l => (<div key={l.id} onClick={() => {playSound('click'); setFormData({...formData, light: t[`l_${l.id}`]}); }} className={`glass-card rounded-xl h-64 group cursor-pointer ${formData.light === t[`l_${l.id}`] ? 'selected' : ''}`}><img src={l.img} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all" /><div className="card-label">{t[`l_${l.id}`]} <br/><span className="text-[9px] text-slate-500 font-normal">{t[`l_${l.id}_desc`]}</span></div></div>))}</div><div onClick={() => {playSound('click'); setFormData(prev => ({...prev, googleData: !prev.googleData}));}} className={`crystal-card p-6 flex justify-between items-center border transition-all cursor-pointer mb-8 max-w-2xl mx-auto w-full ${formData.googleData ? 'border-[#0ea5e9] bg-[#0ea5e9]/10' : 'border-white/60 hover:border-[#0ea5e9]'}`}><div className="flex items-center gap-4"><div className="bg-white/60 p-3 rounded-full text-slate-700 shadow-sm"><Icons.Google /></div><div><h3 className="font-bold text-slate-800">{t.google_data}</h3><p className="text-xs text-slate-500">{t.google_desc}</p></div></div><div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${formData.googleData ? 'bg-[#0ea5e9] border-[#0ea5e9]' : 'border-slate-300'}`}>{formData.googleData && <Icons.Check />}</div></div><div className="max-w-7xl mx-auto w-full text-center"><button onClick={runEngine} className="tech-btn px-20 py-6 text-2xl rounded-2xl shadow-xl">{t.gen_btn}</button></div><div className="floating-credit">{t.credit_text}</div></div>;
-
-            if (view === 'pricing') return <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter"><button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all text-xl font-bold text-slate-700"><Icons.X /></button><h2 className="text-5xl font-black font-tech text-center mb-10 text-slate-900">{t.plans}</h2><div className="w-full max-w-md mb-8 crystal-card p-4 flex flex-col items-center bg-white/30"><input placeholder="Ingresa Código de Promotor (Opcional)" className="glass-input text-center mb-2" /><p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest">Usa un código para obtener un 20% de descuento.</p></div><div className="grid md:grid-cols-3 gap-8 w-full max-w-6xl pb-10 items-center"><PricingCard title={t.p_names[0]} price="99" features={t.f_1} onSelect={() => {}} sub={t.p_subs[0]} tLang={t} /><PricingCard title={t.p_names[1]} price="297" strike="1200" recommended={true} features={t.f_2} onSelect={() => {}} sub={t.p_subs[1]} tLang={t} /><PricingCard title={t.p_names[2]} price="997" features={t.f_3} onSelect={() => {}} sub={t.p_subs[2]} tLang={t} /></div><div className="floating-credit">{t.credit_text}</div></div>;
-            if (view === 'faq') return <div className="min-h-screen flex flex-col items-center justify-center p-6 relative z-10 fade-enter"><button onClick={() => setView('landing')} className="absolute top-8 right-8 w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all text-xl font-bold text-slate-700"><Icons.X /></button><h2 className="text-5xl font-black font-tech text-center mb-16 text-slate-900">{t.faq_title}</h2><div className="max-w-3xl w-full space-y-6"> {[{q: t.q1, a: t.a1}, {q: t.q2, a: t.a2}, {q: t.q3, a: t.a3}].map((item, i) => (<details key={i} className="crystal-card p-6 group cursor-pointer open:bg-white/60 shadow-sm"><summary className="font-bold text-lg flex justify-between items-center outline-none list-none uppercase font-tech text-slate-800">{item.q} <span className="text-slate-500 transition-transform group-open:rotate-180"><Icons.ChevronDown /></span></summary><p className="text-slate-600 text-sm mt-4 leading-relaxed pl-4 border-l-2 border-sky-300">{item.a}</p></details>))} </div><div className="floating-credit">{t.credit_text}</div></div>;
 
             return (
-                <div className={`theme-${timeTheme}`}>
-                    <div className="cloud-bg"></div>
-                    <button onClick={() => {setIsMuted(!isMuted); document.querySelectorAll('audio').forEach(el => el.muted = !isMuted)}} className="fixed bottom-5 right-5 z-50 bg-white/50 border border-white text-slate-800 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-lg">
-                        {isMuted ? <Icons.VolumeX /> : <Icons.Volume2 />}
-                    </button>
-                    {view === 'landing' && landingView}
-                    {view === 'setup' && setupView}
-                    {view === 'upload' && uploadView}
-                    {view === 'q1' && q1View}
-                    {view === 'q2' && q2View}
-                    {view === 'q3' && q3View}
-                    {view === 'q4' && q4View}
-                    {view === 'q5' && q5View}
-                    {view === 'style' && styleView}
-                    {view === 'light' && lightView}
-                    {view === 'processing' && processingView}
-                    {view === 'result' && resultView}
-                    {view === 'pricing' && pricingView}
-                    {view === 'faq' && faqView}
-                    <ChatBot />
+                <div className="fixed inset-0 z-40 flex items-center justify-center p-4 fade-in">
+                    <div className="crystal-card p-10 max-w-2xl w-full text-center relative">
+                        <div className="back-arrow-btn" onClick={() => window.location.reload()}><Icons.ArrowLeft /></div>
+                        <h2 className="text-3xl font-display font-bold mb-8 text-shadow">{t.q_title}</h2>
+                        
+                        <div className="space-y-5 text-left">
+                            <div className="relative">
+                                <label className="font-label ml-2 mb-1 block text-shadow">{t.q_prod}</label>
+                                <input className="glass-input" placeholder={t.q_prod_ph} value={prod} onChange={e => setProd(e.target.value)} />
+                                <button className="absolute right-2 top-8 text-xs bg-white/20 px-2 py-1 rounded hover:bg-white/40 transition-colors flex items-center gap-1" onClick={handleSuggest}>
+                                    {suggesting ? t.ai_analyzing : t.ai_suggestion} <Icons.Sparkle />
+                                </button>
+                            </div>
+                            <div><label className="font-label ml-2 mb-1 block text-shadow">{t.q_target}</label><input className="glass-input" placeholder={t.q_target_ph} value={target} onChange={e => setTarget(e.target.value)} /></div>
+                            <div><label className="font-label ml-2 mb-1 block text-shadow">{t.q_wish}</label><textarea className="glass-input area" placeholder={t.q_wish_ph} value={wish} onChange={e => setWish(e.target.value)} /></div>
+                        </div>
+                        <button onClick={handleNext} className="tech-btn w-full mt-8 text-lg shadow-lg">{t.q_next}</button>
+                    </div>
                 </div>
+            );
+        };
+
+        const ProcessingView = ({ onFinish, t, userData }) => {
+            const [step, setStep] = useState(0);
+            const [finalPrompt, setFinalPrompt] = useState("");
+
+            useEffect(() => {
+                const process = async () => {
+                    // 1. Gemini as Creative Director (Returns JSON)
+                    const fullPrompt = MOTHER_PROMPT_INSTRUCTION + `Producto: ${userData.prod}, Target: ${userData.target}, Deseos: ${userData.wish}`;
+                    const response = await callGemini(fullPrompt, true); // Expect JSON
+                    
+                    setTimeout(() => setStep(1), 1500);
+                    setTimeout(() => setStep(2), 3000);
+                    setTimeout(() => onFinish(response), 5000); // Pass JSON to studio
+                };
+                process();
+            }, []);
+
+            return (
+                <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/60 backdrop-blur-xl fade-in">
+                    <NeuralBrain />
+                    <h2 className="text-4xl font-display font-bold mt-6 animate-pulse text-shadow">{t.processing}</h2>
+                    <p className="text-sm opacity-90 mt-3 font-mono text-shadow bg-black/20 px-4 py-1 rounded-full">{step === 0 ? "Conectando Director Creativo AI..." : step === 1 ? t.processing_step1 : t.processing_step2}</p>
+                </div>
+            );
+        };
+
+        const MagicStudio = ({ t, onClose, aiData, userData }) => {
+            const [bgUrl, setBgUrl] = useState("https://image.pollinations.ai/prompt/loading");
+            const canvasRef = useRef(null);
+            const fabricCanvasRef = useRef(null);
+            
+            useEffect(() => {
+                // 2. Generate Background via Pollinations
+                const bgPrompt = encodeURIComponent(aiData?.background_prompt || "luxury studio background");
+                setBgUrl(`https://image.pollinations.ai/prompt/${bgPrompt}?nologo=true&width=1024&height=1024&seed=${Math.random()}`);
+
+                // 3. Init Fabric
+                if (canvasRef.current) {
+                    const canvas = new fabric.Canvas(canvasRef.current, { width: 800, height: 800, backgroundColor: 'transparent' });
+                    fabricCanvasRef.current = canvas;
+                    
+                    // Layer 1: Product (Placeholder for now, in real app user uploads PNG)
+                    // We simulate with text/shape as user didn't upload a new file here
+                    const productText = new fabric.Text(userData.prod || "PRODUCTO", { 
+                        left: 250, top: 300, fontSize: 60, fill: 'white', fontFamily: 'Outfit', fontWeight: 'bold',
+                        shadow: 'rgba(0,0,0,0.5) 5px 5px 10px'
+                    });
+                    canvas.add(productText);
+                    canvas.setActiveObject(productText);
+                }
+            }, []);
+
+            return (
+                <div className="fixed inset-0 z-40 flex items-center justify-center p-4 fade-in">
+                    <div className="crystal-card w-full h-[90vh] max-w-7xl flex overflow-hidden relative border-2 border-white/20">
+                        <div className="back-arrow-btn" onClick={onClose}><Icons.ArrowLeft /></div>
+                        
+                        {/* Canvas Area */}
+                        <div className="flex-1 bg-black/40 flex items-center justify-center p-10 relative">
+                            <div className="h-[600px] w-[600px] relative shadow-2xl bg-gray-900 rounded-xl overflow-hidden">
+                                {/* Layer 0: Background */}
+                                <img src={bgUrl} className="absolute inset-0 w-full h-full object-cover" />
+                                {/* Layer 1+: Fabric Canvas */}
+                                <div className="absolute inset-0 w-full h-full z-10">
+                                    <canvas ref={canvasRef} />
+                                </div>
+                                <div className="absolute bottom-4 right-4 gold-btn px-6 py-3 rounded-full text-xs cursor-pointer shadow-lg hover:scale-105 transition-transform flex items-center gap-2 z-20">
+                                    <Icons.Sparkle /> {t.studio_upscale}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Sidebar Layers */}
+                        <div className="w-80 bg-white/10 backdrop-blur-xl border-l border-white/20 p-6 flex flex-col gap-6 overflow-y-auto">
+                            <div className="text-xl font-display font-bold text-shadow border-b border-white/20 pb-4">{t.studio_title}</div>
+                            
+                            <div className="flex flex-col gap-3">
+                                <div className="text-xs font-label opacity-70">CAPAS</div>
+                                {/* Layer 0 Control */}
+                                <div className="bg-white/5 p-3 rounded-lg border border-white/10 flex justify-between items-center cursor-pointer hover:bg-white/10">
+                                    <span className="text-sm">{t.studio_layer_bg}</span>
+                                    <span className="text-[10px] bg-blue-500 px-1 rounded">AI</span>
+                                </div>
+                                {/* Layer 1 Control */}
+                                <div className="bg-white/5 p-3 rounded-lg border border-white/10 flex justify-between items-center border-l-4 border-l-blue-500 bg-white/10">
+                                    <span className="text-sm font-bold">{t.studio_layer_prod}</span>
+                                    <Icons.Layers />
+                                </div>
+                                {/* Layer 2 Control */}
+                                <div className="bg-white/5 p-3 rounded-lg border border-white/10 flex justify-between items-center opacity-50 cursor-not-allowed">
+                                    <span className="text-sm">{t.studio_layer_txt}</span>
+                                    <Icons.Lock />
+                                </div>
+                            </div>
+
+                            <div className="bg-black/20 p-4 rounded-xl mt-4 border border-white/10">
+                                <div className="text-xs font-bold text-yellow-400 mb-2">💡 COPY NEUROMARKETING:</div>
+                                <p className="text-xs italic opacity-80 leading-relaxed">"{aiData?.viral_copy || 'Generando copy persuasivo...'}"</p>
+                            </div>
+
+                            <div className="mt-auto">
+                                <div className="text-xs font-label opacity-70 mb-2">INTENSIDAD LUZ (PRO)</div>
+                                <input type="range" className="w-full accent-blue-500" disabled />
+                            </div>
+                            <button className="tech-btn w-full text-xs">{t.res_down}</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- APP MAIN ---
+        const App = () => {
+            const [view, setView] = useState('landing');
+            const [theme, setTheme] = useState('day');
+            const [lang, setLang] = useState('ES');
+            const [user, setUser] = useState(null);
+            const [showPricing, setShowPricing] = useState(false);
+            const [showLogin, setShowLogin] = useState(false);
+            const [credits, setCredits] = useState(3);
+            const [pricingMsg, setPricingMsg] = useState("");
+            const [userData, setUserData] = useState({});
+            const [aiData, setAiData] = useState(null);
+            const [selectedTransformIndex, setSelectedTransformIndex] = useState(0);
+
+            useEffect(() => { document.body.setAttribute('data-theme', theme); }, [theme]);
+            const toggleTheme = () => setTheme(prev => prev === 'day' ? 'night' : 'day');
+            const t = TRANSLATIONS[lang];
+
+            const handleStartTrial = () => {
+                if (user?.isGod) { setView('questions'); return; }
+                if (credits <= 0) { setPricingMsg(t.trial_error); setShowPricing(true); } 
+                else { 
+                    setCredits(prev => prev - 1); 
+                    setView('questions'); 
+                }
+            };
+
+            const activeTransform = TRANSFORMATIONS[selectedTransformIndex];
+
+            return (
+                <>
+                    <PixarSky />
+                    <CelestialCursor />
+                    
+                    <div className="relative z-10 min-h-screen flex flex-col">
+                        <Header setView={setView} theme={theme} toggleTheme={toggleTheme} user={user} onOpenLogin={() => setShowLogin(true)} onShowPricing={() => setShowPricing(true)} lang={lang} setLang={setLang} />
+                        
+                        {view === 'landing' && (
+                            <main className="flex-1 flex flex-col items-center justify-center px-4 text-center mt-10 mb-20 fade-in cursor-default relative z-20">
+                                <h2 className="text-7xl md:text-9xl font-display font-black mb-4 tracking-tighter leading-none drop-shadow-2xl text-shadow">
+                                    {t.hero_title} <br/><span style={{color: 'rgba(255,255,255,0.9)'}}>{t.hero_subtitle}</span>
+                                </h2>
+                                <div className="readable-text mb-16">
+                                    <p className="font-label text-sm tracking-[0.3em] font-bold">{t.hero_desc}</p>
+                                </div>
+                                
+                                {/* --- GALERÍA DE TRANSFORMACIONES --- */}
+                                <div className="w-full max-w-5xl mb-12 crystal-card p-4 relative">
+                                    <h3 className="text-2xl font-display font-bold mb-4 text-shadow text-left pl-4 flex items-center gap-3">
+                                        {activeTransform.title}
+                                        <span className="text-[10px] bg-blue-500/80 px-2 py-1 rounded-full font-mono uppercase tracking-wider">{activeTransform.tag}</span>
+                                    </h3>
+                                    <ComparisonSlider beforeImg={activeTransform.before} afterImg={activeTransform.after} />
+                                     <p className="text-sm text-left pl-4 mt-4 opacity-80 italic">"{activeTransform.desc}"</p>
+                                </div>
+
+                                {/* Miniaturas Interactivas */}
+                                <div className="w-full max-w-5xl grid grid-cols-3 gap-4 mb-24 px-4">
+                                    {TRANSFORMATIONS.map((item, index) => (
+                                        <div key={item.id} onClick={() => setSelectedTransformIndex(index)}
+                                             className={`crystal-card p-2 cursor-pointer transition-all hover:scale-105 ${index === selectedTransformIndex ? 'border-blue-400/80 bg-blue-500/20' : 'border-white/20'}`}>
+                                            <div className="relative h-24 rounded-2xl overflow-hidden mb-2">
+                                                <img src={item.after} className="w-full h-full object-cover" />
+                                                <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-[9px] p-1 text-center font-bold truncate">{item.title}</div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                {/* ------------------------------------ */}
+
+                                <div className="flex gap-6 mb-24">
+                                    <button onClick={handleStartTrial} className="tech-btn text-lg">{t.cta_trial} ({user?.isGod ? '∞' : credits})</button>
+                                    <button onClick={() => { if(user?.isGod) alert("GOD MODE: STUDIO UNLOCKED"); else { setPricingMsg(t.studio_lock_msg); setShowPricing(true); } }} className="glass-input w-auto px-10 py-4 font-bold uppercase tracking-widest cursor-pointer hover:bg-white/20 text-shadow border-2 border-white/40">
+                                        {t.cta_studio}
+                                    </button>
+                                </div>
+
+                                <div className="w-full max-w-4xl crystal-card p-12 mb-20 flex flex-col md:flex-row items-center gap-12 text-left">
+                                    <div className="w-48 h-48 rounded-full border-4 border-white/30 shadow-2xl flex-shrink-0 overflow-hidden">
+                                        <img src={CEO_PHOTO} className="w-full h-full object-cover" />
+                                    </div>
+                                    <div>
+                                        <div className="readable-text mb-4"><span className="font-label text-xs">CREATOR</span></div>
+                                        <h3 className="text-4xl font-display font-bold mb-2 text-shadow">RODDY SMITH</h3>
+                                        <p className="text-xl italic font-light opacity-90 border-l-4 border-white/50 pl-6 text-shadow">{t.ceo_quote}</p>
+                                    </div>
+                                </div>
+                            </main>
+                        )}
+
+                        {view === 'questions' && <QuestionView t={t} onNext={() => setView('processing')} setUserData={setUserData} />}
+                        {view === 'processing' && <ProcessingView t={t} userData={userData} onFinish={(data) => { setAiData(data); setView('studio'); }} />}
+                        {view === 'studio' && <MagicStudio t={t} aiData={aiData} userData={userData} onClose={() => setView('landing')} />}
+                    </div>
+
+                    {showLogin && <LoginModal onClose={() => setShowLogin(false)} onLoginSuccess={(isGod) => setUser({ name: "Roddy", avatar: CEO_PHOTO, isGod })} t={t} />}
+                    {showPricing && <PricingModal onClose={() => setShowPricing(false)} t={t} forcedMessage={pricingMsg} />}
+                    <ChatBoy t={t} />
+                </>
             );
         };
 
